@@ -1,0 +1,15 @@
+[push]
+	default = simple
+[user]
+	name = Nicolas Martin
+	email = nicolas.martin.0986@gmail.com
+[merge]
+	tool = kdiff3
+[diff]
+	tool = kdiff3
+[mergetool "kdiff3"]
+	path = /Applications/kdiff3.app/Contents/MacOS/kdiff3
+[difftool "kdiff3"]
+	path = /Applications/kdiff3.app/Contents/MacOS/kdiff3
+[rebase]
+	autostash = true
