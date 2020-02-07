@@ -2,12 +2,13 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH=/Users/nma/.oh-my-zsh
+export ZSH=~/.oh-my-zsh
 
 ZSH_THEME="robbyrussell"
 
 plugins=(
   git
+  vi-mode
   # ssh-agent
 )
 
@@ -17,11 +18,19 @@ source $ZSH/oh-my-zsh.sh
 export SSH_KEY_PATH="~/.ssh/rsa_id"
 ssh-add -A
 
+# One history per window?
+unsetopt inc_append_history
+unsetopt share_history
+
 # use vim
 set -o vi
 export GOBIN=$HOME/go/bin
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOBIN
+
+# ruby
+eval "$(rbenv init -)"
+
 alias st='git status '
 alias ga='git add '
 alias br='git branch '
@@ -42,6 +51,19 @@ alias mkcd='_(){ mkdir $1; cd $1; }; _'
 alias k='kubectl'
 alias vim='nvim'
 alias v='nvim'
+alias vrc='nvim ~/.config/nvim/init.vim'
+alias gh='cd ~/go/src/github.com/punchh/'
 
 if [ /usr/local/bin/kubectl ]; then source <(kubectl completion zsh); fi
 
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
+export PATH="/usr/local/opt/mysql@5.7/bin:$PATH"
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/nmartin/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/nmartin/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/nmartin/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/nmartin/google-cloud-sdk/completion.zsh.inc'; fi
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
