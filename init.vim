@@ -2,7 +2,7 @@ call plug#begin('~/.local/share/nvim/plugged')
 	" brew upgrade golangci/tap/golangci-lint
 	Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 	" File tree
-	Plug 'scrooloose/nerdtree'
+	Plug 'preservim/nerdtree'
 	" Commenting
 	Plug 'tpope/vim-commentary'
 	" Auto complete
@@ -83,8 +83,12 @@ let mapleader = ","
 " NERDTree
 	" Close if NERDTree is the last window open
 	autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+	" " If more than one window and previous buffer was NERDTree, go back to it.
+	" autocmd BufEnter * if bufname('#') =~# "^NERD_tree_" && winnr('$') > 1 | b# | endif
 	map <C-n> :NERDTreeToggle<CR>
 	map <leader>l :NERDTreeFind<cr>
+	" Remove signcolumn
+	autocmd FileType nerdtree setlocal signcolumn=no
 
 " Remap ctrl-p to find file
 	map <leader>p <C-p>
@@ -112,13 +116,13 @@ let mapleader = ","
 if executable('ag')
 	let g:ackprg = 'ag --vimgrep'
 	" Use ag over grep
-	set grepprg=ag\ --nogroup\ --nocolor
+	set grepprg=ag\ --nogroup\ --nocolor\ --ignore-dir=vendor
 
 	" use ag with CtrlP
 	" Bug: Looks through the vendored folder. 
 	" ag is fast enough that CtrlP doesn't need to cache
-	" let g:ctrlp_use_caching = 0 
-	" let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+	let g:ctrlp_use_caching = 0 
+	let g:ctrlp_user_command = 'ag %s -l --nocolor --ignore-dir=vendor --ignore .git -g ""'
 endif
 " bind \ (backward slash) to grep shortcut
 command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!

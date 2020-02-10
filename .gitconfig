@@ -13,3 +13,5 @@
 	path = /Applications/kdiff3.app/Contents/MacOS/kdiff3
 [rebase]
 	autostash = true
+[core]
+	pager = cat

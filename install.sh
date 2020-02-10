@@ -28,6 +28,7 @@ warn "Symlinking files"
 
 install .gitconfig
 install .zshrc
+install .tmux.conf
 install init.vim "$HOME/.config/nvim/init.vim"
 # install base.vim "$HOME/base.vim"
 # install .gitattributes

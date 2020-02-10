@@ -31,6 +31,7 @@ export PATH=$PATH:$GOBIN
 # ruby
 eval "$(rbenv init -)"
 
+# git aliases
 alias st='git status '
 alias ga='git add '
 alias br='git branch '
@@ -40,19 +41,19 @@ alias co='git checkout '
 alias last='git last'
 alias pu='git push '
 alias last='git log -1'
-
 alias re='git fetch origin master;git rebase origin/master'
 alias g='git '
 alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit -m "--wip--"'
 alias orig="find . -name '*.orig' -delete"
 alias gunwip='git log -n 1 | grep -q -c "\-\-wip\-\-" && git reset HEAD~1'
 alias removemerge='git branch --merged | grep -v "\*" | grep -v master | grep -v dev | xargs -n 1 git branch -d'
-alias mkcd='_(){ mkdir $1; cd $1; }; _'
+
 alias k='kubectl'
 alias vim='nvim'
 alias v='nvim'
 alias vrc='nvim ~/.config/nvim/init.vim'
 alias gh='cd ~/go/src/github.com/punchh/'
+alias ll='ls -la'
 
 if [ /usr/local/bin/kubectl ]; then source <(kubectl completion zsh); fi
 
@@ -67,3 +68,9 @@ if [ -f '/Users/nmartin/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/nmartin
 if [ -f '/Users/nmartin/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/nmartin/google-cloud-sdk/completion.zsh.inc'; fi
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+mkcd ()
+{
+    mkdir -p -- "$1" &&
+      cd -P -- "$1"
+}
