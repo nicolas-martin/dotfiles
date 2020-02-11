@@ -11,17 +11,22 @@ call plug#begin('~/.local/share/nvim/plugged')
 	Plug 'ctrlpvim/ctrlp.vim'
 	" Statusbar
 	Plug 'vim-airline/vim-airline'
-	" Doc on status bar
-	Plug 'Shougo/echodoc.vim'
 	" snippets
 	Plug 'SirVer/ultisnips'
 	" surround
 	Plug 'tpope/vim-surround'
+	Plug 'danilo-augusto/vim-afterglow'
 	" brew install the_silver_searcher
 	" Plug 'mileszs/ack.vim'
+	" Doc on status bar
+	" Plug 'Shougo/echodoc.vim'
 call plug#end()
 
 let mapleader = ","
+
+" Theme
+colo afterglow
+let g:airline_theme='afterglow'
 
 " UltiSnips triggering
 	let g:UltiSnipsExpandTrigger = '<C-j>'
@@ -66,7 +71,8 @@ let mapleader = ","
 
 	set nobackup 		" No backup file
 	set nowritebackup
-	set nocompatible
+	set foldmethod=syntax 	" Code folding
+	set nofoldenable        " ... but have folds open by default
 
 " Auto reloads the file when modifications were made
 	set autoread
@@ -87,8 +93,6 @@ let mapleader = ","
 	" autocmd BufEnter * if bufname('#') =~# "^NERD_tree_" && winnr('$') > 1 | b# | endif
 	map <C-n> :NERDTreeToggle<CR>
 	map <leader>l :NERDTreeFind<cr>
-	" Remove signcolumn
-	autocmd FileType nerdtree setlocal signcolumn=no
 
 " Remap ctrl-p to find file
 	map <leader>p <C-p>
@@ -119,8 +123,6 @@ if executable('ag')
 	set grepprg=ag\ --nogroup\ --nocolor\ --ignore-dir=vendor
 
 	" use ag with CtrlP
-	" Bug: Looks through the vendored folder. 
-	" ag is fast enough that CtrlP doesn't need to cache
 	let g:ctrlp_use_caching = 0 
 	let g:ctrlp_user_command = 'ag %s -l --nocolor --ignore-dir=vendor --ignore .git -g ""'
 endif
@@ -132,7 +134,7 @@ nnoremap \ :Ag<SPACE>
 	set hidden 		" if hidden is not set, TextEdit might fail.
 	set updatetime=300 	" You will have bad experience for diagnostic messages when it's default 4000.
 	set shortmess+=c 	" don't give |ins-completion-menu| messages.
-	set signcolumn=yes 	" always show signcolumns (?)
+	autocmd FileType go setlocal signcolumn=yes
 	"" Use tab for trigger completion with characters ahead and navigate.
 	" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
 	inoremap <silent><expr> <TAB>
@@ -148,7 +150,6 @@ nnoremap \ :Ag<SPACE>
 
 	" Use <c-space> to trigger completion.
 	inoremap <silent><expr> <c-space> coc#refresh()
-	" nmap <leader>d :YcmCompleter GoTo<CR>
 	" Remap keys for gotos
 	nmap <silent> gd <Plug>(coc-definition)
 	nmap <silent> gy <Plug>(coc-type-definition)
@@ -157,10 +158,24 @@ nnoremap \ :Ag<SPACE>
 	" Use `[c` and `]c` to navigate diagnostics
 	nmap <silent> [c <Plug>(coc-diagnostic-prev)
 	nmap <silent> ]c <Plug>(coc-diagnostic-next)
+
+	" Use <leader>K to show documentation in preview window
+	nnoremap <silent> <leader>k :call <SID>show_documentation()<CR>
+	function! s:show_documentation()
+	  if (index(['vim','help'], &filetype) >= 0)
+	    execute 'h '.expand('<cword>')
+	  else
+	    call CocAction('doHover')
+	  endif
+	endfunction
+
 	" Remap for rename current word
 	nmap <leader>rn <Plug>(coc-rename)
-	" Use U to show documentation in preview window
-	" Try this is godoc is too slow
-	nnoremap <silent> U :call <SID>show_documentation()<CR>
-	" Search workspace symbols (try this at some point)
-	"nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+
+	" Remap for format selected region
+	" NOTE: Doesn't work...
+	xmap <leader>f  <Plug>(coc-format-selected)
+
+	" Add status line support, for integration with other plugin, checkout `:h coc-status`
+	" NOTE: What is this?
+	set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
