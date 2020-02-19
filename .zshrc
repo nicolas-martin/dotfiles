@@ -73,3 +73,6 @@ mkcd ()
     mkdir -p -- "$1" &&
       cd -P -- "$1"
 }
+
+# added by Snowflake SnowSQL installer v1.2
+export PATH=/Applications/SnowSQL.app/Contents/MacOS:$PATH

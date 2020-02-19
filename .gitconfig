@@ -1,8 +1,8 @@
 [push]
 	default = simple
 [user]
-	name = nicolas-martin
-	email = nicolas.martin.0986@gmail.com
+	name = nmartinpunchh
+	email = nicolas.martin@punchh.com
 [merge]
 	tool = kdiff3
 [diff]

@@ -1,10 +1,8 @@
 call plug#begin('~/.local/share/nvim/plugged')
-	" brew upgrade golangci/tap/golangci-lint
+	" brew install golangci/tap/golangci-lint
 	Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 	" File tree
 	Plug 'preservim/nerdtree'
-	" Commenting
-	Plug 'tpope/vim-commentary'
 	" Auto complete
 	Plug 'neoclide/coc.nvim', {'branch': 'release'}
 	" Fuzzy file finder
@@ -13,20 +11,20 @@ call plug#begin('~/.local/share/nvim/plugged')
 	Plug 'vim-airline/vim-airline'
 	" snippets
 	Plug 'SirVer/ultisnips'
+	Plug 'danilo-augusto/vim-afterglow'
 	" surround
 	Plug 'tpope/vim-surround'
-	Plug 'danilo-augusto/vim-afterglow'
+	" Commenting
+	Plug 'tpope/vim-commentary'
 	" brew install the_silver_searcher
 	" Plug 'mileszs/ack.vim'
-	" Doc on status bar
-	" Plug 'Shougo/echodoc.vim'
 call plug#end()
 
 let mapleader = ","
 
 " Theme
-colo afterglow
-let g:airline_theme='afterglow'
+	colo afterglow
+	let g:airline_theme='afterglow'
 
 " UltiSnips triggering
 	let g:UltiSnipsExpandTrigger = '<C-j>'
@@ -39,52 +37,73 @@ let g:airline_theme='afterglow'
 	let g:go_highlight_functions = 1
 	let g:go_highlight_function_calls = 1
 	let g:go_highlight_operators = 1
-	" ---
         let g:go_metalinter_enabled = ['deadcode', 'errcheck', 'gosimple', 'govet', 'staticcheck', 'typecheck', 'unused', 'varcheck']
-	" let g:go_metalinter_enabled = ['vet', 'deadcode', 'errcheck', 'gosimple', 'ineffassign', 'staticcheck', 'structcheck', 'typecheck', 'unused', 'varcheck']
-	" let g:go_metalinter_autosave_enabled = ["govet","golint","errcheck"]
 	let g:go_metalinter_autosave = 1
 	let g:go_metalinter_command = "golangci-lint"
-	" let g:go_list_type = 'quickfix'
 	nnoremap <leader>w :GoMetaLinter<CR>
-
-	" ---
 	let g:go_fmt_command = "goimports"
 	let g:go_auto_type_info = 1
+	" use golang language server
 	let g:go_def_mode='gopls'
 	let g:go_info_mode='gopls'
-	let g:go_def_mapping_enabled = 0  " disable vim-go :GoDef short cut (gd) this is handled by LanguageClient [LC]
+	let g:go_def_mapping_enabled = 0  	" disable vim-go :GoDef short cut (gd) this is handled by LanguageClient [LC]
+	let g:go_debug_log_output='' 		" supress internal dlv debug
+	let g:go_debug_windows = {
+		\ 'vars':       'leftabove 30vnew',
+		\ 'stack':      'leftabove 20new',
+		\ 'goroutines': 'botright 10new',
+		\ 'out':        'vsplit 10new',
+	\ }
+	" By default the keys only work on the current buffer
+	augroup vim-go-debug
+		autocmd! * <buffer>
+		autocmd FileType go nmap <F5>   <Plug>(go-debug-continue)
+		autocmd FileType go nmap <F6>   <Plug>(go-debug-print)
+		autocmd FileType go nmap <F9>   <Plug>(go-debug-breakpoint)
+		autocmd FileType go nmap <F10>  <Plug>(go-debug-next)
+		autocmd FileType go nmap <F11>  <Plug>(go-debug-step)
+	augroup END
+	doautocmd vim-go-debug FileType go
+
+
 " Default settings
 	set cmdheight=2
-	set noexpandtab		" tabs are tabs vs expandtab tabs are space
-	set showcmd		" show command in bottom bar
-	" set wildmenu	  	" visual autocomplete for command menu
-	set lazyredraw		" redraw only when we need to.
-	set showmatch		" highlight matching [{()}]
-	set incsearch		" search as characters are entered
-	set hlsearch		" highlight matches
-	set noshowmode		" don't show modes (use airline instead)"
+	set noexpandtab			" tabs are tabs vs expandtab tabs are space
+	set showcmd			" show command in bottom bar
+	set lazyredraw			" redraw only when we need to.
+	set showmatch			" highlight matching [{()}]
+	set incsearch			" search as characters are entered
+	set hlsearch			" highlight matches
+	set noshowmode			" don't show modes (use airline instead)"
 	set number relativenumber
 	set autowrite
-	set clipboard=unnamed
-	set scrolloff=5		" Keep some distance from the bottom
-
-	set nobackup 		" No backup file
+	set clipboard+=unnamedplus
+	set scrolloff=5			" Keep some distance from the bottom
+	set sidescrolloff=5 		" Keep some distance while side scrolling
+	set nobackup 			" No backup file
 	set nowritebackup
-	set foldmethod=syntax 	" Code folding
-	set nofoldenable        " ... but have folds open by default
+	set foldmethod=syntax 		" Code folding
+	set foldlevelstart=20 		" Opens X amount of fold at the start - Can't use nofoldenable
+	set splitright			" Split window appears right the current one.
+	set autoread 			" Auto reloads the file when modifications were made
+	set nocompatible 		" enter the current millenium (nvim is always nocompatible?)
 
-" Auto reloads the file when modifications were made
-	set autoread
 	filetype plugin indent on
 	nnoremap <f1> o<Esc>
 	syntax on
 	nnoremap <leader>n :noh<CR>
-
 	no <C-j> <C-w>j 
 	no <C-k> <C-w>k 
 	no <C-l> <C-w>l 
 	no <C-h> <C-w>h 
+
+	" faster ESC
+	inoremap jk <ESC>
+	inoremap kj <ESC>
+	" get rid of the evil ex mode
+	nnoremap Q <nop>
+	" define sensible backspace behaviour. See :help backspace for more details
+	set backspace=2
 
 " NERDTree
 	" Close if NERDTree is the last window open
@@ -121,11 +140,11 @@ if executable('ag')
 	let g:ackprg = 'ag --vimgrep'
 	" Use ag over grep
 	set grepprg=ag\ --nogroup\ --nocolor\ --ignore-dir=vendor
-
 	" use ag with CtrlP
 	let g:ctrlp_use_caching = 0 
 	let g:ctrlp_user_command = 'ag %s -l --nocolor --ignore-dir=vendor --ignore .git -g ""'
 endif
+
 " bind \ (backward slash) to grep shortcut
 command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
 nnoremap \ :Ag<SPACE>
@@ -135,7 +154,7 @@ nnoremap \ :Ag<SPACE>
 	set updatetime=300 	" You will have bad experience for diagnostic messages when it's default 4000.
 	set shortmess+=c 	" don't give |ins-completion-menu| messages.
 	autocmd FileType go setlocal signcolumn=yes
-	"" Use tab for trigger completion with characters ahead and navigate.
+	" Use tab for trigger completion with characters ahead and navigate.
 	" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
 	inoremap <silent><expr> <TAB>
 	      \ pumvisible() ? "\<C-n>" :
@@ -155,6 +174,7 @@ nnoremap \ :Ag<SPACE>
 	nmap <silent> gy <Plug>(coc-type-definition)
 	nmap <silent> gi <Plug>(coc-implementation)
 	nmap <silent> gr <Plug>(coc-references)
+
 	" Use `[c` and `]c` to navigate diagnostics
 	nmap <silent> [c <Plug>(coc-diagnostic-prev)
 	nmap <silent> ]c <Plug>(coc-diagnostic-next)
@@ -179,3 +199,7 @@ nnoremap \ :Ag<SPACE>
 	" Add status line support, for integration with other plugin, checkout `:h coc-status`
 	" NOTE: What is this?
 	set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+
+" custom snippets
+ 	" Create comment from the function name of an instance function
+	autocmd FileType go nnoremap <leader>mc f)wyawki//<Esc>pa<Space>
