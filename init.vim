@@ -11,30 +11,68 @@ call plug#begin('~/.local/share/nvim/plugged')
 	Plug 'vim-airline/vim-airline'
 	" snippets
 	Plug 'SirVer/ultisnips'
-	Plug 'danilo-augusto/vim-afterglow'
+	" Plug 'danilo-augusto/vim-afterglow'
+	Plug 'mhartington/oceanic-next'
 	" surround
 	Plug 'tpope/vim-surround'
 	" Commenting
 	Plug 'tpope/vim-commentary'
 	" brew install the_silver_searcher
 	" Plug 'mileszs/ack.vim'
+	"
+	" Document outline
+	" brew install ctags
+	" NOTE: Do I need ctags for gotags to work?
+	" brew install gotags
+	Plug 'majutsushi/tagbar'
 call plug#end()
 
 let mapleader = ","
 
-" Theme
-	colo afterglow
-	let g:airline_theme='afterglow'
+" tagbar
+nmap <F2> :TagbarToggle<CR>
+" Ignore package, imports and use gotags
+let g:tagbar_type_go = {
+	\ 'ctagstype' : 'go',
+	\ 'kinds'     : [
+		\ 'c:constants',
+		\ 'v:variables',
+		\ 't:types',
+		\ 'n:interfaces',
+		\ 'w:fields',
+		\ 'e:embedded',
+		\ 'm:methods',
+		\ 'r:constructor',
+		\ 'f:functions'
+	\ ],
+	\ 'sro' : '.',
+	\ 'kind2scope' : {
+		\ 't' : 'ctype',
+		\ 'n' : 'ntype'
+	\ },
+	\ 'scope2kind' : {
+		\ 'ctype' : 't',
+		\ 'ntype' : 'n'
+	\ },
+	\ 'ctagsbin'  : 'gotags',
+	\ 'ctagsargs' : '-sort -silent'
+\ }
 
-" UltiSnips triggering
-	let g:UltiSnipsExpandTrigger = '<C-j>'
-	" let g:UltiSnipsJumpForwardTrigger = '<C-;>'
-	" let g:UltiSnipsJumpBackwardTrigger = '<C-k>'
+" UltiSnips
+	let g:UltiSnipsExpandTrigger="<c-l>"
+	let g:UltiSnipsJumpForwardTrigger="<c-j>"
+	let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+" Theme
+	set termguicolors
+	colorscheme OceanicNext
+	let g:airline_theme='oceanicnext'
+	" colo afterglow
+	" let g:airline_theme='afterglow'
 
 " Go settings
 	let g:go_highlight_types = 1
 	let g:go_highlight_fields = 1
-	let g:go_highlight_functions = 1
+	let g:go_highlight_functions = 1 
 	let g:go_highlight_function_calls = 1
 	let g:go_highlight_operators = 1
         let g:go_metalinter_enabled = ['deadcode', 'errcheck', 'gosimple', 'govet', 'staticcheck', 'typecheck', 'unused', 'varcheck']
@@ -81,6 +119,7 @@ let mapleader = ","
 	set scrolloff=5			" Keep some distance from the bottom
 	set sidescrolloff=5 		" Keep some distance while side scrolling
 	set nobackup 			" No backup file
+	set noswapfile 			" NOTE: Experimental No swap file
 	set nowritebackup
 	set foldmethod=syntax 		" Code folding
 	set foldlevelstart=20 		" Opens X amount of fold at the start - Can't use nofoldenable
@@ -135,8 +174,9 @@ let mapleader = ","
 	autocmd Filetype python setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab  autoindent
 	autocmd FileType yaml setlocal tabstop=2 shiftwidth=2 softtabstop=2  expandtab
 
-" Ack finder
+" ag
 if executable('ag')
+	" TODO: Find out why ag search open up in the wrong buffer when tagbar is opened
 	let g:ackprg = 'ag --vimgrep'
 	" Use ag over grep
 	set grepprg=ag\ --nogroup\ --nocolor\ --ignore-dir=vendor
@@ -191,10 +231,6 @@ nnoremap \ :Ag<SPACE>
 
 	" Remap for rename current word
 	nmap <leader>rn <Plug>(coc-rename)
-
-	" Remap for format selected region
-	" NOTE: Doesn't work...
-	xmap <leader>f  <Plug>(coc-format-selected)
 
 	" Add status line support, for integration with other plugin, checkout `:h coc-status`
 	" NOTE: What is this?
