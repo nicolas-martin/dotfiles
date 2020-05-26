@@ -73,9 +73,9 @@ let g:tagbar_type_go = {
 	let g:go_highlight_functions = 1 
 	let g:go_highlight_function_calls = 1
 	let g:go_highlight_operators = 1
-        let g:go_metalinter_enabled = ['deadcode', 'errcheck', 'gosimple', 'govet', 'staticcheck', 'typecheck', 'unused', 'varcheck']
-	let g:go_metalinter_autosave = 1
-	let g:go_metalinter_command = "golangci-lint"
+        " let g:go_metalinter_enabled = ['deadcode', 'errcheck', 'gosimple', 'govet', 'staticcheck', 'typecheck', 'unused', 'varcheck']
+	" let g:go_metalinter_autosave = 1
+	" let g:go_metalinter_command = "golangci-lint"
 	nnoremap <leader>w :GoMetaLinter<CR>
 	let g:go_fmt_command = "goimports"
 	let g:go_auto_type_info = 1
@@ -165,8 +165,9 @@ let g:tagbar_type_go = {
 " File specific settings
 	autocmd Filetype go setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab
 	autocmd Filetype python setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab  autoindent
-	autocmd FileType yaml setlocal tabstop=2 shiftwidth=2 softtabstop=2  expandtab
+	autocmd Filetype yaml setlocal tabstop=2 shiftwidth=2 softtabstop=2  expandtab
 	autocmd Filetype javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab  autoindent
+	autocmd Filetype proto setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab
 
 " ag
 if executable('ag')

@@ -13,8 +13,10 @@
       ]
     }
   },
+    "snippets.ultisnips.directories": [
+    "gosnippets/UltiSnips"
+  ],
   "python.jediEnabled": false,
-  "python.pythonPath":"/usr/local/bin/python3",
-  "python.upgradePythonLanguageServer":true,
+  "suggest.preferCompleteThanJumpPlaceholder": true,
   "suggest.noselect": false
 }

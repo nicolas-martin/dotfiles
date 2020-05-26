@@ -30,7 +30,7 @@ install .gitconfig
 install .zshrc
 install .tmux.conf
 install init.vim "$HOME/.config/nvim/init.vim"
-install coc-settings.vim "$HOME/.config/nvim/coc-settings.json"
+install coc-settings.json "$HOME/.config/nvim/coc-settings.json"
 # install base.vim "$HOME/base.vim"
 # install .gitattributes
 

@@ -13,7 +13,10 @@ plugins=(
 
 # ssh
 export SSH_KEY_PATH="~/.ssh/rsa_id"
-ssh-add -A
+# Auto add keys?
+[ -z "$SSH_AUTH_SOCK" ] && eval "$(ssh-agent -s)"
+
+# ssh-add -A
 
 # use vim
 set -o vi
@@ -41,7 +44,7 @@ alias removemerge='git branch --merged | grep -v "\*" | grep -v master | grep -v
 alias wd='cd $GOPATH/src/github.com/nicolas-martin'
 
 alias k='kubectl'
-alias vim='nvim'
+alias vim='/usr/bin/vim'
 alias v='nvim'
 alias vrc='nvim ~/.config/nvim/init.vim'
 alias ll='ls -la'
