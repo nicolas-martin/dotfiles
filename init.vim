@@ -10,6 +10,7 @@ call plug#begin('~/.local/share/nvim/plugged')
 	" Statusbar
 	Plug 'vim-airline/vim-airline'
 	" snippets
+	" Doesn't work on fresh install. Additional steps?
 	Plug 'SirVer/ultisnips'
 	" Plug 'danilo-augusto/vim-afterglow'
 	Plug 'mhartington/oceanic-next'
@@ -19,16 +20,13 @@ call plug#begin('~/.local/share/nvim/plugged')
 	Plug 'tpope/vim-commentary'
 	" brew install the_silver_searcher
 	" Plug 'mileszs/ack.vim'
-	"
-	" Document outline
-	" brew install ctags
 	" NOTE: Do I need ctags for gotags to work?
 	" brew install gotags
 	Plug 'majutsushi/tagbar'
 call plug#end()
-
+set nocompatible
 let mapleader = ","
-
+let g:webdevicons_enable_nerdtree = 1
 " tagbar
 nmap <F2> :TagbarToggle<CR>
 " Ignore package, imports and use gotags
@@ -81,7 +79,6 @@ let g:tagbar_type_go = {
 	nnoremap <leader>w :GoMetaLinter<CR>
 	let g:go_fmt_command = "goimports"
 	let g:go_auto_type_info = 1
-	" use golang language server
 	let g:go_def_mode='gopls'
 	let g:go_info_mode='gopls'
 	let g:go_def_mapping_enabled = 0  	" disable vim-go :GoDef short cut (gd) this is handled by LanguageClient [LC]
@@ -102,7 +99,6 @@ let g:tagbar_type_go = {
 		autocmd FileType go nmap <F11>  <Plug>(go-debug-step)
 	augroup END
 	doautocmd vim-go-debug FileType go
-
 
 " Default settings
 	set cmdheight=2
@@ -136,9 +132,6 @@ let g:tagbar_type_go = {
 	no <C-l> <C-w>l 
 	no <C-h> <C-w>h 
 
-	" faster ESC
-	inoremap jk <ESC>
-	inoremap kj <ESC>
 	" get rid of the evil ex mode
 	nnoremap Q <nop>
 	" define sensible backspace behaviour. See :help backspace for more details
@@ -173,6 +166,7 @@ let g:tagbar_type_go = {
 	autocmd Filetype go setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab
 	autocmd Filetype python setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab  autoindent
 	autocmd FileType yaml setlocal tabstop=2 shiftwidth=2 softtabstop=2  expandtab
+	autocmd Filetype javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab  autoindent
 
 " ag
 if executable('ag')
