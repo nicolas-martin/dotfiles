@@ -62,10 +62,14 @@ let g:tagbar_type_go = {
 	let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 " Theme
 	set termguicolors
+	" if exists('$TMUX')
+	" 	" Colors in tmux
+	" 	let &t_8f = "<Esc>[38;2;%lu;%lu;%lum"
+	" 	let &t_8b = "<Esc>[48;2;%lu;%lu;%lum"
+	" endif
+
 	colorscheme OceanicNext
 	let g:airline_theme='oceanicnext'
-	" colo afterglow
-	" let g:airline_theme='afterglow'
 
 " Go settings
 	let g:go_highlight_types = 1
@@ -78,7 +82,7 @@ let g:tagbar_type_go = {
 	" let g:go_metalinter_command = "golangci-lint"
 	nnoremap <leader>w :GoMetaLinter<CR>
 	let g:go_fmt_command = "goimports"
-	let g:go_auto_type_info = 1
+	" let g:go_auto_type_info = 1
 	let g:go_def_mode='gopls'
 	let g:go_info_mode='gopls'
 	let g:go_def_mapping_enabled = 0  	" disable vim-go :GoDef short cut (gd) this is handled by LanguageClient [LC]
@@ -122,15 +126,17 @@ let g:tagbar_type_go = {
 	set splitright			" Split window appears right the current one.
 	set autoread 			" Auto reloads the file when modifications were made
 	set nocompatible 		" enter the current millenium (nvim is always nocompatible?)
+	set ignorecase
+	set encoding=utf-8
 
 	filetype plugin indent on
 	nnoremap <f1> o<Esc>
 	syntax on
 	nnoremap <leader>n :noh<CR>
-	no <C-j> <C-w>j 
-	no <C-k> <C-w>k 
-	no <C-l> <C-w>l 
-	no <C-h> <C-w>h 
+	no <C-j> <C-w>j
+	no <C-k> <C-w>k
+	no <C-l> <C-w>l
+	no <C-h> <C-w>h
 
 	" get rid of the evil ex mode
 	nnoremap Q <nop>
@@ -168,6 +174,7 @@ let g:tagbar_type_go = {
 	autocmd Filetype yaml setlocal tabstop=2 shiftwidth=2 softtabstop=2  expandtab
 	autocmd Filetype javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab  autoindent
 	autocmd Filetype proto setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab
+	autocmd Filetype javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2  expandtab
 
 " ag
 if executable('ag')

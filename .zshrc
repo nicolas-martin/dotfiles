@@ -47,6 +47,7 @@ alias k='kubectl'
 alias vim='/usr/bin/vim'
 alias v='nvim'
 alias vrc='nvim ~/.config/nvim/init.vim'
+alias gh='cd ~/go/src/github.com/nicolas-martin/'
 alias ll='ls -la'
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

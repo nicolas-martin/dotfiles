@@ -2,15 +2,8 @@
   "languageserver": {
     "golang": {
       "command": "gopls",
-      "rootPatterns": [
-        "go.mod",
-        ".vim/",
-        ".git/",
-        ".hg/"
-      ],
-      "filetypes": [
-        "go"
-      ]
+      "rootPatterns": [ "go.mod", ".vim/", ".git/", ".hg/" ],
+      "filetypes": [ "go" ]
     }
   },
     "snippets.ultisnips.directories": [
@@ -18,5 +11,6 @@
   ],
   "python.jediEnabled": false,
   "suggest.preferCompleteThanJumpPlaceholder": true,
-  "suggest.noselect": false
+  "codeLens.enable": true,
+  "solargraph.useBundler": true
 }
