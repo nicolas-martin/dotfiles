@@ -23,38 +23,19 @@ call plug#begin('~/.local/share/nvim/plugged')
 	" NOTE: Do I need ctags for gotags to work?
 	" brew install gotags
 	Plug 'majutsushi/tagbar'
+	" Plug 'dstein64/vim-startuptime'
+	Plug 'ThePrimeagen/vim-apm'
+	Plug 'jiangmiao/auto-pairs'
 call plug#end()
 set nocompatible
 let mapleader = ","
 let g:webdevicons_enable_nerdtree = 1
+" Set the keystroke callback to on
+
 " tagbar
 nmap <F2> :TagbarToggle<CR>
 " Ignore package, imports and use gotags
-let g:tagbar_type_go = {
-	\ 'ctagstype' : 'go',
-	\ 'kinds'     : [
-		\ 'c:constants',
-		\ 'v:variables',
-		\ 't:types',
-		\ 'n:interfaces',
-		\ 'w:fields',
-		\ 'e:embedded',
-		\ 'm:methods',
-		\ 'r:constructor',
-		\ 'f:functions'
-	\ ],
-	\ 'sro' : '.',
-	\ 'kind2scope' : {
-		\ 't' : 'ctype',
-		\ 'n' : 'ntype'
-	\ },
-	\ 'scope2kind' : {
-		\ 'ctype' : 't',
-		\ 'ntype' : 'n'
-	\ },
-	\ 'ctagsbin'  : 'gotags',
-	\ 'ctagsargs' : '-sort -silent'
-\ }
+" :TagbarGetTypeConfig go
 
 " UltiSnips
 	let g:UltiSnipsExpandTrigger="<c-l>"

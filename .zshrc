@@ -1,17 +1,11 @@
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
+echo "hello from zshrc"
 
-# Path to your oh-my-zsh installation.
-export ZSH=~/.oh-my-zsh
+export ZSH="/Users/nmartin/.oh-my-zsh"
 
 ZSH_THEME="robbyrussell"
+plugins=(vi-mode)
 
-plugins=(
-  vi-mode
-  # ssh-agent
-)
-
-# ssh
+source $ZSH/oh-my-zsh.sh
 export SSH_KEY_PATH="~/.ssh/rsa_id"
 # Auto add keys?
 [ -z "$SSH_AUTH_SOCK" ] && eval "$(ssh-agent -s)"
@@ -50,6 +44,7 @@ alias vrc='nvim ~/.config/nvim/init.vim'
 alias gh='cd ~/go/src/github.com/nicolas-martin/'
 alias ll='ls -la'
 
+alias cssh='ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 mkcd ()
@@ -57,3 +52,4 @@ mkcd ()
     mkdir -p -- "$1" &&
       cd -P -- "$1"
 }
+
