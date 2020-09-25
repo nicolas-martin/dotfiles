@@ -24,31 +24,27 @@ call plug#begin('~/.local/share/nvim/plugged')
 	" brew install gotags
 	Plug 'majutsushi/tagbar'
 	" Plug 'dstein64/vim-startuptime'
-	Plug 'ThePrimeagen/vim-apm'
 	Plug 'jiangmiao/auto-pairs'
 call plug#end()
-set nocompatible
 let mapleader = ","
 let g:webdevicons_enable_nerdtree = 1
-" Set the keystroke callback to on
+
+" python. Use custom pyenv with py3nvim
+" :h python3_host_prog has the commands to set this up
+	let g:python3_host_prog = '/Users/nmartin/.pyenv/versions/py3nvim/bin/python'
 
 " tagbar
-nmap <F2> :TagbarToggle<CR>
-" Ignore package, imports and use gotags
-" :TagbarGetTypeConfig go
+	nmap <F2> :TagbarToggle<CR>
+	" Ignore package, imports and use gotags
+	" :TagbarGetTypeConfig go
 
 " UltiSnips
+" I also did some magic with the folders..
 	let g:UltiSnipsExpandTrigger="<c-l>"
 	let g:UltiSnipsJumpForwardTrigger="<c-j>"
 	let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 " Theme
 	set termguicolors
-	" if exists('$TMUX')
-	" 	" Colors in tmux
-	" 	let &t_8f = "<Esc>[38;2;%lu;%lu;%lum"
-	" 	let &t_8b = "<Esc>[48;2;%lu;%lu;%lum"
-	" endif
-
 	colorscheme OceanicNext
 	let g:airline_theme='oceanicnext'
 
@@ -106,13 +102,12 @@ nmap <F2> :TagbarToggle<CR>
 	set foldlevelstart=20 		" Opens X amount of fold at the start - Can't use nofoldenable
 	set splitright			" Split window appears right the current one.
 	set autoread 			" Auto reloads the file when modifications were made
-	set nocompatible 		" enter the current millenium (nvim is always nocompatible?)
+	" set nocompatible 		" enter the current millenium (nvim is always nocompatible?)
+	" syntax on
+	" filetype plugin indent on
 	set ignorecase
 	set encoding=utf-8
-
-	filetype plugin indent on
 	nnoremap <f1> o<Esc>
-	syntax on
 	nnoremap <leader>n :noh<CR>
 	no <C-j> <C-w>j
 	no <C-k> <C-w>k
@@ -168,9 +163,9 @@ if executable('ag')
 	let g:ctrlp_user_command = 'ag %s -l --nocolor --ignore-dir=vendor --ignore .git -g ""'
 endif
 
-" bind \ (backward slash) to grep shortcut
-command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
-nnoremap \ :Ag<SPACE>
+	" bind \ (backward slash) to grep shortcut
+	command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
+	nnoremap \ :Ag<SPACE>
 
 " coc settings
 	set hidden 		" if hidden is not set, TextEdit might fail.
@@ -179,7 +174,7 @@ nnoremap \ :Ag<SPACE>
 	autocmd FileType go setlocal signcolumn=yes
 	" Use tab for trigger completion with characters ahead and navigate.
 	" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
-	inoremap <silent><expr> <TAB>
+	inoremap <silent><expr> <C-l>
 	      \ pumvisible() ? "\<C-n>" :
 	      \ <SID>check_back_space() ? "\<TAB>" :
 	      \ coc#refresh()
@@ -192,13 +187,13 @@ nnoremap \ :Ag<SPACE>
 
 	" Use <c-space> to trigger completion.
 	inoremap <silent><expr> <c-space> coc#refresh()
-	" Remap keys for gotos
 	nmap <silent> gd <Plug>(coc-definition)
 	nmap <silent> gy <Plug>(coc-type-definition)
 	nmap <silent> gi <Plug>(coc-implementation)
 	nmap <silent> gr <Plug>(coc-references)
-
-	" Use `[c` and `]c` to navigate diagnostics
+	nmap <silent> <leader>rn <Plug>(coc-rename)
+	nmap <silent> <leader>as V<Plug>(coc-codeaction-selected)
+	nmap <silent> <leader>a <Plug>(coc-codeaction-line)
 	nmap <silent> [c <Plug>(coc-diagnostic-prev)
 	nmap <silent> ]c <Plug>(coc-diagnostic-next)
 
@@ -208,15 +203,12 @@ nnoremap \ :Ag<SPACE>
 	  if (index(['vim','help'], &filetype) >= 0)
 	    execute 'h '.expand('<cword>')
 	  else
-	    call CocAction('doHover')
+	    call CocActionAsync('doHover')
 	  endif
 	endfunction
 
-	" Remap for rename current word
-	nmap <leader>rn <Plug>(coc-rename)
 
 	" Add status line support, for integration with other plugin, checkout `:h coc-status`
-	" NOTE: What is this?
 	set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
 " custom snippets

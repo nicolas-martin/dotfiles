@@ -9,8 +9,6 @@
     "snippets.ultisnips.directories": [
     "gosnippets/UltiSnips"
   ],
-  "python.jediEnabled": false,
   "suggest.preferCompleteThanJumpPlaceholder": true,
-  "codeLens.enable": true,
-  "solargraph.useBundler": true
+  "codeLens.enable": true
 }

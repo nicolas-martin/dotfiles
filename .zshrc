@@ -17,6 +17,8 @@ set -o vi
 export GOBIN=$HOME/go/bin
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOBIN
+# pretty man
+export MANPAGER='nvim +Man!'
 
 # git aliases
 alias st='git status '
@@ -31,17 +33,14 @@ alias last='git log -1'
 alias re='git fetch origin master;git rebase origin/master'
 alias g='git '
 alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit -m "--wip--"'
-alias orig="find . -name '*.orig' -delete"
 alias gunwip='git log -n 1 | grep -q -c "\-\-wip\-\-" && git reset HEAD~1'
+alias orig="find . -name '*.orig' -delete"
 alias removemerge='git branch --merged | grep -v "\*" | grep -v master | grep -v dev | xargs -n 1 git branch -d'
-
-alias wd='cd $GOPATH/src/github.com/nicolas-martin'
-
+alias gh='cd $GOPATH/src/github.com/nicolas-martin/'
 alias k='kubectl'
 alias vim='/usr/bin/vim'
 alias v='nvim'
 alias vrc='nvim ~/.config/nvim/init.vim'
-alias gh='cd ~/go/src/github.com/nicolas-martin/'
 alias ll='ls -la'
 
 alias cssh='ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
@@ -53,3 +52,7 @@ mkcd ()
       cd -P -- "$1"
 }
 
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+
+alias poetry=~/.poetry/bin/poetry
