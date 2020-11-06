@@ -1,6 +1,7 @@
 call plug#begin('~/.local/share/nvim/plugged')
 	" brew install golangci/tap/golangci-lint
-	Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+	" Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+	Plug 'fatih/vim-go'
 	" File tree
 	Plug 'preservim/nerdtree'
 	" Auto complete
@@ -22,9 +23,9 @@ call plug#begin('~/.local/share/nvim/plugged')
 	" Plug 'mileszs/ack.vim'
 	" NOTE: Do I need ctags for gotags to work?
 	" brew install gotags
-	Plug 'majutsushi/tagbar'
+	Plug 'preservim/tagbar'
 	" Plug 'dstein64/vim-startuptime'
-	Plug 'jiangmiao/auto-pairs'
+	" Plug 'jiangmiao/auto-pairs'
 call plug#end()
 let mapleader = ","
 let g:webdevicons_enable_nerdtree = 1
@@ -32,11 +33,32 @@ let g:webdevicons_enable_nerdtree = 1
 " python. Use custom pyenv with py3nvim
 " :h python3_host_prog has the commands to set this up
 	let g:python3_host_prog = '/Users/nmartin/.pyenv/versions/py3nvim/bin/python'
+	autocmd FileType python setlocal signcolumn=yes
+	call coc#config('python', {'pythonPath': $PYENV_VIRTUAL_ENV})
+
+" rust
+	autocmd FileType rust setlocal signcolumn=yes
 
 " tagbar
 	nmap <F2> :TagbarToggle<CR>
-	" Ignore package, imports and use gotags
 	" :TagbarGetTypeConfig go
+	" Fold package, imports
+	let g:tagbar_type_go = {
+	    \ 'kinds' : [
+		\ 'p:package:1',
+		\ 'i:import:1',
+		\ 'c:constants:0:0',
+		\ 'v:variables:0:0',
+		\ 't:types:0:0',
+		\ 'n:intefaces:0:0',
+		\ 'w:fields:0:0',
+		\ 'e:embedded:0:0',
+		\ 'm:methods:0:0',
+		\ 'r:constructors:0:0',
+		\ 'f:functions:0:0',
+		\ '?:unknown',
+	    \ ],
+	\ }
 
 " UltiSnips
 " I also did some magic with the folders..
@@ -80,6 +102,7 @@ let g:webdevicons_enable_nerdtree = 1
 		autocmd FileType go nmap <F11>  <Plug>(go-debug-step)
 	augroup END
 	doautocmd vim-go-debug FileType go
+	autocmd FileType go setlocal signcolumn=yes
 
 " Default settings
 	set cmdheight=2
@@ -126,6 +149,7 @@ let g:webdevicons_enable_nerdtree = 1
 	" autocmd BufEnter * if bufname('#') =~# "^NERD_tree_" && winnr('$') > 1 | b# | endif
 	map <C-n> :NERDTreeToggle<CR>
 	map <leader>l :NERDTreeFind<cr>
+	let g:NERDTreeRespectWildIgnore = 1
 
 " Remap ctrl-p to find file
 	map <leader>p <C-p>
@@ -162,7 +186,6 @@ if executable('ag')
 	let g:ctrlp_use_caching = 0 
 	let g:ctrlp_user_command = 'ag %s -l --nocolor --ignore-dir=vendor --ignore .git -g ""'
 endif
-
 	" bind \ (backward slash) to grep shortcut
 	command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
 	nnoremap \ :Ag<SPACE>
@@ -171,7 +194,6 @@ endif
 	set hidden 		" if hidden is not set, TextEdit might fail.
 	set updatetime=300 	" You will have bad experience for diagnostic messages when it's default 4000.
 	set shortmess+=c 	" don't give |ins-completion-menu| messages.
-	autocmd FileType go setlocal signcolumn=yes
 	" Use tab for trigger completion with characters ahead and navigate.
 	" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
 	inoremap <silent><expr> <C-l>
@@ -214,3 +236,18 @@ endif
 " custom snippets
  	" Create comment from the function name of an instance function
 	autocmd FileType go nnoremap <leader>mc f)wyawki//<Esc>pa<Space>
+	function! Count( word )
+	  redir => cnt
+		silent exe '%s/' . a:word . '//n'
+	  redir END
+	  return matchstr( cnt, '\d\+' )
+	endfunction
+
+	function! FormatLog()
+	  let @q='nvnk$J'
+	  let @/ = 'WebsocketHandler'
+	  let n = Count('WebsocketHandler')-20
+	  execute "normal /\<cr>"
+	  execute "normal ".n."@q"
+	  execute "%s/ \\+/ /g"
+	endfun

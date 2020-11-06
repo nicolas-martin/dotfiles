@@ -42,6 +42,7 @@ alias vim='/usr/bin/vim'
 alias v='nvim'
 alias vrc='nvim ~/.config/nvim/init.vim'
 alias ll='ls -la'
+alias ghc='/usr/local/bin/gh'
 
 alias cssh='ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -56,3 +57,9 @@ eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 
 alias poetry=~/.poetry/bin/poetry
+
+# Get autocompelte with catalina
+autoload -U compinit && compinit
+
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh" || true
+
