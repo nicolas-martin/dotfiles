@@ -15,3 +15,4 @@
 	autostash = true
 [core]
 	pager = cat
+	ignoreCase = false

@@ -1,7 +1,6 @@
 call plug#begin('~/.local/share/nvim/plugged')
 	" brew install golangci/tap/golangci-lint
-	" Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
-	Plug 'fatih/vim-go'
+	Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 	" File tree
 	Plug 'preservim/nerdtree'
 	" Auto complete
@@ -14,7 +13,8 @@ call plug#begin('~/.local/share/nvim/plugged')
 	" Doesn't work on fresh install. Additional steps?
 	Plug 'SirVer/ultisnips'
 	" Plug 'danilo-augusto/vim-afterglow'
-	Plug 'mhartington/oceanic-next'
+	" Plug 'mhartington/oceanic-next'
+	Plug 'morhetz/gruvbox'
 	" surround
 	Plug 'tpope/vim-surround'
 	" Commenting
@@ -66,9 +66,11 @@ let g:webdevicons_enable_nerdtree = 1
 	let g:UltiSnipsJumpForwardTrigger="<c-j>"
 	let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 " Theme
+	" Theme
+	syntax enable
+	colorscheme GruvBox
 	set termguicolors
-	colorscheme OceanicNext
-	let g:airline_theme='oceanicnext'
+	" let g:airline_theme='gruvbox'
 
 " Go settings
 	let g:go_highlight_types = 1
