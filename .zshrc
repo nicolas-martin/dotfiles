@@ -3,7 +3,7 @@ echo "hello from zshrc"
 export ZSH="/Users/nmartin/.oh-my-zsh"
 
 ZSH_THEME="robbyrussell"
-plugins=(vi-mode)
+plugins=(vi-mode autojump)
 
 source $ZSH/oh-my-zsh.sh
 export SSH_KEY_PATH="~/.ssh/rsa_id"

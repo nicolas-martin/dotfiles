@@ -31,15 +31,16 @@ install .zshrc
 install .tmux.conf
 install init.vim "$HOME/.config/nvim/init.vim"
 install coc-settings.json "$HOME/.config/nvim/coc-settings.json"
-# install base.vim "$HOME/base.vim"
-# install .gitattributes
+install alacritty.yml "$HOME/.config/alacritty/alacritty.yml"
+install base.vim "$HOME/base.vim"
+install .gitattributes
 
-warn "Installing misc deps"
+# warn "Installing misc deps"
 
-curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+# curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+#     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+# curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+#     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 warn "Running misc commands"
 

@@ -1,0 +1,19 @@
+# Configuration for Alacritty, the GPU enhanced terminal emulator.
+
+# Setup term for programs to be able to use it
+env:
+  TERM: alacritty
+
+selection:
+  save_to_clipboard: true
+
+live_config_reload: true
+
+font:
+  size: 14
+
+window:
+  # Values for `decorations` (macOS only):
+  #     - transparent: Title bar, transparent background and title bar buttons
+  #     - buttonless: Title bar, transparent background, but no title bar buttons
+  decorations: buttonless
