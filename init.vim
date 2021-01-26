@@ -12,8 +12,6 @@ call plug#begin('~/.local/share/nvim/plugged')
 	" snippets
 	" Doesn't work on fresh install. Additional steps?
 	Plug 'SirVer/ultisnips'
-	" Plug 'danilo-augusto/vim-afterglow'
-	" Plug 'mhartington/oceanic-next'
 	Plug 'morhetz/gruvbox'
 	" surround
 	Plug 'tpope/vim-surround'
@@ -28,7 +26,6 @@ call plug#begin('~/.local/share/nvim/plugged')
 	" Plug 'jiangmiao/auto-pairs'
 call plug#end()
 let mapleader = ","
-let g:webdevicons_enable_nerdtree = 1
 
 " python. Use custom pyenv with py3nvim
 " :h python3_host_prog has the commands to set this up
@@ -68,9 +65,9 @@ let g:webdevicons_enable_nerdtree = 1
 " Theme
 	" Theme
 	syntax enable
-	colorscheme GruvBox
+	colorscheme gruvbox
 	set termguicolors
-	" let g:airline_theme='gruvbox'
+	let g:airline_theme='gruvbox'
 
 " Go settings
 	let g:go_highlight_types = 1
@@ -78,10 +75,9 @@ let g:webdevicons_enable_nerdtree = 1
 	let g:go_highlight_functions = 1 
 	let g:go_highlight_function_calls = 1
 	let g:go_highlight_operators = 1
-        " let g:go_metalinter_enabled = ['deadcode', 'errcheck', 'gosimple', 'govet', 'staticcheck', 'typecheck', 'unused', 'varcheck']
-	" let g:go_metalinter_autosave = 1
-	" let g:go_metalinter_command = "golangci-lint"
+	" MetaLinter is not the default anymore
 	nnoremap <leader>w :GoMetaLinter<CR>
+	let g:go_metalinter_command = "staticcheck"
 	let g:go_fmt_command = "goimports"
 	" let g:go_auto_type_info = 1
 	let g:go_def_mode='gopls'
@@ -218,6 +214,7 @@ endif
 	nmap <silent> <leader>rn <Plug>(coc-rename)
 	nmap <silent> <leader>as V<Plug>(coc-codeaction-selected)
 	nmap <silent> <leader>a <Plug>(coc-codeaction-line)
+	nmap <silent> <leader>cl <Plug>(coc-codelens-action)	
 	nmap <silent> [c <Plug>(coc-diagnostic-prev)
 	nmap <silent> ]c <Plug>(coc-diagnostic-next)
 

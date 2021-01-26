@@ -19,6 +19,7 @@ export GOPATH=$HOME/go
 export PATH=$PATH:$GOBIN
 # pretty man
 export MANPAGER='nvim +Man!'
+export EDITOR=nvim
 
 # git aliases
 alias st='git status '
@@ -27,7 +28,6 @@ alias br='git branch '
 alias ci='git commit '
 alias dt='git difftool'
 alias co='git checkout '
-alias last='git last'
 alias pu='git push '
 alias last='git log -1'
 alias re='git fetch origin master;git rebase origin/master'
