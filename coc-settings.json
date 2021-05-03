@@ -16,5 +16,5 @@
   "codeLens.enable": true,
   "python.jediEnabled": false,
   "python.linting.pylintEnabled": true,
-  "coc.preferences.formatOnSaveFiletypes":["rust", "python", "go"]
+  "coc.preferences.formatOnSaveFiletypes":["rust", "python", "go", "typescript", "typescriptreact"]
 }

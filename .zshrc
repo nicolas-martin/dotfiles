@@ -14,9 +14,15 @@ export SSH_KEY_PATH="~/.ssh/rsa_id"
 
 # use vim
 set -o vi
-export GOBIN=$HOME/go/bin
+# export GOBIN=$HOME/go/bin
 export GOPATH=$HOME/go
-export PATH=$PATH:$GOBIN
+# GOROOT changes on linux
+export GOROOT=/usr/local/opt/go/libexec
+export PATH=$PATH:$GOPATH/bin
+export PATH=$PATH:$GOROOT/bin
+# replace make with gmake
+export PATH=$PATH:'/usr/local/opt/make/libexec/gnubin'
+
 # pretty man
 export MANPAGER='nvim +Man!'
 export EDITOR=nvim

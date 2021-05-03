@@ -24,6 +24,7 @@ call plug#begin('~/.local/share/nvim/plugged')
 	Plug 'preservim/tagbar'
 	" Plug 'dstein64/vim-startuptime'
 	" Plug 'jiangmiao/auto-pairs'
+	Plug 'leafgarland/typescript-vim'
 call plug#end()
 let mapleader = ","
 
@@ -35,6 +36,10 @@ let mapleader = ","
 
 " rust
 	autocmd FileType rust setlocal signcolumn=yes
+
+" typescript
+	autocmd FileType typescript setlocal signcolumn=yes
+	autocmd FileType typescriptreact setlocal signcolumn=yes
 
 " tagbar
 	nmap <F2> :TagbarToggle<CR>
@@ -171,8 +176,8 @@ let mapleader = ","
 	autocmd Filetype python setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab  autoindent
 	autocmd Filetype yaml setlocal tabstop=2 shiftwidth=2 softtabstop=2  expandtab
 	autocmd Filetype javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab  autoindent
+	autocmd Filetype typescriptreact setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab  autoindent
 	autocmd Filetype proto setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab
-	autocmd Filetype javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2  expandtab
 
 " ag
 if executable('ag')
