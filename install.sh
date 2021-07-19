@@ -26,14 +26,14 @@ gitstall() {
 
 warn "Symlinking files"
 
-install .gitconfig
-install .zshrc
-install .tmux.conf
-install init.vim "$HOME/.config/nvim/init.vim"
-install coc-settings.json "$HOME/.config/nvim/coc-settings.json"
-install alacritty.yml "$HOME/.config/alacritty/alacritty.yml"
-install base.vim "$HOME/base.vim"
-install .gitattributes
+# install .gitconfig
+# install .zshrc
+# install .tmux.conf
+install init.lua "$HOME/.config/nvim/init.lua"
+install plugins.lua "$HOME/.config/nvim/lua/plugins.lua"
+# install alacritty.yml "$HOME/.config/alacritty/alacritty.yml"
+# install base.vim "$HOME/base.vim"
+# install .gitattributes
 
 # warn "Installing misc deps"
 
@@ -44,7 +44,7 @@ install .gitattributes
 
 warn "Running misc commands"
 
-$(which vim) +PlugUpdate +qall
-if command -v nvim; then
-  $(which nvim) +PlugUpdate +qall
-fi
+# $(which vim) +PlugUpdate +qall
+# if command -v nvim; then
+#   $(which nvim) +PlugUpdate +qall
+# fi
