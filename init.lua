@@ -8,13 +8,17 @@ local function map(mode, lhs, rhs, opts)
   if opts then options = vim.tbl_extend('force', options, opts) end
   vim.api.nvim_set_keymap(mode, lhs, rhs, options)
 end
-require('plugins')
 
-g.mapleader = ","
+require('plugins')
+-- vim.g.gruvbox_contrast_dark = "hard"
+-- vim.cmd("let g:gruvbox_colors = { 'dark0_hard': ['#000000', 0] }")
+vim.o.background = "dark"
+cmd [[colorscheme gruvbox]]
+g.mapleader = ','
 
 require'lspconfig'.gopls.setup{
     on_attach=on_attach,
-    cmd = {"gopls", "serve"},
+    cmd = {'gopls', 'serve'},
     settings = {
         gopls = {
             analyses = {
@@ -27,13 +31,13 @@ require'lspconfig'.gopls.setup{
 
 require('telescope').setup{}
 map('n', '<leader>ff', '<cmd>lua require(\'telescope.builtin\').find_files()<cr>')
-map('<leader>fg', '<cmd>lua require(\'telescope.builtin\').live_grep()<cr>')
-map('<leader>fb', '<cmd>lua require(\'telescope.builtin\').buffers()<cr>')
-map('<leader>fh', '<cmd>lua require(\'telescope.builtin\').help_tags()<cr>')
+map('n', '<leader>fg', '<cmd>lua require(\'telescope.builtin\').live_grep()<cr>')
+map('n', '<leader>fb', '<cmd>lua require(\'telescope.builtin\').buffers()<cr>')
+map('n', '<leader>fh', '<cmd>lua require(\'telescope.builtin\').help_tags()<cr>')
 
 require'nvim-treesitter.configs'.setup {
     highlight = {
-        enable = true
+        enable = false
     },
 }
 
@@ -79,6 +83,7 @@ map('n', 'Q', '<nop>')
   -- opt.splitright = true                  -- Split window appears right the current one.
   opt.autoread = true                    -- Auto reloads the file when modifications were made
   opt.ignorecase = true
+  opt.termguicolors=true
   -- opt.encoding = utf-8
 
 cmd 'autocmd Filetype go setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab'
