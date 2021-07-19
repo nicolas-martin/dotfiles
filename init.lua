@@ -3,6 +3,11 @@ local fn = vim.fn -- to call Vim functions e.g. fn.bufnr()
 local g = vim.g -- a table to access global variables
 local opt = vim.opt -- to set options
 
+local function map(mode, lhs, rhs, opts)
+  local options = {noremap = true}
+  if opts then options = vim.tbl_extend('force', options, opts) end
+  vim.api.nvim_set_keymap(mode, lhs, rhs, options)
+end
 require('plugins')
 
 g.mapleader = ","
@@ -20,16 +25,17 @@ require'lspconfig'.gopls.setup{
     },
 }
 
+require('telescope').setup{}
+map('n', '<leader>ff', '<cmd>lua require(\'telescope.builtin\').find_files()<cr>')
+map('<leader>fg', '<cmd>lua require(\'telescope.builtin\').live_grep()<cr>')
+map('<leader>fb', '<cmd>lua require(\'telescope.builtin\').buffers()<cr>')
+map('<leader>fh', '<cmd>lua require(\'telescope.builtin\').help_tags()<cr>')
+
 require'nvim-treesitter.configs'.setup {
     highlight = {
         enable = true
     },
 }
-local function map(mode, lhs, rhs, opts)
-  local options = {noremap = true}
-  if opts then options = vim.tbl_extend('force', options, opts) end
-  vim.api.nvim_set_keymap(mode, lhs, rhs, options)
-end
 
   map('n', '<C-n>', ':NERDTreeToggle<CR>') 
   map('n', '<leader>l', ':NERDTreeFind<cr>')
@@ -118,8 +124,6 @@ local on_attach = function(client, bufnr)
   buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
 
 end
-
-
 
 -- Use a loop to conveniently call 'setup' on multiple servers and
 -- map buffer local keybindings when the language server attaches
