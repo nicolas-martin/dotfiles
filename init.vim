@@ -27,6 +27,8 @@ call plug#begin('~/.local/share/nvim/plugged')
 	Plug 'leafgarland/typescript-vim'
 call plug#end()
 let mapleader = ","
+" test fix for tmux+nvim
+autocmd VimEnter * :silent exec "!kill -s SIGWINCH $PPID"
 
 " python. Use custom pyenv with py3nvim
 " :h python3_host_prog has the commands to set this up

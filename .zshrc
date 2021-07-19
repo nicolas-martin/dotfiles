@@ -49,6 +49,7 @@ alias v='nvim'
 alias vrc='nvim ~/.config/nvim/init.vim'
 alias ll='ls -la'
 alias ghc='/usr/local/bin/gh'
+alias b='git branch | grep -v "^\*" | fzf --height=20% --reverse --info=inline | xargs git checkout'
 
 alias cssh='ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
