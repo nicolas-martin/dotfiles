@@ -17,16 +17,6 @@ cmd [[colorscheme gruvbox]]
 g.mapleader = ','
 
 require'lspconfig'.gopls.setup{
-    on_attach=on_attach,
-    cmd = {'gopls', 'serve'},
-    settings = {
-        gopls = {
-            analyses = {
-                unusedparams = true,
-            },
-            staticcheck = true,
-        },
-    },
 }
 
 require('telescope').setup{}
@@ -35,7 +25,26 @@ map('n', '<leader>fg', '<cmd>lua require(\'telescope.builtin\').live_grep()<cr>'
 map('n', '<leader>fb', '<cmd>lua require(\'telescope.builtin\').buffers()<cr>')
 map('n', '<leader>fh', '<cmd>lua require(\'telescope.builtin\').help_tags()<cr>')
 
+vim.cmd([[
+  let g:go_highlight_types = 1
+  let g:go_highlight_fields = 1
+  let g:go_highlight_functions = 1
+  let g:go_highlight_function_calls = 1
+  let g:go_highlight_operators = 1
+]])
 require'nvim-treesitter.configs'.setup {
+    ensure_installed = {
+      "javascript",
+      "typescript",
+      "tsx",
+      "html",
+      "css",
+      "lua",
+      "rust",
+      "go",
+      "python",
+      "json",
+    },
     highlight = {
         enable = false
     },
