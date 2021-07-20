@@ -16,14 +16,75 @@ vim.o.background = "dark"
 cmd [[colorscheme gruvbox]]
 g.mapleader = ','
 
+ require'compe'.setup {
+  enabled = true;
+  autocomplete = true;
+  debug = false;
+  min_length = 1;
+  preselect = 'enable';
+  throttle_time = 80;
+  source_timeout = 200;
+  resolve_timeout = 800;
+  incomplete_delay = 400;
+  max_abbr_width = 100;
+  max_kind_width = 100;
+  max_menu_width = 100;
+  documentation = {
+    border = { '', '' ,'', ' ', '', '', '', ' ' }, -- the border option is the same as `|help nvim_open_win|`
+    winhighlight = "NormalFloat:CompeDocumentation,FloatBorder:CompeDocumentationBorder",
+    max_width = 120,
+    min_width = 60,
+    max_height = math.floor(vim.o.lines * 0.3),
+    min_height = 1,
+  };
+
+  source = {
+    path = true;
+    buffer = true;
+    calc = true;
+    nvim_lsp = true;
+    nvim_lua = true;
+    ultisnips = true;
+  };
+}  
+-- ?
+cmd [[ let g:python3_host_prog = '/Users/nmartin/.pyenv/versions/py3nvim/bin/python' ]]
+-- capabilities = vim.lsp.protocol.make_client_capabilities()
+-- capabilities.textDocument.completion.completionItem.snippetSupport = true
+-- capabilities.textDocument.completion.completionItem.resolveSupport = {
+--   properties = {
+--     'documentation',
+--     'detail',
+--     'additionalTextEdits',
+--   }
+-- }
+
 require'lspconfig'.gopls.setup{
+  -- capabilities = capabilities,
 }
 
-require('telescope').setup{}
+vim.cmd([[
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+]])
+
+-- ?
+local default_opts = { noremap = true, silent = true, expr = true }
+vim.api.nvim_set_keymap('i', '<C-Space>', [[ compe#complete() ]], default_opts)
+vim.api.nvim_set_keymap('i', '<CR>', 'compe#confirm(\'<CR>\')', default_opts)
+vim.api.nvim_set_keymap('i', '<C-e>', 'compe#close(\'<C-e>\')', default_opts)
+vim.api.nvim_set_keymap('i', '<C-f>', 'compe#scroll({ \'delta\': +4 })', default_opts)
+vim.api.nvim_set_keymap('i', '<C-d>', 'compe#scroll({ \'delta\': -4 })', default_opts)
+
+require('telescope').setup{
+  defaults = { file_ignore_patterns = {"vendor", "go.sum", "go.mod"} }
+}
 map('n', '<leader>ff', '<cmd>lua require(\'telescope.builtin\').find_files()<cr>')
 map('n', '<leader>fg', '<cmd>lua require(\'telescope.builtin\').live_grep()<cr>')
 map('n', '<leader>fb', '<cmd>lua require(\'telescope.builtin\').buffers()<cr>')
 map('n', '<leader>fh', '<cmd>lua require(\'telescope.builtin\').help_tags()<cr>')
+map('n', '<leader>ft', '<cmd>lua require(\'telescope.builtin\').lsp_document_symbols()<cr>')
 
 vim.cmd([[
   let g:go_highlight_types = 1
@@ -32,6 +93,7 @@ vim.cmd([[
   let g:go_highlight_function_calls = 1
   let g:go_highlight_operators = 1
 ]])
+
 require'nvim-treesitter.configs'.setup {
     ensure_installed = {
       "javascript",
@@ -49,7 +111,6 @@ require'nvim-treesitter.configs'.setup {
         enable = false
     },
 }
-
   map('n', '<C-n>', ':NERDTreeToggle<CR>') 
   map('n', '<leader>l', ':NERDTreeFind<cr>')
   map('n', '<leader>1', '1gt')
@@ -61,14 +122,14 @@ require'nvim-treesitter.configs'.setup {
   map('n', '<leader>7', '7gt')
   map('n', '<leader>8', '8gt')
   map('n', '<leader>9', '9gt')
-map('n', '<f1>', 'o<Esc>')
-map('n', '<leader>n', ':noh<CR>')
-map('n', '<C-j>', '<C-w>j')
-map('n', '<C-k>', '<C-w>k')
-map('n', '<C-l>', '<C-w>l')
-map('n', '<C-h>', '<C-w>h')
--- get rid of the evil ex mode
-map('n', 'Q', '<nop>')
+  map('n', '<f1>', 'o<Esc>')
+  map('n', '<leader>n', ':noh<CR>')
+  map('n', '<C-j>', '<C-w>j')
+  map('n', '<C-k>', '<C-w>k')
+  map('n', '<C-l>', '<C-w>l')
+  map('n', '<C-h>', '<C-w>h')
+  -- get rid of the evil ex mode
+  map('n', 'Q', '<nop>')
 
 -- Default settings
   opt.cmdheight = 2
@@ -81,6 +142,7 @@ map('n', 'Q', '<nop>')
   -- opt.noshowmode = true                  -- don't show modes (use airline instead)"
   opt.relativenumber = true
   opt.autowrite = true
+  vim.o.completeopt = "menuone,noselect"
   -- opt.clipboard = unnamedplus
   opt.scrolloff = 5                 -- Keep some distance from the bottom
   opt.sidescrolloff = 5             -- Keep some distance while side scrolling
@@ -124,24 +186,24 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
   buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
   buf_set_keymap('n', '<leader>k', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-  buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
-  buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
-  buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
-  buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-  buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-  buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+  buf_set_keymap('n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+  buf_set_keymap('n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+  buf_set_keymap('n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+  buf_set_keymap('n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+  buf_set_keymap('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  buf_set_keymap('n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
   buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-  buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+  buf_set_keymap('n', '<leader>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
   buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
   buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
-  buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
-  buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
+  buf_set_keymap('n', '<leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+  buf_set_keymap("n", "<leader>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
 
 end
 
 -- Use a loop to conveniently call 'setup' on multiple servers and
 -- map buffer local keybindings when the language server attaches
-local servers = {"gopls", "pyright", "rust_analyzer", "tsserver" }
+local servers = {"gopls"}
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup {
     on_attach = on_attach,

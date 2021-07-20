@@ -6,6 +6,9 @@ return require('packer').startup(function()
   use 'tpope/vim-surround'
   use 'tpope/vim-commentary'
   use 'wbthomason/packer.nvim'
+  use 'hrsh7th/nvim-compe'
+  use 'SirVer/ultisnips'
+  use 'honza/vim-snippets'
   use 'fatih/vim-go'
   use {'npxbr/gruvbox.nvim', requires = {'rktjmp/lush.nvim'}}
   use {
