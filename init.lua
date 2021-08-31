@@ -16,52 +16,82 @@ vim.o.background = "dark"
 cmd [[colorscheme gruvbox]]
 g.mapleader = ','
 
- require'compe'.setup {
+require'compe'.setup {
   enabled = true;
   autocomplete = true;
   debug = false;
-  min_length = 1;
-  preselect = 'enable';
-  throttle_time = 80;
-  source_timeout = 200;
-  resolve_timeout = 800;
-  incomplete_delay = 400;
-  max_abbr_width = 100;
-  max_kind_width = 100;
-  max_menu_width = 100;
-  documentation = {
-    border = { '', '' ,'', ' ', '', '', '', ' ' }, -- the border option is the same as `|help nvim_open_win|`
-    winhighlight = "NormalFloat:CompeDocumentation,FloatBorder:CompeDocumentationBorder",
-    max_width = 120,
-    min_width = 60,
-    max_height = math.floor(vim.o.lines * 0.3),
-    min_height = 1,
-  };
 
   source = {
-    path = true;
+    path = false;
     buffer = true;
-    calc = true;
     nvim_lsp = true;
-    nvim_lua = true;
-    ultisnips = true;
+    ultisnips = {true, priority = 100 };
   };
 }  
--- ?
+
+-- Why do I need this for ultisnips?
 cmd [[ let g:python3_host_prog = '/Users/nmartin/.pyenv/versions/py3nvim/bin/python' ]]
--- capabilities = vim.lsp.protocol.make_client_capabilities()
--- capabilities.textDocument.completion.completionItem.snippetSupport = true
--- capabilities.textDocument.completion.completionItem.resolveSupport = {
---   properties = {
---     'documentation',
---     'detail',
---     'additionalTextEdits',
---   }
--- }
+capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.textDocument.completion.completionItem.snippetSupport = true
+capabilities.textDocument.completion.completionItem.resolveSupport = {
+  properties = {
+    'documentation',
+    'detail',
+    'additionalTextEdits',
+  }
+}
+
+
+-- go imports on save
+function goimports(timeout_ms)
+  local context = { only = { "source.organizeImports" } }
+  vim.validate { context = { context, "t", true } }
+
+  local params = vim.lsp.util.make_range_params()
+  params.context = context
+
+  -- See the implementation of the textDocument/codeAction callback
+  -- (lua/vim/lsp/handler.lua) for how to do this properly.
+  local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, timeout_ms)
+  if not result or next(result) == nil then return end
+  local actions = result[1].result
+  if not actions then return end
+  local action = actions[1]
+
+  -- textDocument/codeAction can return either Command[] or CodeAction[]. If it
+  -- is a CodeAction, it can have either an edit, a command or both. Edits
+  -- should be executed first.
+  if action.edit or type(action.command) == "table" then
+    if action.edit then
+      vim.lsp.util.apply_workspace_edit(action.edit)
+    end
+    if type(action.command) == "table" then
+      vim.lsp.buf.execute_command(action.command)
+    end
+  else
+    vim.lsp.buf.execute_command(action)
+  end
+end
+
+cmd [[ autocmd BufWritePre *.go lua goimports(1000) ]]
 
 require'lspconfig'.gopls.setup{
-  -- capabilities = capabilities,
+  cmd = {"gopls", "serve"},
+  settings = {
+    gopls = {
+      analyses = {
+        unusedparams = true,
+      },
+      staticcheck = true,
+    },
+  },
+  capabilities = capabilities,
 }
+
+-- test fix for tmux+nvim
+vim.cmd([[
+autocmd VimEnter * :silent exec "!kill -s SIGWINCH $PPID"
+]])
 
 vim.cmd([[
 let g:UltiSnipsExpandTrigger="<tab>"
@@ -71,15 +101,28 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
 -- ?
 local default_opts = { noremap = true, silent = true, expr = true }
-vim.api.nvim_set_keymap('i', '<C-Space>', [[ compe#complete() ]], default_opts)
-vim.api.nvim_set_keymap('i', '<CR>', 'compe#confirm(\'<CR>\')', default_opts)
-vim.api.nvim_set_keymap('i', '<C-e>', 'compe#close(\'<C-e>\')', default_opts)
-vim.api.nvim_set_keymap('i', '<C-f>', 'compe#scroll({ \'delta\': +4 })', default_opts)
-vim.api.nvim_set_keymap('i', '<C-d>', 'compe#scroll({ \'delta\': -4 })', default_opts)
+map('i', '<C-Space>', [[ compe#complete() ]], default_opts)
+map('i', '<CR>', 'compe#confirm(\'<CR>\')', default_opts)
+map('i', '<C-e>', 'compe#close(\'<C-e>\')', default_opts)
+map('i', '<C-f>', 'compe#scroll({ \'delta\': +4 })', default_opts)
+map('i', '<C-d>', 'compe#scroll({ \'delta\': -4 })', default_opts)
 
 require('telescope').setup{
-  defaults = { file_ignore_patterns = {"vendor", "go.sum", "go.mod"} }
+  defaults = { 
+    file_ignore_patterns = {"vendor", "go.sum", "go.mod", "module", ".git"},
+    mappings = {
+      i = {
+        ["<C-n>"] = false,
+        ["<C-p>"] = false,
+        ["<esc>"] = require('telescope.actions').close,
+        ["<C-[>"] = require('telescope.actions').close,
+        ["<C-j>"] = require('telescope.actions').move_selection_next, 
+        ["<C-k>"] = require('telescope.actions').move_selection_previous,
+      },
+    }
+  }
 }
+
 map('n', '<leader>ff', '<cmd>lua require(\'telescope.builtin\').find_files()<cr>')
 map('n', '<leader>fg', '<cmd>lua require(\'telescope.builtin\').live_grep()<cr>')
 map('n', '<leader>fb', '<cmd>lua require(\'telescope.builtin\').buffers()<cr>')
@@ -92,7 +135,12 @@ vim.cmd([[
   let g:go_highlight_functions = 1
   let g:go_highlight_function_calls = 1
   let g:go_highlight_operators = 1
+  let g:go_fmt_command = "goimports"
+  let g:go_metalinter_command = "staticcheck"
+  let g:go_gopls_enabled = 0
 ]])
+
+map('n', '<leader>w', ':GoMetaLinter<CR>')
 
 require'nvim-treesitter.configs'.setup {
     ensure_installed = {
@@ -143,7 +191,7 @@ require'nvim-treesitter.configs'.setup {
   opt.relativenumber = true
   opt.autowrite = true
   vim.o.completeopt = "menuone,noselect"
-  -- opt.clipboard = unnamedplus
+  opt.clipboard = "unnamedplus"
   opt.scrolloff = 5                 -- Keep some distance from the bottom
   opt.sidescrolloff = 5             -- Keep some distance while side scrolling
   opt.backup = false                    -- No backup file
@@ -163,6 +211,7 @@ cmd 'autocmd Filetype yaml setlocal tabstop=2 shiftwidth=2 softtabstop=2  expand
 cmd 'autocmd Filetype javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab  autoindent'
 cmd 'autocmd Filetype typescriptreact setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab  autoindent'
 cmd 'autocmd Filetype proto setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab'
+cmd 'autocmd Filetype lua setlocal tabstop=2 shiftwidth=2 softtabstop=2  expandtab signcolumn=yes'
  
 
 local nvim_lsp = require('lspconfig')

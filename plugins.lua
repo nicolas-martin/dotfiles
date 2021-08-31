@@ -1,7 +1,7 @@
 return require('packer').startup(function()
   use 'preservim/nerdtree'
   use 'neovim/nvim-lspconfig'
-  use 'nvim-treesitter/nvim-treesitter'
+  use { 'nvim-treesitter/nvim-treesitter', branch = '0.5-compat', run = ':TSUpdate' }
   use 'tpope/vim-repeat'
   use 'tpope/vim-surround'
   use 'tpope/vim-commentary'
