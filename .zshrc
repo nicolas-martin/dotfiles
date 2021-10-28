@@ -70,3 +70,4 @@ autoload -U compinit && compinit
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh" || true
 
+if [ -e /Users/nmartin/.nix-profile/etc/profile.d/nix.sh ]; then . /Users/nmartin/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer

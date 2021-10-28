@@ -16,30 +16,58 @@ vim.o.background = "dark"
 cmd [[colorscheme gruvbox]]
 g.mapleader = ','
 
-require'compe'.setup {
-  enabled = true;
-  autocomplete = true;
-  debug = false;
+  local cmp = require'cmp'
 
-  source = {
-    path = false;
-    buffer = true;
-    nvim_lsp = true;
-    ultisnips = {true, priority = 100 };
-  };
-}  
+  cmp.setup({
+    snippet = {
+      expand = function(args)
+        vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+        -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+        -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+        -- require'snippy'.expand_snippet(args.body) -- For `snippy` users.
+      end,
+    },
+    mapping = {
+      ['<C-d>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
+      ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
+      ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
+      ['<C-y>'] = cmp.config.disable, -- If you want to remove the default `<C-y>` mapping, You can specify `cmp.config.disable` value.
+      ['<C-e>'] = cmp.mapping({
+        i = cmp.mapping.abort(),
+        c = cmp.mapping.close(),
+      }),
+      ['<CR>'] = cmp.mapping.confirm({ select = true }),
+    },
+    sources = cmp.config.sources({
+      { name = 'nvim_lsp' },
+      { nme = 'vsnip' }, -- For vsnip users.
+      -- { name = 'luasnip' }, -- For luasnip users.
+      -- { name = 'ultisnips' }, -- For ultisnips users.
+      -- { name = 'snippy' }, -- For snippy users.
+    }, {
+      { name = 'buffer' },
+    })
+  })
+-- The nvim-cmp almost supports LSP's capabilities so You should advertise it to LSP servers..
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
--- Why do I need this for ultisnips?
-cmd [[ let g:python3_host_prog = '/Users/nmartin/.pyenv/versions/py3nvim/bin/python' ]]
-capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities.textDocument.completion.completionItem.snippetSupport = true
-capabilities.textDocument.completion.completionItem.resolveSupport = {
-  properties = {
-    'documentation',
-    'detail',
-    'additionalTextEdits',
-  }
-}
+-- -- Why do I need this for ultisnips?
+-- vim.cmd([[
+-- let g:UltiSnipsExpandTrigger="<tab>"
+-- let g:UltiSnipsJumpForwardTrigger="<c-b>"
+-- let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+-- ]])
+-- cmd [[ let g:python3_host_prog = '/Users/nmartin/.pyenv/versions/py3nvim/bin/python' ]]
+-- capabilities = vim.lsp.protocol.make_client_capabilities()
+-- capabilities.textDocument.completion.completionItem.snippetSupport = true
+-- capabilities.textDocument.completion.completionItem.resolveSupport = {
+--   properties = {
+--     'documentation',
+--     'detail',
+--     'additionalTextEdits',
+--   }
+-- }
 
 
 -- go imports on save
@@ -75,7 +103,67 @@ end
 
 cmd [[ autocmd BufWritePre *.go lua goimports(1000) ]]
 
-require'lspconfig'.gopls.setup{
+local nvim_lsp = require('lspconfig')
+
+nvim_lsp.diagnosticls.setup {
+  on_attach = on_attach,
+  filetypes = { 'javascript', 'javascriptreact', 'json', 'typescript', 'typescriptreact', 'css', 'less', 'scss', 'markdown', 'pandoc' },
+  init_options = {
+    linters = {
+      eslint = {
+        command = 'eslint_d',
+        rootPatterns = { '.git' },
+        debounce = 100,
+        args = { '--stdin', '--stdin-filename', '%filepath', '--format', 'json' },
+        sourceName = 'eslint_d',
+        parseJson = {
+          errorsRoot = '[0].messages',
+          line = 'line',
+          column = 'column',
+          endLine = 'endLine',
+          endColumn = 'endColumn',
+          message = '[eslint] ${message} [${ruleId}]',
+          security = 'severity'
+        },
+        securities = {
+          [2] = 'error',
+          [1] = 'warning'
+        }
+      },
+    },
+    filetypes = {
+      javascript = 'eslint',
+      javascriptreact = 'eslint',
+      typescript = 'eslint',
+      typescriptreact = 'eslint',
+    },
+    formatters = {
+      eslint_d = {
+        command = 'eslint_d',
+        args = { '--stdin', '--stdin-filename', '%filename', '--fix-to-stdout' },
+        rootPatterns = { '.git' },
+      },
+      prettier = {
+        command = 'prettier',
+        args = { '--stdin-filepath', '%filename' }
+      }
+    },
+    formatFiletypes = {
+      css = 'prettier',
+      javascript = 'eslint_d',
+      javascriptreact = 'eslint_d',
+      json = 'prettier',
+      scss = 'prettier',
+      less = 'prettier',
+      typescript = 'eslint_d',
+      typescriptreact = 'eslint_d',
+      json = 'prettier',
+      markdown = 'prettier',
+    }
+  }
+}
+nvim_lsp.tsserver.setup {}
+nvim_lsp.gopls.setup{
   cmd = {"gopls", "serve"},
   settings = {
     gopls = {
@@ -88,24 +176,28 @@ require'lspconfig'.gopls.setup{
   capabilities = capabilities,
 }
 
+vim.cmd([[
+  let g:go_highlight_types = 1
+  let g:go_highlight_fields = 1
+  let g:go_highlight_functions = 1
+  let g:go_highlight_function_calls = 1
+  let g:go_highlight_operators = 1
+  let g:go_metalinter_command = "staticcheck"
+  let g:go_gopls_enabled = 0
+]])
+  -- let g:go_fmt_command = "goimports"
+
+map('n', '<leader>w', ':GoMetaLinter<CR>')
+map('n', '<leader>r', ':GoRun<CR>')
+
+
+vim.cmd([[autocmd BufNewFile,BufRead *.mo set filetype=swift]])
+
 -- test fix for tmux+nvim
-vim.cmd([[
-autocmd VimEnter * :silent exec "!kill -s SIGWINCH $PPID"
-]])
+vim.cmd([[ autocmd VimEnter * :silent exec "!kill -s SIGWINCH $PPID" ]])
 
-vim.cmd([[
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
-]])
 
--- ?
-local default_opts = { noremap = true, silent = true, expr = true }
-map('i', '<C-Space>', [[ compe#complete() ]], default_opts)
-map('i', '<CR>', 'compe#confirm(\'<CR>\')', default_opts)
-map('i', '<C-e>', 'compe#close(\'<C-e>\')', default_opts)
-map('i', '<C-f>', 'compe#scroll({ \'delta\': +4 })', default_opts)
-map('i', '<C-d>', 'compe#scroll({ \'delta\': -4 })', default_opts)
+-- local default_opts = { noremap = true, silent = true, expr = true }
 
 require('telescope').setup{
   defaults = { 
@@ -129,18 +221,6 @@ map('n', '<leader>fb', '<cmd>lua require(\'telescope.builtin\').buffers()<cr>')
 map('n', '<leader>fh', '<cmd>lua require(\'telescope.builtin\').help_tags()<cr>')
 map('n', '<leader>ft', '<cmd>lua require(\'telescope.builtin\').lsp_document_symbols()<cr>')
 
-vim.cmd([[
-  let g:go_highlight_types = 1
-  let g:go_highlight_fields = 1
-  let g:go_highlight_functions = 1
-  let g:go_highlight_function_calls = 1
-  let g:go_highlight_operators = 1
-  let g:go_fmt_command = "goimports"
-  let g:go_metalinter_command = "staticcheck"
-  let g:go_gopls_enabled = 0
-]])
-
-map('n', '<leader>w', ':GoMetaLinter<CR>')
 
 require'nvim-treesitter.configs'.setup {
     ensure_installed = {
@@ -204,8 +284,11 @@ require'nvim-treesitter.configs'.setup {
   opt.ignorecase = true
   opt.termguicolors=true
   -- opt.encoding = utf-8
+  opt.foldmethod="expr"
+  opt.foldexpr="nvim_treesitter#foldexpr()"
 
 cmd 'autocmd Filetype go setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab signcolumn=yes'
+cmd 'autocmd Filetype ts setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab signcolumn=yes'
 cmd 'autocmd Filetype python setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab  autoindent signcolumn=yes'
 cmd 'autocmd Filetype yaml setlocal tabstop=2 shiftwidth=2 softtabstop=2  expandtab signcolumn=yes'
 cmd 'autocmd Filetype javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab  autoindent'
@@ -214,7 +297,6 @@ cmd 'autocmd Filetype proto setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpa
 cmd 'autocmd Filetype lua setlocal tabstop=2 shiftwidth=2 softtabstop=2  expandtab signcolumn=yes'
  
 
-local nvim_lsp = require('lspconfig')
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
@@ -224,7 +306,7 @@ local on_attach = function(client, bufnr)
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
 
   --Enable completion triggered by <c-x><c-o>
-  buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+  -- buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
 
   -- Mappings.
   local opts = { noremap=true, silent=true }
@@ -250,9 +332,17 @@ local on_attach = function(client, bufnr)
 
 end
 
+nvim_lsp.motoko.setup{
+  cmd = {"dfx", "_language-service"},
+  filetypes = { "motoko", "mo"},
+  root_dir = root_pattern("dfx.json", ".git"),
+  settings = {},
+  capabilities = capabilities,
+}
+
 -- Use a loop to conveniently call 'setup' on multiple servers and
 -- map buffer local keybindings when the language server attaches
-local servers = {"gopls"}
+local servers = {"gopls", "tsserver", "motoko"}
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup {
     on_attach = on_attach,
