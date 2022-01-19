@@ -16,59 +16,57 @@ vim.o.background = "dark"
 cmd [[colorscheme gruvbox]]
 g.mapleader = ','
 
-  local cmp = require'cmp'
-
-  cmp.setup({
-    snippet = {
-      expand = function(args)
-        vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
-        -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
-        -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
-        -- require'snippy'.expand_snippet(args.body) -- For `snippy` users.
-      end,
-    },
-    mapping = {
-      ['<C-d>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
-      ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
-      ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
-      ['<C-y>'] = cmp.config.disable, -- If you want to remove the default `<C-y>` mapping, You can specify `cmp.config.disable` value.
-      ['<C-e>'] = cmp.mapping({
-        i = cmp.mapping.abort(),
-        c = cmp.mapping.close(),
-      }),
-      ['<CR>'] = cmp.mapping.confirm({ select = true }),
-    },
-    sources = cmp.config.sources({
-      { name = 'nvim_lsp' },
-      { nme = 'vsnip' }, -- For vsnip users.
-      -- { name = 'luasnip' }, -- For luasnip users.
-      -- { name = 'ultisnips' }, -- For ultisnips users.
-      -- { name = 'snippy' }, -- For snippy users.
-    }, {
-      { name = 'buffer' },
+-- Setup nvim-cmp.
+local cmp = require'cmp'
+cmp.setup({
+  snippet = {
+    expand = function(args)
+        vim.fn["vsnip#anonymous"](args.body)
+    end,
+  },
+  mapping = {
+    ['<C-p>'] = cmp.mapping.select_prev_item(),
+    ['<C-n>'] = cmp.mapping.select_next_item(),
+    -- Add tab support
+    ['<S-Tab>'] = cmp.mapping.select_prev_item(),
+    ['<Tab>'] = cmp.mapping.select_next_item(),
+    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-e>'] = cmp.mapping.close(),
+    ['<CR>'] = cmp.mapping.confirm({
+      behavior = cmp.ConfirmBehavior.Insert,
+      select = true,
     })
-  })
--- The nvim-cmp almost supports LSP's capabilities so You should advertise it to LSP servers..
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+  },
 
--- -- Why do I need this for ultisnips?
--- vim.cmd([[
--- let g:UltiSnipsExpandTrigger="<tab>"
--- let g:UltiSnipsJumpForwardTrigger="<c-b>"
--- let g:UltiSnipsJumpBackwardTrigger="<c-z>"
--- ]])
--- cmd [[ let g:python3_host_prog = '/Users/nmartin/.pyenv/versions/py3nvim/bin/python' ]]
--- capabilities = vim.lsp.protocol.make_client_capabilities()
--- capabilities.textDocument.completion.completionItem.snippetSupport = true
--- capabilities.textDocument.completion.completionItem.resolveSupport = {
---   properties = {
---     'documentation',
---     'detail',
---     'additionalTextEdits',
---   }
--- }
+  -- Installed sources
+  sources = {
+    { name = 'nvim_lsp' },
+    { name = 'vsnip' },
+    { name = 'path' },
+    { name = 'buffer' },
+  },
+})
 
+-- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
+cmp.setup.cmdline('/', {
+	sources = {
+		{ name = 'buffer' }
+	}
+})
+
+-- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+cmp.setup.cmdline(':', {
+	sources = cmp.config.sources({
+		{ name = 'path' }
+	}, {
+		{ name = 'cmdline' }
+	})
+})
+
+-- Setup lspconfig.
+local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
 -- go imports on save
 function goimports(timeout_ms)
@@ -105,77 +103,6 @@ cmd [[ autocmd BufWritePre *.go lua goimports(1000) ]]
 
 local nvim_lsp = require('lspconfig')
 
-nvim_lsp.diagnosticls.setup {
-  on_attach = on_attach,
-  filetypes = { 'javascript', 'javascriptreact', 'json', 'typescript', 'typescriptreact', 'css', 'less', 'scss', 'markdown', 'pandoc' },
-  init_options = {
-    linters = {
-      eslint = {
-        command = 'eslint_d',
-        rootPatterns = { '.git' },
-        debounce = 100,
-        args = { '--stdin', '--stdin-filename', '%filepath', '--format', 'json' },
-        sourceName = 'eslint_d',
-        parseJson = {
-          errorsRoot = '[0].messages',
-          line = 'line',
-          column = 'column',
-          endLine = 'endLine',
-          endColumn = 'endColumn',
-          message = '[eslint] ${message} [${ruleId}]',
-          security = 'severity'
-        },
-        securities = {
-          [2] = 'error',
-          [1] = 'warning'
-        }
-      },
-    },
-    filetypes = {
-      javascript = 'eslint',
-      javascriptreact = 'eslint',
-      typescript = 'eslint',
-      typescriptreact = 'eslint',
-    },
-    formatters = {
-      eslint_d = {
-        command = 'eslint_d',
-        args = { '--stdin', '--stdin-filename', '%filename', '--fix-to-stdout' },
-        rootPatterns = { '.git' },
-      },
-      prettier = {
-        command = 'prettier',
-        args = { '--stdin-filepath', '%filename' }
-      }
-    },
-    formatFiletypes = {
-      css = 'prettier',
-      javascript = 'eslint_d',
-      javascriptreact = 'eslint_d',
-      json = 'prettier',
-      scss = 'prettier',
-      less = 'prettier',
-      typescript = 'eslint_d',
-      typescriptreact = 'eslint_d',
-      json = 'prettier',
-      markdown = 'prettier',
-    }
-  }
-}
-nvim_lsp.tsserver.setup {}
-nvim_lsp.gopls.setup{
-  cmd = {"gopls", "serve"},
-  settings = {
-    gopls = {
-      analyses = {
-        unusedparams = true,
-      },
-      staticcheck = true,
-    },
-  },
-  capabilities = capabilities,
-}
-
 vim.cmd([[
   let g:go_highlight_types = 1
   let g:go_highlight_fields = 1
@@ -190,12 +117,8 @@ vim.cmd([[
 map('n', '<leader>w', ':GoMetaLinter<CR>')
 map('n', '<leader>r', ':GoRun<CR>')
 
-
-vim.cmd([[autocmd BufNewFile,BufRead *.mo set filetype=swift]])
-
 -- test fix for tmux+nvim
 vim.cmd([[ autocmd VimEnter * :silent exec "!kill -s SIGWINCH $PPID" ]])
-
 
 -- local default_opts = { noremap = true, silent = true, expr = true }
 
@@ -215,13 +138,6 @@ require('telescope').setup{
   }
 }
 
-map('n', '<leader>ff', '<cmd>lua require(\'telescope.builtin\').find_files()<cr>')
-map('n', '<leader>fg', '<cmd>lua require(\'telescope.builtin\').live_grep()<cr>')
-map('n', '<leader>fb', '<cmd>lua require(\'telescope.builtin\').buffers()<cr>')
-map('n', '<leader>fh', '<cmd>lua require(\'telescope.builtin\').help_tags()<cr>')
-map('n', '<leader>ft', '<cmd>lua require(\'telescope.builtin\').lsp_document_symbols()<cr>')
-
-
 require'nvim-treesitter.configs'.setup {
     ensure_installed = {
       "javascript",
@@ -239,25 +155,33 @@ require'nvim-treesitter.configs'.setup {
         enable = false
     },
 }
-  map('n', '<C-n>', ':NERDTreeToggle<CR>') 
-  map('n', '<leader>l', ':NERDTreeFind<cr>')
-  map('n', '<leader>1', '1gt')
-  map('n', '<leader>2', '2gt')
-  map('n', '<leader>3', '3gt')
-  map('n', '<leader>4', '4gt')
-  map('n', '<leader>5', '5gt')
-  map('n', '<leader>6', '6gt')
-  map('n', '<leader>7', '7gt')
-  map('n', '<leader>8', '8gt')
-  map('n', '<leader>9', '9gt')
-  map('n', '<f1>', 'o<Esc>')
-  map('n', '<leader>n', ':noh<CR>')
-  map('n', '<C-j>', '<C-w>j')
-  map('n', '<C-k>', '<C-w>k')
-  map('n', '<C-l>', '<C-w>l')
-  map('n', '<C-h>', '<C-w>h')
-  -- get rid of the evil ex mode
-  map('n', 'Q', '<nop>')
+
+map('n', '<leader>ff', '<cmd>lua require(\'telescope.builtin\').find_files()<cr>')
+map('n', '<leader>fg', '<cmd>lua require(\'telescope.builtin\').live_grep()<cr>')
+map('n', '<leader>fb', '<cmd>lua require(\'telescope.builtin\').buffers()<cr>')
+map('n', '<leader>fh', '<cmd>lua require(\'telescope.builtin\').help_tags()<cr>')
+map('n', '<leader>ft', '<cmd>lua require(\'telescope.builtin\').lsp_document_symbols()<cr>')
+
+
+map('n', '<C-n>', ':NERDTreeToggle<CR>') 
+map('n', '<leader>l', ':NERDTreeFind<cr>')
+map('n', '<leader>1', '1gt')
+map('n', '<leader>2', '2gt')
+map('n', '<leader>3', '3gt')
+map('n', '<leader>4', '4gt')
+map('n', '<leader>5', '5gt')
+map('n', '<leader>6', '6gt')
+map('n', '<leader>7', '7gt')
+map('n', '<leader>8', '8gt')
+map('n', '<leader>9', '9gt')
+map('n', '<f1>', 'o<Esc>')
+map('n', '<leader>n', ':noh<CR>')
+map('n', '<C-j>', '<C-w>j')
+map('n', '<C-k>', '<C-w>k')
+map('n', '<C-l>', '<C-w>l')
+map('n', '<C-h>', '<C-w>h')
+-- get rid of the evil ex mode
+map('n', 'Q', '<nop>')
 
 -- Default settings
   opt.cmdheight = 2
@@ -285,18 +209,18 @@ require'nvim-treesitter.configs'.setup {
   opt.termguicolors=true
   -- opt.encoding = utf-8
   opt.foldmethod="expr"
-  opt.foldexpr="nvim_treesitter#foldexpr()"
+  -- opt.foldexpr="nvim_treesitter#foldexpr()"
 
 cmd 'autocmd Filetype go setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab signcolumn=yes'
+cmd 'autocmd Filetype rust setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab signcolumn=yes'
 cmd 'autocmd Filetype ts setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab signcolumn=yes'
 cmd 'autocmd Filetype python setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab  autoindent signcolumn=yes'
-cmd 'autocmd Filetype yaml setlocal tabstop=2 shiftwidth=2 softtabstop=2  expandtab signcolumn=yes'
-cmd 'autocmd Filetype javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab  autoindent'
-cmd 'autocmd Filetype typescriptreact setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab  autoindent'
+cmd 'autocmd Filetype yaml setlocal tabstop=2 shiftwidth=2 softtabstop=2  noexpandtab signcolumn=yes'
+cmd 'autocmd Filetype javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 noexpandtab  autoindent'
+cmd 'autocmd Filetype typescriptreact setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab  autoindent'
 cmd 'autocmd Filetype proto setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab'
-cmd 'autocmd Filetype lua setlocal tabstop=2 shiftwidth=2 softtabstop=2  expandtab signcolumn=yes'
- 
-
+cmd 'autocmd Filetype lua setlocal tabstop=2 shiftwidth=2 softtabstop=2  noexpandtab signcolumn=yes'
+cmd 'autocmd Filetype motoko setlocal tabstop=2 shiftwidth=2 softtabstop=2  noexpandtab signcolumn=yes'
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
@@ -332,22 +256,81 @@ local on_attach = function(client, bufnr)
 
 end
 
-nvim_lsp.motoko.setup{
-  cmd = {"dfx", "_language-service"},
-  filetypes = { "motoko", "mo"},
-  root_dir = root_pattern("dfx.json", ".git"),
-  settings = {},
-  capabilities = capabilities,
+nvim_lsp.tsserver.setup {}
+nvim_lsp.gopls.setup{
+  cmd = {"gopls", "serve"},
+  settings = {
+    gopls = {
+      analyses = {
+        unusedparams = true,
+      },
+      staticcheck = true,
+    },
+  },
 }
+
+local configs = require 'lspconfig.configs'
+local util = require 'lspconfig/util'
+
+
+configs.motoko = {
+  default_config = {
+    cmd = {"dfx", "_language-service", "nft"},
+    filetypes = { "motoko", "mo", "gdmo"},
+    root_dir = function(fname)
+      return util.root_pattern '*.mo'(fname) or util.find_git_ancestor(fname) or util.path.dirname(fname)
+    end,
+  },
+  docs = {
+    description = [[]],
+    default_config = {
+      root_dir = [[root_pattern("dfx.json", ".git")]],
+    },
+  },
+}
+require('lspconfig').motoko.setup{}
+
+local opts = {
+    tools = {
+        autoSetHints = true,
+        hover_with_actions = true,
+        runnables = {
+            use_telescope = true
+        },
+        inlay_hints = {
+            show_parameter_hints = false,
+            parameter_hints_prefix = "",
+            other_hints_prefix = "",
+        },
+    },
+
+    -- all the opts to send to nvim-lspconfig
+    -- these override the defaults set by rust-tools.nvim
+    -- see https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md#rust_analyzer
+    server = {
+        -- on_attach is a callback called when the language server attachs to the buffer
+        -- on_attach = on_attach,
+        settings = {
+            -- to enable rust-analyzer settings visit:
+            -- https://github.com/rust-analyzer/rust-analyzer/blob/master/docs/user/generated_config.adoc
+            ["rust-analyzer"] = {
+                -- enable clippy on save
+                checkOnSave = {
+                    command = "clippy"
+                },
+            }
+        }
+    },
+}
+
+require('rust-tools').setup(opts)
 
 -- Use a loop to conveniently call 'setup' on multiple servers and
 -- map buffer local keybindings when the language server attaches
-local servers = {"gopls", "tsserver", "motoko"}
+local servers = {"gopls", "tsserver", "motoko", "rust_analyzer"}
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup {
     on_attach = on_attach,
-    flags = {
-      debounce_text_changes = 150,
-    }
+    capabilities = capabilities,
   }
 end
