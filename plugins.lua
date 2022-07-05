@@ -1,3 +1,4 @@
+
 return require('packer').startup(function()
 	use 'wbthomason/packer.nvim'
 	use 'preservim/nerdtree'
@@ -16,9 +17,13 @@ return require('packer').startup(function()
 
 	-- LSP completion source for nvim-cmp
 	use 'hrsh7th/cmp-nvim-lsp'
+	use 'hrsh7th/cmp-nvim-lsp-signature-help'
 
 	-- Snippet completion source for nvim-cmp
-	use 'hrsh7th/cmp-vsnip'
+	-- failed to download?
+	-- use 'hrsh7th/cmp-vsnip'
+	use 'SirVer/ultisnips'
+	use("quangnguyen30192/cmp-nvim-ultisnips")
 
 	-- Other usefull completion sources
 	use 'hrsh7th/cmp-path'
@@ -31,7 +36,7 @@ return require('packer').startup(function()
 	use 'simrat39/rust-tools.nvim'
 
 	-- Snippet engine
-	use 'hrsh7th/vim-vsnip'
+	-- use 'hrsh7th/vim-vsnip'
 
 	-- Fuzzy finder
 	-- Optional
@@ -39,4 +44,5 @@ return require('packer').startup(function()
 	use 'nvim-lua/plenary.nvim'
 	use 'nvim-telescope/telescope.nvim'
 end)
+
 
