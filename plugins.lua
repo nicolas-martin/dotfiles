@@ -2,11 +2,10 @@
 return require('packer').startup(function()
 	use 'wbthomason/packer.nvim'
 	use 'preservim/nerdtree'
-	-- use 'nvim-treesitter/nvim-treesitter'
 	use 'tpope/vim-repeat'
 	use 'tpope/vim-surround'
 	use 'tpope/vim-commentary'
-	use {'npxbr/gruvbox.nvim', requires = {'rktjmp/lush.nvim'}}
+	use 'ellisonleao/gruvbox.nvim'
 	use 'fatih/vim-go'
 	use 'nvim-treesitter/nvim-treesitter'
 	-- Collection of common configurations for the Nvim LSP client
@@ -18,6 +17,8 @@ return require('packer').startup(function()
 	-- LSP completion source for nvim-cmp
 	use 'hrsh7th/cmp-nvim-lsp'
 	use 'hrsh7th/cmp-nvim-lsp-signature-help'
+
+	use "onsails/lspkind-nvim" -- add the nice source + completion item kind to the menu
 
 	-- Snippet completion source for nvim-cmp
 	-- failed to download?

@@ -19,10 +19,30 @@ g.mapleader = ','
 local cmp_ultisnips_mappings = require("cmp_nvim_ultisnips.mappings")
 local cmp = require'cmp'
 cmp.setup({
+	formatting = {
+			-- Show where the completion opts are coming from
+			format = require("lspkind").cmp_format({
+					option = 'default',
+					mode = 'symbol',
+					maxwidth = 50,
+					with_text = true,
+					menu = {
+							vsnip = "[vsnip]",
+							nvim_lua = "[nvim]",
+							nvim_lsp = "[LSP]",
+							path = "[path]",
+							buffer = "[buffer]",
+							nvim_lsp_signature_help = "[param]",
+					},
+			}),
+	},
+	experimental = {
+		-- I like the new menu better! Nice work hrsh7th
+		native_menu = false,
+	},
 	-- autocomplete
 	snippet = {
 		expand = function(args)
-				-- vim.fn["vsnip#anonymous"](args.body)
 				vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
 
 		end,
@@ -37,29 +57,49 @@ cmp.setup({
 		['<C-f>'] = cmp.mapping.scroll_docs(4),
 		['<C-Space>'] = cmp.mapping.complete(),
 		['<C-e>'] = cmp.mapping.close(),
-		['<CR>'] = cmp.mapping.confirm({
-			behavior = cmp.ConfirmBehavior.Insert,
-			select = true,
-		}),
-	["<Tab>"] = cmp.mapping( function(fallback) cmp_ultisnips_mappings.expand_or_jump_forwards(fallback) end,
-					{ "i", "s", --[[ "c" (to enable the mapping in command mode) ]] }
-				),
-	["<S-Tab>"] = cmp.mapping( function(fallback) cmp_ultisnips_mappings.jump_backwards(fallback) end,
-					{ "i", "s", --[[ "c" (to enable the mapping in command mode) ]] }
-				),
-
+		['<CR>'] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Insert, select = true }),
+		["<Tab>"] = cmp.mapping( function(fallback) cmp_ultisnips_mappings.expand_or_jump_forwards(fallback) end,
+					{ "i", "s", --[[ "c" (to enable the mapping in command mode) ]] }),
+		["<S-Tab>"] = cmp.mapping( function(fallback) cmp_ultisnips_mappings.jump_backwards(fallback) end,
+					{ "i", "s", --[[ "c" (to enable the mapping in command mode) ]] }),
 	},
 	-- Installed sources
 	sources = {
-		{ name = 'ultisnips' }, -- For ultisnips users.
 		{ name = 'nvim_lsp' },
+		{ name = 'ultisnips' }, -- For ultisnips users.
 		{ name = 'path' },
-		{ name = 'buffer' },
+		{ name = 'buffer', keyword_length = 3 },
 		{ name = 'nvim_lsp_signature_help' },
-		
+	},
 	flags = {
-		debounce_text_changes = 150,
-	}	}
+		debounce_text_changes = 200,
+	},	
+	sorting = {
+	    comparators = {
+	      cmp.config.compare.offset,
+	      cmp.config.compare.exact,
+	      cmp.config.compare.score,
+
+	      -- copied from cmp-under, but I don't think I need the plugin for this.
+	      -- I might add some more of my own.
+	      function(entry1, entry2)
+					local _, entry1_under = entry1.completion_item.label:find "^_+"
+					local _, entry2_under = entry2.completion_item.label:find "^_+"
+					entry1_under = entry1_under or 0
+					entry2_under = entry2_under or 0
+					if entry1_under > entry2_under then
+						return false
+					elseif entry1_under < entry2_under then
+						return true
+					end
+	      end,
+
+	      cmp.config.compare.kind,
+	      cmp.config.compare.sort_text,
+	      cmp.config.compare.length,
+	      cmp.config.compare.order,
+	    },
+	},
 })
 
 -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
@@ -209,7 +249,8 @@ map('n', 'Q', '<nop>')
 	-- opt.noshowmode = true									-- don't show modes (use airline instead)"
 	opt.relativenumber = true
 	opt.autowrite = true
-	vim.o.completeopt = "menuone,noselect"
+	-- vim.o.completeopt = "menuone,noselect"
+	vim.o.completeopt = "menu", "menuone", "noselect"
 	opt.clipboard = "unnamedplus"
 	opt.scrolloff = 5									-- Keep some distance from the bottom
 	opt.sidescrolloff = 5							-- Keep some distance while side scrolling
@@ -225,7 +266,23 @@ map('n', 'Q', '<nop>')
 	-- opt.encoding = utf-8
 	opt.foldmethod="expr"
 	opt.foldexpr="nvim_treesitter#foldexpr()"
-
+	vim.opt.shortmess:append "c"
+require'nvim-web-devicons'.setup {
+ -- your personnal icons can go here (to override)
+ -- you can specify color or cterm_color instead of specifying both of them
+ -- DevIcon will be appended to `name`
+ override = {
+  zsh = {
+    icon = "",
+    color = "#428850",
+    cterm_color = "65",
+    name = "Zsh"
+  }
+ };
+ -- globally enable default icons (default to false)
+ -- will get overriden by `get_icons` option
+ default = true;
+}
 
 cmd 'autocmd Filetype go setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab signcolumn=yes'
 cmd 'autocmd Filetype rust setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab signcolumn=yes'
@@ -263,7 +320,7 @@ local on_attach = function(client, bufnr)
 	buf_set_keymap('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
 	buf_set_keymap('n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
 	buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-	buf_set_keymap('n', '<leader>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+	buf_set_keymap('n', '<leader>e', '<cmd>lua vim.diagnostic.get()<CR>', opts)
 	buf_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
 	buf_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
 	buf_set_keymap('n', '<leader>q', '<cmd>lua vim.diagnostic.set_loclist()<CR>', opts)
@@ -282,48 +339,16 @@ nvim_lsp.gopls.setup{
 			staticcheck = true,
 		},
 	},
+	flags = {
+		debounce_text_changes = 200,
+	},
 }
 
 local configs = require 'lspconfig.configs'
 
-local opts = {
-		tools = {
-				autoSetHints = true,
-				hover_with_actions = true,
-				runnables = {
-						use_telescope = true
-				},
-				inlay_hints = {
-						show_parameter_hints = false,
-						parameter_hints_prefix = "",
-						other_hints_prefix = "",
-				},
-		},
-
-		-- all the opts to send to nvim-lspconfig
-		-- these override the defaults set by rust-tools.nvim
-		-- see https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md#rust_analyzer
-		server = {
-				-- on_attach is a callback called when the language server attachs to the buffer
-				-- on_attach = on_attach,
-				settings = {
-						-- to enable rust-analyzer settings visit:
-						-- https://github.com/rust-analyzer/rust-analyzer/blob/master/docs/user/generated_config.adoc
-						["rust-analyzer"] = {
-								-- enable clippy on save
-								checkOnSave = {
-										command = "clippy"
-								},
-						}
-				}
-		},
-}
-
-require('rust-tools').setup(opts)
-
 -- Use a loop to conveniently call 'setup' on multiple servers and
 -- map buffer local keybindings when the language server attaches
-local servers = {"gopls", "tsserver", "rust_analyzer"}
+local servers = {"gopls", "tsserver"}
 for _, lsp in ipairs(servers) do
 	nvim_lsp[lsp].setup {
 		on_attach = on_attach,
