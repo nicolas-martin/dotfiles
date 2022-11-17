@@ -1,4 +1,3 @@
-
 local cmd = vim.cmd -- to execute Vim commands e.g. cmd('pwd')
 local fn = vim.fn -- to call Vim functions e.g. fn.bufnr()
 local g = vim.g -- a table to access global variables
@@ -15,11 +14,15 @@ vim.o.background = "dark"
 cmd [[colorscheme gruvbox]]
 g.mapleader = ','
 
+local nvim_lsp = require('lspconfig')
+
 -- Setup nvim-cmp.
-local cmp_ultisnips_mappings = require("cmp_nvim_ultisnips.mappings")
+-- require("cmp_nvim_ultisnips").setup {}
+-- local cmp_ultisnips_mappings = require("cmp_nvim_ultisnips.mappings")
 local cmp = require'cmp'
 cmp.setup({
 	formatting = {
+		fields = { 'kind', 'abbr', 'menu' }, -- change the order so the icon appear first
 			-- Show where the completion opts are coming from
 			format = require("lspkind").cmp_format({
 					option = 'default',
@@ -27,7 +30,7 @@ cmp.setup({
 					maxwidth = 50,
 					with_text = true,
 					menu = {
-							vsnip = "[vsnip]",
+							ultisnips = "[snip]",
 							nvim_lua = "[nvim]",
 							nvim_lsp = "[LSP]",
 							path = "[path]",
@@ -37,7 +40,7 @@ cmp.setup({
 			}),
 	},
 	experimental = {
-		-- I like the new menu better! Nice work hrsh7th
+		-- I like the new menu better(?)
 		native_menu = false,
 	},
 	-- autocomplete
@@ -58,10 +61,10 @@ cmp.setup({
 		['<C-Space>'] = cmp.mapping.complete(),
 		['<C-e>'] = cmp.mapping.close(),
 		['<CR>'] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Insert, select = true }),
-		["<Tab>"] = cmp.mapping( function(fallback) cmp_ultisnips_mappings.expand_or_jump_forwards(fallback) end,
-					{ "i", "s", --[[ "c" (to enable the mapping in command mode) ]] }),
-		["<S-Tab>"] = cmp.mapping( function(fallback) cmp_ultisnips_mappings.jump_backwards(fallback) end,
-					{ "i", "s", --[[ "c" (to enable the mapping in command mode) ]] }),
+		-- ["<Tab>"] = cmp.mapping( function(fallback) cmp_ultisnips_mappings.expand_or_jump_forwards(fallback) end,
+		--			{ "i", "s", --[[ "c" (to enable the mapping in command mode) ]] }),
+		-- ["<S-Tab>"] = cmp.mapping( function(fallback) cmp_ultisnips_mappings.jump_backwards(fallback) end,
+		--			{ "i", "s", --[[ "c" (to enable the mapping in command mode) ]] }),
 	},
 	-- Installed sources
 	sources = {
@@ -72,17 +75,17 @@ cmp.setup({
 		{ name = 'nvim_lsp_signature_help' },
 	},
 	flags = {
-		debounce_text_changes = 200,
-	},	
+		debounce_text_changes = 150,
+	},
 	sorting = {
-	    comparators = {
-	      cmp.config.compare.offset,
-	      cmp.config.compare.exact,
-	      cmp.config.compare.score,
+			comparators = {
+				cmp.config.compare.offset,
+				cmp.config.compare.exact,
+				cmp.config.compare.score,
 
-	      -- copied from cmp-under, but I don't think I need the plugin for this.
-	      -- I might add some more of my own.
-	      function(entry1, entry2)
+				-- copied from cmp-under, but I don't think I need the plugin for this.
+				-- I might add some more of my own.
+				function(entry1, entry2)
 					local _, entry1_under = entry1.completion_item.label:find "^_+"
 					local _, entry2_under = entry2.completion_item.label:find "^_+"
 					entry1_under = entry1_under or 0
@@ -92,15 +95,57 @@ cmp.setup({
 					elseif entry1_under < entry2_under then
 						return true
 					end
-	      end,
+				end,
 
-	      cmp.config.compare.kind,
-	      cmp.config.compare.sort_text,
-	      cmp.config.compare.length,
-	      cmp.config.compare.order,
-	    },
+				cmp.config.compare.kind,
+				cmp.config.compare.sort_text,
+				cmp.config.compare.length,
+				cmp.config.compare.order,
+			},
 	},
 })
+
+require('gitsigns').setup{
+  -- unchanged default settings
+  on_attach = function(bufnr)
+    local gs = package.loaded.gitsigns
+
+    local function map(mode, l, r, opts)
+      opts = opts or {}
+      opts.buffer = bufnr
+      vim.keymap.set(mode, l, r, opts)
+    end
+
+    -- Navigation
+    map('n', ']c', function()
+      if vim.wo.diff then return ']c' end
+      vim.schedule(function() gs.next_hunk() end)
+      return '<Ignore>'
+    end, {expr=true})
+
+    map('n', '[c', function()
+      if vim.wo.diff then return '[c' end
+      vim.schedule(function() gs.prev_hunk() end)
+      return '<Ignore>'
+    end, {expr=true})
+
+    -- Actions
+    map({'n', 'v'}, '<leader>hs', ':Gitsigns stage_hunk<CR>')
+    map({'n', 'v'}, '<leader>hr', ':Gitsigns reset_hunk<CR>')
+    map('n', '<leader>hS', gs.stage_buffer)
+    map('n', '<leader>hu', gs.undo_stage_hunk)
+    map('n', '<leader>hR', gs.reset_buffer)
+    map('n', '<leader>hp', gs.preview_hunk)
+    map('n', '<leader>hb', function() gs.blame_line{full=true} end)
+    map('n', '<leader>tb', gs.toggle_current_line_blame)
+    map('n', '<leader>hd', gs.diffthis)
+    map('n', '<leader>hD', function() gs.diffthis('~') end)
+    map('n', '<leader>td', gs.toggle_deleted)
+
+    -- Text object
+    map({'o', 'x'}, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
+  end
+}
 
 -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
 cmp.setup.cmdline('/', {
@@ -122,6 +167,7 @@ cmp.setup.cmdline(':', {
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
 -- go imports on save
+-- TODO: I can delete this?
 function goimports(timeout_ms)
 	local context = { only = { "source.organizeImports" } }
 	vim.validate { context = { context, "t", true } }
@@ -152,10 +198,6 @@ function goimports(timeout_ms)
 	end
 end
 
--- TODO: trying without?
--- cmd [[ autocmd BufWritePre *.go lua goimports(1000) ]]
-
-local nvim_lsp = require('lspconfig')
 
 vim.cmd([[
 	let g:go_highlight_types = 1
@@ -166,8 +208,10 @@ vim.cmd([[
 	let g:go_metalinter_command = "staticcheck"
 	let g:go_gopls_enabled = 0
 	let g:python3_host_prog = '/usr/local/bin/python3'	
+
 ]])
-	-- let g:go_fmt_command = "goimports"
+
+-- let g:go_fmt_command = "goimports"
 
 map('n', '<leader>w', ':GoMetaLinter<CR>')
 map('n', '<leader>r', ':GoRun<CR>')
@@ -178,7 +222,16 @@ vim.cmd([[ autocmd VimEnter * :silent exec "!kill -s SIGWINCH $PPID" ]])
 -- local default_opts = { noremap = true, silent = true, expr = true }
 
 require('telescope').setup{
-	defaults = { 
+	extensions = {
+		fzf = {
+			fuzzy = true,										 -- false will only do exact matching
+			override_generic_sorter = true,  -- override the generic sorter
+			override_file_sorter = true,		 -- override the file sorter
+			case_mode = "smart_case",				 -- or "ignore_case" or "respect_case"
+																			 -- the default case_mode is "smart_case"
+		}
+	},
+	defaults = {
 		file_ignore_patterns = {"vendor", "go.sum", "go.mod", "module", ".git"},
 		mappings = {
 			i = {
@@ -186,29 +239,26 @@ require('telescope').setup{
 				["<C-p>"] = false,
 				["<esc>"] = require('telescope.actions').close,
 				["<C-[>"] = require('telescope.actions').close,
-				["<C-j>"] = require('telescope.actions').move_selection_next, 
+				["<C-j>"] = require('telescope.actions').move_selection_next,
 				["<C-k>"] = require('telescope.actions').move_selection_previous,
+				["<leader>q"] = require('telescope.actions').send_selected_to_qflist + require('telescope.actions').open_qflist,
 			},
 		}
 	}
 }
+require('telescope').load_extension('fzf')
 
 require'nvim-treesitter.configs'.setup {
-		ensure_installed = {
-			"javascript",
-			"typescript",
-			"tsx",
-			"html",
-			"css",
-			"lua",
-			"rust",
-			"go",
-			"python",
-			"json",
-		},
-		highlight = {
-				enable = false
-		},
+	ensure_installed = {"javascript", "typescript", "tsx", "html", "css", "lua", "rust", "go", "python", "json", "ruby"},
+	highlight = {
+			enable = false
+	},
+	playground = { enable = true },
+	query_linter = {
+		enable = true,
+		use_virtual_text = true,
+		lint_events = { "BufWrite", "CursorHold" },
+	},
 }
 
 map('n', '<leader>ff', '<cmd>lua require(\'telescope.builtin\').find_files()<cr>')
@@ -216,9 +266,7 @@ map('n', '<leader>fg', '<cmd>lua require(\'telescope.builtin\').live_grep()<cr>'
 map('n', '<leader>fb', '<cmd>lua require(\'telescope.builtin\').buffers()<cr>')
 map('n', '<leader>fh', '<cmd>lua require(\'telescope.builtin\').help_tags()<cr>')
 map('n', '<leader>ft', '<cmd>lua require(\'telescope.builtin\').lsp_document_symbols()<cr>')
-
-
-map('n', '<C-n>', ':NERDTreeToggle<CR>') 
+map('n', '<C-n>', ':NERDTreeToggle<CR>')
 map('n', '<leader>l', ':NERDTreeFind<cr>')
 map('n', '<leader>1', '1gt')
 map('n', '<leader>2', '2gt')
@@ -235,8 +283,14 @@ map('n', '<C-j>', '<C-w>j')
 map('n', '<C-k>', '<C-w>k')
 map('n', '<C-l>', '<C-w>l')
 map('n', '<C-h>', '<C-w>h')
--- get rid of the evil ex mode
 map('n', 'Q', '<nop>')
+map('n', ']q', ':cn<CR>')
+map('n', '[q', ':cp<CR>')
+
+-- -- always paste from the unamed register
+-- map('n', 'p', '"0p')
+-- map('v', 'p', '"0p')
+-- get rid of the evil ex mode
 
 -- Default settings
 	opt.cmdheight = 2
@@ -249,7 +303,6 @@ map('n', 'Q', '<nop>')
 	-- opt.noshowmode = true									-- don't show modes (use airline instead)"
 	opt.relativenumber = true
 	opt.autowrite = true
-	-- vim.o.completeopt = "menuone,noselect"
 	vim.o.completeopt = "menu", "menuone", "noselect"
 	opt.clipboard = "unnamedplus"
 	opt.scrolloff = 5									-- Keep some distance from the bottom
@@ -267,17 +320,18 @@ map('n', 'Q', '<nop>')
 	opt.foldmethod="expr"
 	opt.foldexpr="nvim_treesitter#foldexpr()"
 	vim.opt.shortmess:append "c"
+
 require'nvim-web-devicons'.setup {
  -- your personnal icons can go here (to override)
  -- you can specify color or cterm_color instead of specifying both of them
  -- DevIcon will be appended to `name`
  override = {
-  zsh = {
-    icon = "",
-    color = "#428850",
-    cterm_color = "65",
-    name = "Zsh"
-  }
+	zsh = {
+		icon = "",
+		color = "#428850",
+		cterm_color = "65",
+		name = "Zsh"
+	}
  };
  -- globally enable default icons (default to false)
  -- will get overriden by `get_icons` option
@@ -325,33 +379,74 @@ local on_attach = function(client, bufnr)
 	buf_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
 	buf_set_keymap('n', '<leader>q', '<cmd>lua vim.diagnostic.set_loclist()<CR>', opts)
 	buf_set_keymap("n", "<leader>f", "<cmd>lua vim.buf.formatting()<CR>", opts)
+	-- toggle line number for pairing
+	buf_set_keymap("n", "<leader>0", "<cmd>set nu! rnu!<CR>", opts)
 
 end
 
-nvim_lsp.tsserver.setup {}
+nvim_lsp.solargraph.setup{
+	on_attach = on_attach,
+	capabilities = capabilities,
+}
+
+nvim_lsp.tsserver.setup{
+	on_attach = on_attach,
+	capabilities = capabilities,
+}
+
+nvim_lsp.sumneko_lua.setup{
+	on_attach = on_attach,
+	capabilities = capabilities,
+	settings = {
+		Lua = {
+			runtime = {
+				-- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+				version = 'LuaJIT',
+			},
+			diagnostics = {
+				disable = {"lowercase-global"},
+				-- Get the language server to recognize the `vim` global
+				globals = {'vim'},
+			},
+			workspace = {
+				-- Make the server aware of Neovim runtime files
+				library = vim.api.nvim_get_runtime_file("", true),
+			},
+			-- Do not send telemetry data containing a randomized but unique identifier
+			telemetry = {
+				enable = false,
+			},
+		},
+	},
+}
+
 nvim_lsp.gopls.setup{
-	cmd = {"gopls", "serve"},
+	on_attach = on_attach,
+	capabilities = capabilities,
 	settings = {
 		gopls = {
 			analyses = {
 				unusedparams = true,
+				nilness = true,
 			},
 			staticcheck = true,
 		},
 	},
 	flags = {
-		debounce_text_changes = 200,
+		debounce_text_changes = 150,
 	},
 }
 
-local configs = require 'lspconfig.configs'
 
+-- TODO: DOES THIS EVEN WORK?
+-- SEEMS LIKE IT OVERRIDES THE SETUP
 -- Use a loop to conveniently call 'setup' on multiple servers and
 -- map buffer local keybindings when the language server attaches
-local servers = {"gopls", "tsserver"}
-for _, lsp in ipairs(servers) do
-	nvim_lsp[lsp].setup {
-		on_attach = on_attach,
-		capabilities = capabilities,
-	}
-end
+-- local servers = {"gopls", "tsserver", "sumneko_lua"}
+-- -- local servers = {"gopls", "tsserver"}
+-- for _, lsp in ipairs(servers) do
+--	nvim_lsp[lsp].setup {
+--		on_attach = on_attach,
+--		capabilities = capabilities,
+--	}
+-- end

@@ -1,6 +1,6 @@
 echo "hello from zshrc"
 
-export ZSH="/Users/nmartin/.oh-my-zsh"
+export ZSH="/Users/nma/.oh-my-zsh"
 
 ZSH_THEME="robbyrussell"
 plugins=(vi-mode autojump)
@@ -10,14 +10,24 @@ export SSH_KEY_PATH="~/.ssh/rsa_id"
 # Auto add keys?
 [ -z "$SSH_AUTH_SOCK" ] && eval "$(ssh-agent -s)"
 
+#CB
+export GO111MODULE=on # can be skipped if project files are located outside of your GOPATH already.
+export GOPROXY=https://gomodules.cbhq.net/
+export GONOSUMDB=github.cbhq.net  
+
+
 # ssh-add -A
 
 # use vim
 set -o vi
+
 # export GOBIN=$HOME/go/bin
 export GOPATH=$HOME/go
-# GOROOT changes on linux
-export GOROOT=/usr/local/opt/go/libexec
+
+export PATH="/usr/local/opt/go@1.17/bin:$PATH"
+export GOROOT=/usr/local/opt/go@1.17/libexec
+# export GOROOT=/usr/local/opt/go@1.18/libexec
+# export PATH="/usr/local/opt/go@1.18/bin:$PATH"
 export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:$GOROOT/bin
 # replace make with gmake
@@ -60,14 +70,15 @@ mkcd ()
       cd -P -- "$1"
 }
 
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
-
-alias poetry=~/.poetry/bin/poetry
-
 # Get autocompelte with catalina
 autoload -U compinit && compinit
 
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh" || true
-
-if [ -e /Users/nmartin/.nix-profile/etc/profile.d/nix.sh ]; then . /Users/nmartin/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+#ruby
+export GEM_HOME="$HOME/.gem"
+eval "$(rbenv init - zsh)"
+export PATH="$GEM_HOME/bin:$PATH"
+export PATH="/usr/local/opt/openssl@3/bin:$PATH"
+export PATH="$HOME/.rbenv/bin:$PATH"
+export LDFLAGS="-L/Users/nma/.rbenv/versions/2.6.9/lib"
+export CPPFLAGS="-I/Users/nma/.rbenv/versions/2.6.9/include"
+export PKG_CONFIG_PATH="/Users/nma/.rbenv/versions/2.6.9/lib/pkgconfig"
