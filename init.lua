@@ -46,8 +46,7 @@ cmp.setup({
 	-- autocomplete
 	snippet = {
 		expand = function(args)
-				vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
-
+      vim.fn["vsnip#anonymous"](args.body)
 		end,
 	},
 	mapping = {
@@ -61,91 +60,45 @@ cmp.setup({
 		['<C-Space>'] = cmp.mapping.complete(),
 		['<C-e>'] = cmp.mapping.close(),
 		['<CR>'] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Insert, select = true }),
-		-- ["<Tab>"] = cmp.mapping( function(fallback) cmp_ultisnips_mappings.expand_or_jump_forwards(fallback) end,
-		--			{ "i", "s", --[[ "c" (to enable the mapping in command mode) ]] }),
-		-- ["<S-Tab>"] = cmp.mapping( function(fallback) cmp_ultisnips_mappings.jump_backwards(fallback) end,
-		--			{ "i", "s", --[[ "c" (to enable the mapping in command mode) ]] }),
 	},
 	-- Installed sources
 	sources = {
 		{ name = 'nvim_lsp' },
-		{ name = 'ultisnips' }, -- For ultisnips users.
+    { name = "vsnip" },
 		{ name = 'path' },
 		{ name = 'buffer', keyword_length = 3 },
 		{ name = 'nvim_lsp_signature_help' },
 	},
-	flags = {
-		debounce_text_changes = 150,
-	},
-	sorting = {
-			comparators = {
-				cmp.config.compare.offset,
-				cmp.config.compare.exact,
-				cmp.config.compare.score,
+	-- flags = {
+	-- 	debounce_text_changes = 150,
+	-- },
+	-- sorting = {
+	-- 		comparators = {
+	-- 			cmp.config.compare.offset,
+	-- 			cmp.config.compare.exact,
+	-- 			cmp.config.compare.score,
 
-				-- copied from cmp-under, but I don't think I need the plugin for this.
-				-- I might add some more of my own.
-				function(entry1, entry2)
-					local _, entry1_under = entry1.completion_item.label:find "^_+"
-					local _, entry2_under = entry2.completion_item.label:find "^_+"
-					entry1_under = entry1_under or 0
-					entry2_under = entry2_under or 0
-					if entry1_under > entry2_under then
-						return false
-					elseif entry1_under < entry2_under then
-						return true
-					end
-				end,
+	-- 			-- copied from cmp-under, but I don't think I need the plugin for this.
+	-- 			-- I might add some more of my own.
+	-- 			function(entry1, entry2)
+	-- 				local _, entry1_under = entry1.completion_item.label:find "^_+"
+	-- 				local _, entry2_under = entry2.completion_item.label:find "^_+"
+	-- 				entry1_under = entry1_under or 0
+	-- 				entry2_under = entry2_under or 0
+	-- 				if entry1_under > entry2_under then
+	-- 					return false
+	-- 				elseif entry1_under < entry2_under then
+	-- 					return true
+	-- 				end
+	-- 			end,
 
-				cmp.config.compare.kind,
-				cmp.config.compare.sort_text,
-				cmp.config.compare.length,
-				cmp.config.compare.order,
-			},
-	},
+	-- 			cmp.config.compare.kind,
+	-- 			cmp.config.compare.sort_text,
+	-- 			cmp.config.compare.length,
+	-- 			cmp.config.compare.order,
+	-- 		},
+	-- },
 })
-
-require('gitsigns').setup{
-  -- unchanged default settings
-  on_attach = function(bufnr)
-    local gs = package.loaded.gitsigns
-
-    local function map(mode, l, r, opts)
-      opts = opts or {}
-      opts.buffer = bufnr
-      vim.keymap.set(mode, l, r, opts)
-    end
-
-    -- Navigation
-    map('n', ']c', function()
-      if vim.wo.diff then return ']c' end
-      vim.schedule(function() gs.next_hunk() end)
-      return '<Ignore>'
-    end, {expr=true})
-
-    map('n', '[c', function()
-      if vim.wo.diff then return '[c' end
-      vim.schedule(function() gs.prev_hunk() end)
-      return '<Ignore>'
-    end, {expr=true})
-
-    -- Actions
-    map({'n', 'v'}, '<leader>hs', ':Gitsigns stage_hunk<CR>')
-    map({'n', 'v'}, '<leader>hr', ':Gitsigns reset_hunk<CR>')
-    map('n', '<leader>hS', gs.stage_buffer)
-    map('n', '<leader>hu', gs.undo_stage_hunk)
-    map('n', '<leader>hR', gs.reset_buffer)
-    map('n', '<leader>hp', gs.preview_hunk)
-    map('n', '<leader>hb', function() gs.blame_line{full=true} end)
-    map('n', '<leader>tb', gs.toggle_current_line_blame)
-    map('n', '<leader>hd', gs.diffthis)
-    map('n', '<leader>hD', function() gs.diffthis('~') end)
-    map('n', '<leader>td', gs.toggle_deleted)
-
-    -- Text object
-    map({'o', 'x'}, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
-  end
-}
 
 -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
 cmp.setup.cmdline('/', {
@@ -153,7 +106,6 @@ cmp.setup.cmdline('/', {
 		{ name = 'buffer' }
 	}
 })
-
 -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
 cmp.setup.cmdline(':', {
 	sources = cmp.config.sources({
@@ -164,7 +116,7 @@ cmp.setup.cmdline(':', {
 })
 
 -- Setup lspconfig.
-local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
 -- go imports on save
 -- TODO: I can delete this?
@@ -286,13 +238,11 @@ map('n', '<C-h>', '<C-w>h')
 map('n', 'Q', '<nop>')
 map('n', ']q', ':cn<CR>')
 map('n', '[q', ':cp<CR>')
+map('n', '<leader>)', '<cmd>set nu! rnu!<CR>')
 
--- -- always paste from the unamed register
--- map('n', 'p', '"0p')
--- map('v', 'p', '"0p')
--- get rid of the evil ex mode
 
 -- Default settings
+	opt.mouse = ""
 	opt.cmdheight = 2
 	opt.expandtab = true								-- tabs are tabs vs expandtab tabs are space
 	opt.showcmd = true										 -- show command in bottom bar
@@ -300,26 +250,23 @@ map('n', '[q', ':cp<CR>')
 	opt.showmatch = true								 -- highlight matching [{()}]
 	opt.incsearch = true									 -- search as characters are entered
 	opt.hlsearch = true										 -- highlight matches
-	-- opt.noshowmode = true									-- don't show modes (use airline instead)"
 	opt.relativenumber = true
 	opt.autowrite = true
-	vim.o.completeopt = "menu", "menuone", "noselect"
 	opt.clipboard = "unnamedplus"
 	opt.scrolloff = 5									-- Keep some distance from the bottom
 	opt.sidescrolloff = 5							-- Keep some distance while side scrolling
 	opt.backup = false										-- No backup file
 	opt.swapfile = false									-- NOTE: Experimental No swap file
 	opt.writebackup = false
-	-- opt.foldmethod = syntax					 -- Code folding
 	opt.foldlevelstart = 20						-- Opens X amount of fold at the start - Can't use nofoldenable
 	-- opt.splitright = true									-- Split window appears right the current one.
 	opt.autoread = true										 -- Auto reloads the file when modifications were made
 	opt.ignorecase = true
 	opt.termguicolors=true
-	-- opt.encoding = utf-8
 	opt.foldmethod="expr"
 	opt.foldexpr="nvim_treesitter#foldexpr()"
-	vim.opt.shortmess:append "c"
+	vim.o.completeopt = "menuone,noinsert,noselect"
+	vim.opt.shortmess = vim.opt.shortmess + "c"
 
 require'nvim-web-devicons'.setup {
  -- your personnal icons can go here (to override)
@@ -342,7 +289,7 @@ cmd 'autocmd Filetype go setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandt
 cmd 'autocmd Filetype rust setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab signcolumn=yes'
 cmd 'autocmd Filetype ts setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab signcolumn=yes'
 cmd 'autocmd Filetype python setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab	autoindent signcolumn=yes'
-cmd 'autocmd Filetype yaml setlocal tabstop=2 shiftwidth=2 softtabstop=2	noexpandtab signcolumn=yes'
+cmd 'autocmd Filetype yaml setlocal tabstop=4 shiftwidth=4 softtabstop=4	noexpandtab signcolumn=yes'
 cmd 'autocmd Filetype javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 noexpandtab	autoindent'
 cmd 'autocmd Filetype typescriptreact setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab  autoindent'
 cmd 'autocmd Filetype proto setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab'
@@ -380,9 +327,47 @@ local on_attach = function(client, bufnr)
 	buf_set_keymap('n', '<leader>q', '<cmd>lua vim.diagnostic.set_loclist()<CR>', opts)
 	buf_set_keymap("n", "<leader>f", "<cmd>lua vim.buf.formatting()<CR>", opts)
 	-- toggle line number for pairing
-	buf_set_keymap("n", "<leader>0", "<cmd>set nu! rnu!<CR>", opts)
 
 end
+
+-- Configure LSP through rust-tools.nvim plugin.
+-- rust-tools will configure and enable certain LSP features for us.
+-- See https://github.com/simrat39/rust-tools.nvim#configuration
+local opts = {
+  tools = {
+    runnables = {
+      use_telescope = true,
+    },
+    inlay_hints = {
+      auto = true,
+      show_parameter_hints = false,
+      parameter_hints_prefix = "",
+      other_hints_prefix = "",
+    },
+  },
+
+  -- all the opts to send to nvim-lspconfig
+  -- these override the defaults set by rust-tools.nvim
+  -- see https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md#rust_analyzer
+  server = {
+    -- on_attach is a callback called when the language server attachs to the buffer
+    on_attach = on_attach,
+	  capabilities = capabilities,
+    settings = {
+      -- to enable rust-analyzer settings visit:
+      -- https://github.com/rust-analyzer/rust-analyzer/blob/master/docs/user/generated_config.adoc
+      ["rust-analyzer"] = {
+        -- enable clippy on save
+        checkOnSave = {
+          command = "clippy",
+        },
+      },
+    },
+  },
+}
+
+require("rust-tools").setup(opts)
+
 
 nvim_lsp.solargraph.setup{
 	on_attach = on_attach,

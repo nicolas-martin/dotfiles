@@ -17,30 +17,33 @@ return require('packer').startup(function()
 	-- Collection of common configurations for the Nvim LSP client
 	use 'neovim/nvim-lspconfig'
 
-	-- Completion framework
-	use 'hrsh7th/nvim-cmp'
-
 	-- LSP completion source for nvim-cmp
-	use 'hrsh7th/cmp-nvim-lsp'
 	use 'hrsh7th/cmp-nvim-lsp-signature-help'
 	-- add the nice source + completion item kind to the menu
 	use "onsails/lspkind-nvim"
 
 	-- Snippet completion source for nvim-cmp
-	-- failed to download?
-	-- use 'hrsh7th/cmp-vsnip'
+  -- Autocompletion framework
+  use("hrsh7th/nvim-cmp")
+  use({
+    "hrsh7th/cmp-nvim-lsp",
+    "hrsh7th/cmp-vsnip",
+    "hrsh7th/cmp-path",
+    "hrsh7th/cmp-buffer",
+    after = { "hrsh7th/nvim-cmp" },
+    requires = { "hrsh7th/nvim-cmp" },
+  })
+  -- See hrsh7th other plugins for more great completion sources!
+  -- Snippet engine
+  use('hrsh7th/vim-vsnip')
 	use 'SirVer/ultisnips'
 	use 'quangnguyen30192/cmp-nvim-ultisnips'
 
-	-- Other usefull completion sources
-	use 'hrsh7th/cmp-path'
-	use 'hrsh7th/cmp-buffer'
 	-- See hrsh7th's other useins for more completion sources!
 	use 'hrsh7th/cmp-cmdline'
 
 	-- nice icons
 	use 'kyazdani42/nvim-web-devicons'
-	use 'lewis6991/gitsigns.nvim'
 
 	-- Fuzzy finder
 	-- Optional
@@ -48,6 +51,8 @@ return require('packer').startup(function()
 	use 'nvim-lua/plenary.nvim'
 	use 'nvim-telescope/telescope.nvim'
 	use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
+
+	use("simrat39/rust-tools.nvim")
 
 end)
 

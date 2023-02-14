@@ -24,10 +24,10 @@ set -o vi
 # export GOBIN=$HOME/go/bin
 export GOPATH=$HOME/go
 
-export PATH="/usr/local/opt/go@1.17/bin:$PATH"
-export GOROOT=/usr/local/opt/go@1.17/libexec
-# export GOROOT=/usr/local/opt/go@1.18/libexec
-# export PATH="/usr/local/opt/go@1.18/bin:$PATH"
+# export PATH="/usr/local/opt/go@1.17/bin:$PATH"
+# export GOROOT=/usr/local/opt/go@1.17/libexec
+export GOROOT=/usr/local/opt/go@1.18/libexec
+export PATH="/usr/local/opt/go@1.18/bin:$PATH"
 export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:$GOROOT/bin
 # replace make with gmake
@@ -60,6 +60,7 @@ alias vrc='nvim ~/.config/nvim/init.lua'
 alias ll='ls -la'
 alias ghc='/usr/local/bin/gh'
 alias b='git branch | grep -v "^\*" | fzf --height=20% --reverse --info=inline | xargs git checkout'
+alias d='git branch | grep -v "^\*" | fzf --height=20% --reverse --info=inline | xargs git branch -D'
 
 alias cssh='ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -82,3 +83,10 @@ export PATH="$HOME/.rbenv/bin:$PATH"
 export LDFLAGS="-L/Users/nma/.rbenv/versions/2.6.9/lib"
 export CPPFLAGS="-I/Users/nma/.rbenv/versions/2.6.9/include"
 export PKG_CONFIG_PATH="/Users/nma/.rbenv/versions/2.6.9/lib/pkgconfig"
+
+
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+alias killwf='f(){yes | ./bin/rewarder workflow terminate $(pbpaste) ""};f'
+alias killall="cadence --domain coinbase workflow list --op --pjson | jq -r '.[].execution.workflowId' | grep -v hearbeat | xargs -n 1 cadence --domain coinbase workflow term --workflow_id"
