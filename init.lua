@@ -14,12 +14,20 @@ vim.o.background = "dark"
 cmd [[colorscheme gruvbox]]
 g.mapleader = ','
 
+-- IMPORTANT: make sure to setup neodev BEFORE lspconfig
+require("neodev").setup({
+  -- add any options here, or leave empty to use the default settings
+})
 local nvim_lsp = require('lspconfig')
 
 -- Setup nvim-cmp.
--- require("cmp_nvim_ultisnips").setup {}
--- local cmp_ultisnips_mappings = require("cmp_nvim_ultisnips.mappings")
+-- require'luasnip'.config.setup()
+-- use { 'saadparwaiz1/cmp_luasnip' }
+local luasnip = require'luasnip'
 local cmp = require'cmp'
+-- load snippets from https://github.com/rafamadriz/friendly-snippets
+require("luasnip.loaders.from_vscode").lazy_load()
+
 cmp.setup({
 	formatting = {
 		fields = { 'kind', 'abbr', 'menu' }, -- change the order so the icon appear first
@@ -28,11 +36,12 @@ cmp.setup({
 					option = 'default',
 					mode = 'symbol',
 					maxwidth = 50,
+					ellipsis_char = '...',
 					with_text = true,
 					menu = {
-							ultisnips = "[snip]",
-							nvim_lua = "[nvim]",
 							nvim_lsp = "[LSP]",
+							luasnip = "[snip]",
+							nvim_lua = "[nvim]",
 							path = "[path]",
 							buffer = "[buffer]",
 							nvim_lsp_signature_help = "[param]",
@@ -46,15 +55,19 @@ cmp.setup({
 	-- autocomplete
 	snippet = {
 		expand = function(args)
-      vim.fn["vsnip#anonymous"](args.body)
+        luasnip.lsp_expand(args.body)
 		end,
+	},
+	window = {
+		completion = cmp.config.window.bordered(),
+		documentation = cmp.config.window.bordered(),
 	},
 	mapping = {
 		['<C-p>'] = cmp.mapping.select_prev_item(),
 		['<C-n>'] = cmp.mapping.select_next_item(),
 		-- Add tab support
-		['<S-Tab>'] = cmp.mapping.select_prev_item(),
-		['<Tab>'] = cmp.mapping.select_next_item(),
+		-- ['<S-Tab>'] = cmp.mapping.select_prev_item(),
+		-- ['<Tab>'] = cmp.mapping.select_next_item(),
 		['<C-d>'] = cmp.mapping.scroll_docs(-4),
 		['<C-f>'] = cmp.mapping.scroll_docs(4),
 		['<C-Space>'] = cmp.mapping.complete(),
@@ -64,40 +77,11 @@ cmp.setup({
 	-- Installed sources
 	sources = {
 		{ name = 'nvim_lsp' },
-    { name = "vsnip" },
+		{ name = 'luasnip' },
 		{ name = 'path' },
 		{ name = 'buffer', keyword_length = 3 },
 		{ name = 'nvim_lsp_signature_help' },
 	},
-	-- flags = {
-	-- 	debounce_text_changes = 150,
-	-- },
-	-- sorting = {
-	-- 		comparators = {
-	-- 			cmp.config.compare.offset,
-	-- 			cmp.config.compare.exact,
-	-- 			cmp.config.compare.score,
-
-	-- 			-- copied from cmp-under, but I don't think I need the plugin for this.
-	-- 			-- I might add some more of my own.
-	-- 			function(entry1, entry2)
-	-- 				local _, entry1_under = entry1.completion_item.label:find "^_+"
-	-- 				local _, entry2_under = entry2.completion_item.label:find "^_+"
-	-- 				entry1_under = entry1_under or 0
-	-- 				entry2_under = entry2_under or 0
-	-- 				if entry1_under > entry2_under then
-	-- 					return false
-	-- 				elseif entry1_under < entry2_under then
-	-- 					return true
-	-- 				end
-	-- 			end,
-
-	-- 			cmp.config.compare.kind,
-	-- 			cmp.config.compare.sort_text,
-	-- 			cmp.config.compare.length,
-	-- 			cmp.config.compare.order,
-	-- 		},
-	-- },
 })
 
 -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
@@ -157,19 +141,18 @@ vim.cmd([[
 	let g:go_highlight_functions = 1
 	let g:go_highlight_function_calls = 1
 	let g:go_highlight_operators = 1
-	let g:go_metalinter_command = "staticcheck"
-	let g:go_gopls_enabled = 0
 	let g:python3_host_prog = '/usr/local/bin/python3'	
-
 ]])
 
+-- let g:go_metalinter_command = "staticcheck"
+-- let g:go_gopls_enabled = 1
 -- let g:go_fmt_command = "goimports"
 
 map('n', '<leader>w', ':GoMetaLinter<CR>')
 map('n', '<leader>r', ':GoRun<CR>')
 
 -- test fix for tmux+nvim
-vim.cmd([[ autocmd VimEnter * :silent exec "!kill -s SIGWINCH $PPID" ]])
+-- vim.cmd([[ autocmd VimEnter * :silent exec "!kill -s SIGWINCH $PPID" ]])
 
 -- local default_opts = { noremap = true, silent = true, expr = true }
 
@@ -212,6 +195,16 @@ require'nvim-treesitter.configs'.setup {
 		lint_events = { "BufWrite", "CursorHold" },
 	},
 }
+vim.keymap.set({ "i", "s" }, "<C-k>", function()
+    if luasnip.expand_or_jumpable() then
+        luasnip.expand_or_jump()
+    end
+end, { silent = true })
+vim.keymap.set({ "i", "s" }, "<C-j>", function()
+    if luasnip.jumpable( -1) then
+        luasnip.jump( -1)
+    end
+end, { silent = true })
 
 map('n', '<leader>ff', '<cmd>lua require(\'telescope.builtin\').find_files()<cr>')
 map('n', '<leader>fg', '<cmd>lua require(\'telescope.builtin\').live_grep()<cr>')
@@ -236,9 +229,11 @@ map('n', '<C-k>', '<C-w>k')
 map('n', '<C-l>', '<C-w>l')
 map('n', '<C-h>', '<C-w>h')
 map('n', 'Q', '<nop>')
-map('n', ']q', ':cn<CR>')
+map('n', ']q', ':cn<CR>') -- quickfix navigation
 map('n', '[q', ':cp<CR>')
-map('n', '<leader>)', '<cmd>set nu! rnu!<CR>')
+map('n', '<leader>)', '<cmd>set nu! rnu!<CR>') -- toggle relativenumber and numbers
+map('x', 'p', 'P') -- xnoremap p P
+
 
 
 -- Default settings
@@ -286,10 +281,11 @@ require'nvim-web-devicons'.setup {
 }
 
 cmd 'autocmd Filetype go setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab signcolumn=yes'
-cmd 'autocmd Filetype rust setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab signcolumn=yes'
+cmd 'autocmd Filetype rust setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab signcolumn=yes'
+-- cmd 'autocmd Filetype rust setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab signcolumn=yes'
 cmd 'autocmd Filetype ts setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab signcolumn=yes'
 cmd 'autocmd Filetype python setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab	autoindent signcolumn=yes'
-cmd 'autocmd Filetype yaml setlocal tabstop=4 shiftwidth=4 softtabstop=4	noexpandtab signcolumn=yes'
+cmd 'autocmd Filetype yaml setlocal tabstop=4 shiftwidth=4 softtabstop=4	expandtab signcolumn=yes'
 cmd 'autocmd Filetype javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 noexpandtab	autoindent'
 cmd 'autocmd Filetype typescriptreact setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab  autoindent'
 cmd 'autocmd Filetype proto setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab'
@@ -368,6 +364,10 @@ local opts = {
 
 require("rust-tools").setup(opts)
 
+nvim_lsp.bufls.setup{
+	on_attach = on_attach,
+	capabilities = capabilities,
+}
 
 nvim_lsp.solargraph.setup{
 	on_attach = on_attach,
@@ -379,11 +379,14 @@ nvim_lsp.tsserver.setup{
 	capabilities = capabilities,
 }
 
-nvim_lsp.sumneko_lua.setup{
+nvim_lsp.lua_ls.setup{
 	on_attach = on_attach,
 	capabilities = capabilities,
 	settings = {
 		Lua = {
+			completion = {
+        callSnippet = "Replace"
+      },
 			runtime = {
 				-- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
 				version = 'LuaJIT',
@@ -422,16 +425,22 @@ nvim_lsp.gopls.setup{
 	},
 }
 
-
--- TODO: DOES THIS EVEN WORK?
--- SEEMS LIKE IT OVERRIDES THE SETUP
--- Use a loop to conveniently call 'setup' on multiple servers and
--- map buffer local keybindings when the language server attaches
--- local servers = {"gopls", "tsserver", "sumneko_lua"}
--- -- local servers = {"gopls", "tsserver"}
--- for _, lsp in ipairs(servers) do
---	nvim_lsp[lsp].setup {
---		on_attach = on_attach,
---		capabilities = capabilities,
---	}
+-- vim.lsp.handlers['textDocument/hover'] = function(_, method, result)
+--   vim.lsp.util.focusable_float(method, function()
+--     if not (result and result.contents) then
+--       -- return { 'No information available' }
+--       return
+--     end
+--     local markdown_lines = vim.lsp.util.convert_input_to_markdown_lines(result.contents)
+--     markdown_lines = vim.lsp.util.trim_empty_lines(markdown_lines)
+--     if vim.tbl_isempty(markdown_lines) then
+--       -- return { 'No information available' }
+--       return
+--     end
+--     local bufnr, winnr = vim.lsp.util.fancy_floating_markdown(markdown_lines, {
+--       pad_left = 1; pad_right = 1;
+--     })
+--     vim.lsp.util.close_preview_autocmd({"CursorMoved", "BufHidden"}, winnr)
+--     return bufnr, winnr
+--   end)
 -- end

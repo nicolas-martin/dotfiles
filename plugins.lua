@@ -25,19 +25,14 @@ return require('packer').startup(function()
 	-- Snippet completion source for nvim-cmp
   -- Autocompletion framework
   use("hrsh7th/nvim-cmp")
-  use({
-    "hrsh7th/cmp-nvim-lsp",
-    "hrsh7th/cmp-vsnip",
-    "hrsh7th/cmp-path",
-    "hrsh7th/cmp-buffer",
-    after = { "hrsh7th/nvim-cmp" },
-    requires = { "hrsh7th/nvim-cmp" },
-  })
-  -- See hrsh7th other plugins for more great completion sources!
-  -- Snippet engine
-  use('hrsh7th/vim-vsnip')
-	use 'SirVer/ultisnips'
-	use 'quangnguyen30192/cmp-nvim-ultisnips'
+	use("hrsh7th/cmp-nvim-lsp")
+	use("hrsh7th/cmp-path")
+	use("hrsh7th/cmp-buffer")
+
+	-- Snippets
+	use("L3MON4D3/LuaSnip")
+	use("rafamadriz/friendly-snippets")
+	use("saadparwaiz1/cmp_luasnip")
 
 	-- See hrsh7th's other useins for more completion sources!
 	use 'hrsh7th/cmp-cmdline'
@@ -53,6 +48,14 @@ return require('packer').startup(function()
 	use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
 
 	use("simrat39/rust-tools.nvim")
+
+	-- lua / plugin
+	use 'folke/lua-dev.nvim'
+
+	-- move syntax
+	use 'rvmelkonian/move.vim'
+
+	use 'github/copilot.vim'
 
 end)
 

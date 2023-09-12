@@ -2,8 +2,9 @@ echo "hello from zshrc"
 
 export ZSH="/Users/nma/.oh-my-zsh"
 
+# ZSH_THEME="robbyrussell"
 ZSH_THEME="robbyrussell"
-plugins=(vi-mode autojump)
+plugins=(vi-mode autojump kubectl)
 
 source $ZSH/oh-my-zsh.sh
 export SSH_KEY_PATH="~/.ssh/rsa_id"
@@ -26,8 +27,11 @@ export GOPATH=$HOME/go
 
 # export PATH="/usr/local/opt/go@1.17/bin:$PATH"
 # export GOROOT=/usr/local/opt/go@1.17/libexec
-export GOROOT=/usr/local/opt/go@1.18/libexec
-export PATH="/usr/local/opt/go@1.18/bin:$PATH"
+# test 
+# export GOROOT=/usr/local/opt/go@1.18/libexec
+export GOROOT=/usr/local/opt/go@1.20/libexec
+export PATH="/usr/local/opt/go@1.20/bin:$PATH"
+# export PATH="/usr/local/opt/go@1.18/bin:$PATH"
 export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:$GOROOT/bin
 # replace make with gmake
@@ -52,8 +56,6 @@ alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commi
 alias gunwip='git log -n 1 | grep -q -c "\-\-wip\-\-" && git reset HEAD~1'
 alias orig="find . -name '*.orig' -delete"
 alias removemerge='git branch --merged | grep -v "\*" | grep -v master | grep -v dev | xargs -n 1 git branch -d'
-alias gh='cd $GOPATH/src/github.com/nicolas-martin/'
-alias k='kubectl'
 alias vim='/usr/bin/vim'
 alias v='nvim'
 alias vrc='nvim ~/.config/nvim/init.lua'
@@ -78,11 +80,11 @@ autoload -U compinit && compinit
 export GEM_HOME="$HOME/.gem"
 eval "$(rbenv init - zsh)"
 export PATH="$GEM_HOME/bin:$PATH"
-export PATH="/usr/local/opt/openssl@3/bin:$PATH"
+# export PATH="/usr/local/opt/openssl@3/bin:$PATH"
 export PATH="$HOME/.rbenv/bin:$PATH"
-export LDFLAGS="-L/Users/nma/.rbenv/versions/2.6.9/lib"
-export CPPFLAGS="-I/Users/nma/.rbenv/versions/2.6.9/include"
-export PKG_CONFIG_PATH="/Users/nma/.rbenv/versions/2.6.9/lib/pkgconfig"
+# export LDFLAGS="-L/Users/nma/.rbenv/versions/2.6.9/lib"
+# export CPPFLAGS="-I/Users/nma/.rbenv/versions/2.6.9/include"
+# export PKG_CONFIG_PATH="/Users/nma/.rbenv/versions/2.6.9/lib/pkgconfig"
 
 
 export PYENV_ROOT="$HOME/.pyenv"
@@ -90,3 +92,18 @@ export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 alias killwf='f(){yes | ./bin/rewarder workflow terminate $(pbpaste) ""};f'
 alias killall="cadence --domain coinbase workflow list --op --pjson | jq -r '.[].execution.workflowId' | grep -v hearbeat | xargs -n 1 cadence --domain coinbase workflow term --workflow_id"
+
+
+# export RUBY_CFLAGS="-Wno-error=implicit-function-declaration -DUSE_FFI_CLOSURE_ALLOC"
+#eval "$($(go env GOPATH)/bin/assume-role -init)"
+
+# export PRIME_API_GATEWAY_PATH="/Users/nma/dev/prime-api-gateway"
+# export MONOREPO_PATH="/Users/nma/dev/repo"
+# source $MONOREPO_PATH/scripts/rc/rc.sh
+
+export PATH="/usr/local/sbin:$PATH"
+
+
+# export NVM_DIR="$HOME/.nvm"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
