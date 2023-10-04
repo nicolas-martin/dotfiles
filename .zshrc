@@ -28,10 +28,10 @@ export GOPATH=$HOME/go
 # export PATH="/usr/local/opt/go@1.17/bin:$PATH"
 # export GOROOT=/usr/local/opt/go@1.17/libexec
 # test 
-# export GOROOT=/usr/local/opt/go@1.18/libexec
 export GOROOT=/usr/local/opt/go@1.20/libexec
 export PATH="/usr/local/opt/go@1.20/bin:$PATH"
-# export PATH="/usr/local/opt/go@1.18/bin:$PATH"
+# export GOROOT=/usr/local/opt/go@1.19/libexec
+# export PATH="/usr/local/opt/go@1.19/bin:$PATH"
 export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:$GOROOT/bin
 # replace make with gmake

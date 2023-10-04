@@ -142,9 +142,9 @@ vim.cmd([[
 	let g:go_highlight_function_calls = 1
 	let g:go_highlight_operators = 1
 	let g:python3_host_prog = '/usr/local/bin/python3'	
+	let g:go_metalinter_command = 'golangci-lint'
 ]])
 
--- let g:go_metalinter_command = "staticcheck"
 -- let g:go_gopls_enabled = 1
 -- let g:go_fmt_command = "goimports"
 
