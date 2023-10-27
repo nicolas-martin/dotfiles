@@ -9,10 +9,13 @@ vim.opt.sidescrolloff=5-- Keep some distance while side scrolling
 vim.opt.clipboard = "unnamedplus"
 vim.opt.incsearch = true-- search as characters are entered
 vim.opt.hlsearch = true-- highlight matches
-vim.opt.showmatch = true-- highlight matching [{()}]
+vim.opt.showmatch = false-- highlight matching [{()}]
+--
+vim.g.loaded_matchparen = true
+--
 vim.opt.relativenumber = true
 vim.opt.expandtab = true-- tabs are tabs vs expandtab tabs are space
-vim.cmd [[colorscheme gruvbox]]
+vim.cmd [[colorscheme habamax]]
 
 
 vim.cmd 'autocmd Filetype go setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab signcolumn=yes'

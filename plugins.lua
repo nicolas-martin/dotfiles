@@ -18,7 +18,8 @@ return require('packer').startup(function()
 	use 'neovim/nvim-lspconfig'
 
 	-- LSP completion source for nvim-cmp
-	use 'hrsh7th/cmp-nvim-lsp-signature-help'
+	-- use 'hrsh7th/cmp-nvim-lsp-signature-help'
+	use 'ray-x/lsp_signature.nvim'
 	-- add the nice source + completion item kind to the menu
 	use "onsails/lspkind-nvim"
 

@@ -25,11 +25,9 @@ set -o vi
 # export GOBIN=$HOME/go/bin
 export GOPATH=$HOME/go
 
-# export PATH="/usr/local/opt/go@1.17/bin:$PATH"
-# export GOROOT=/usr/local/opt/go@1.17/libexec
 # test 
-export GOROOT=/usr/local/opt/go@1.20/libexec
-export PATH="/usr/local/opt/go@1.20/bin:$PATH"
+# export GOROOT=/usr/local/opt/go@1.20/libexec
+# export PATH="/usr/local/opt/go@1.20/bin:$PATH"
 # export GOROOT=/usr/local/opt/go@1.19/libexec
 # export PATH="/usr/local/opt/go@1.19/bin:$PATH"
 export PATH=$PATH:$GOPATH/bin
