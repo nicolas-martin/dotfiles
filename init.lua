@@ -1,31 +1,38 @@
 require('plugins')
+-- require('/Users/nma/dev/dotfiles/mapping')
 
-vim.g.mapleader=','
+vim.g.mapleader = ','
 vim.g.font='JetBrainsMonoNL Nerd Font'
 vim.opt.foldmethod="expr"
 vim.opt.foldexpr="nvim_treesitter#foldexpr()"
 vim.opt.foldlevelstart=99
-vim.opt.sidescrolloff=5-- Keep some distance while side scrolling
+vim.opt.scrolloff = 5 -- Keep some distance from the bottom
+vim.opt.sidescrolloff=5 -- Keep some distance while side scrolling
 vim.opt.clipboard = "unnamedplus"
-vim.opt.incsearch = true-- search as characters are entered
-vim.opt.hlsearch = true-- highlight matches
-vim.opt.showmatch = true-- highlight matching [{()}]
+vim.opt.incsearch = true -- search as characters are entered
+vim.opt.hlsearch = true -- highlight matches
+vim.opt.showmatch = true -- highlight matching [{()}]
 vim.opt.relativenumber = true
-vim.opt.expandtab = true-- tabs are tabs vs expandtab tabs are space
+vim.opt.expandtab = true -- tabs are tabs vs expandtab tabs are spacc
+vim.opt.completeopt = { 'menu', 'menuone', 'noselect' } -- Completion options
+vim.opt.writebackup = false
+vim.opt.swapfile = false -- NOTE: Experimental No swap file
+vim.opt.ignorecase = true
+vim.opt.filetype = 'on' -- Enable filetype detection
+-- vim.opt.signcolumn = 'yes' -- Always show sign column
+vim.opt.smartcase = true -- Ignore case if all lowercase  
 vim.cmd [[colorscheme gruvbox]]
 
+vim.cmd 'autocmd Filetype go setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab signcolumn=yes'
+vim.cmd 'autocmd Filetype rust setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab signcolumn'
+vim.cmd 'autocmd Filetype ts setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab signcolumn'
+vim.cmd 'autocmd Filetype python setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab	autoindent signcolumn'
+vim.cmd 'autocmd Filetype yaml setlocal tabstop=4 shiftwidth=4 softtabstop=4	expandtab signcolumn'
+vim.cmd 'autocmd Filetype javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 noexpandtab signcolumn'
+vim.cmd 'autocmd Filetype typescriptreact setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab signcolumn'
+vim.cmd 'autocmd Filetype proto setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab signcolumn'
+vim.cmd 'autocmd Filetype lua setlocal tabstop=2 shiftwidth=2 softtabstop=2  noexpandtab'
 
-vim.cmd 'autocmd Filetype go setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab signcolumn=yes'
-vim.cmd 'autocmd Filetype go setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab signcolumn=yes'
-vim.cmd 'autocmd Filetype rust setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab signcolumn=yes'
-vim.cmd 'autocmd Filetype rust setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab signcolumn=yes'
-vim.cmd 'autocmd Filetype ts setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab signcolumn=yes'
-vim.cmd 'autocmd Filetype python setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab	autoindent signcolumn=yes'
-vim.cmd 'autocmd Filetype yaml setlocal tabstop=4 shiftwidth=4 softtabstop=4	expandtab signcolumn=yes'
-vim.cmd 'autocmd Filetype javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 noexpandtab	autoindent'
-vim.cmd 'autocmd Filetype typescriptreact setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab  autoindent'
-vim.cmd 'autocmd Filetype proto setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab'
-vim.cmd 'autocmd Filetype lua setlocal tabstop=2 shiftwidth=2 softtabstop=2  noexpandtab signcolumn=yes'
 
 local function map(mode, lhs, rhs, opts)
 	local options = {noremap = true}
@@ -33,13 +40,13 @@ local function map(mode, lhs, rhs, opts)
 	vim.api.nvim_set_keymap(mode, lhs, rhs, options)
 end
 
--- nnoremap <leader>sv :source $MYVIMRC<CR>
 map('n', '<leader>rc', ':source $MYVIMRC<CR>')
 map('n', '<leader>ff', '<cmd>lua require(\'telescope.builtin\').find_files()<cr>')
 map('n', '<leader>fg', '<cmd>lua require(\'telescope.builtin\').live_grep()<cr>')
 map('n', '<leader>fb', '<cmd>lua require(\'telescope.builtin\').buffers()<cr>')
 map('n', '<leader>fh', '<cmd>lua require(\'telescope.builtin\').help_tags()<cr>')
 map('n', '<leader>ft', '<cmd>lua require(\'telescope.builtin\').lsp_document_symbols()<cr>')
+map('n', '<leader>fT', '<cmd>lua require(\'telescope.builtin\').lsp_dynamic_workspace_symbols()<cr>')
 map('n', '<C-n>', ':NERDTreeToggle<CR>')
 map('n', '<leader>l', ':NERDTreeFind<cr>')
 map('n', '<leader>1', '1gt')
@@ -158,7 +165,7 @@ cmp.setup.cmdline(':', {
 		{ name = 'cmdline' }
 	})
 })
-
+require('telescope').load_extension('fzf')
 require('telescope').setup{
 	extensions = {
 		fzf = {
@@ -166,10 +173,11 @@ require('telescope').setup{
 			override_generic_sorter = true,  -- override the generic sorter
 			override_file_sorter = true,-- override the file sorter
 			case_mode = "smart_case",-- or "ignore_case" or "respect_case" the default case_mode is "smart_case"
-		}
+		},
 	},
 	defaults = {
-		file_ignore_patterns = {"vendor", "go.sum", "go.mod", "module", ".git"},
+		-- ignore_symbols = {"field", "struct"},
+		file_ignore_patterns = {"vendor", "go.sum", "go.mod", "module", ".git", "gen", "*.pb.go", "mod", "Cellar", "mocks"},
 		mappings = {
 			i = {
 				["<C-n>"] = false,
@@ -183,7 +191,6 @@ require('telescope').setup{
 		}
 	}
 }
-require('telescope').load_extension('fzf')
 local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
 local on_attach = function(client, bufnr)
@@ -224,16 +231,35 @@ local on_attach = function(client, bufnr)
 
 end
 
+nvim_lsp.move_analyzer.setup{
+	on_attach = on_attach,
+	capabilities = capabilities,
+}
+
+nvim_lsp.bashls.setup{
+	on_attach = on_attach,
+	capabilities = capabilities,
+}
+
+nvim_lsp.ts_ls.setup{
+	on_attach = on_attach,
+	capabilities = capabilities,
+}
+
 nvim_lsp.gopls.setup{
 	on_attach = on_attach,
 	capabilities = capabilities,
 	settings = {
 		gopls = {
+			gofumpt = true,
 			analyses = {
 				unusedparams = true,
 				nilness = true,
 			},
-			staticcheck = true,
+			directoryFilters = { "-.git", "-.vscode", "-.idea", "-.vscode-test", "-node_modules" },
+			semanticTokens = true,
+			usePlaceholders = true,
+			completeUnimported = true,
 		},
 	},
 	flags = {

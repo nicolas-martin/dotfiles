@@ -76,18 +76,18 @@ autoload -U compinit && compinit
 
 #ruby
 export GEM_HOME="$HOME/.gem"
-eval "$(rbenv init - zsh)"
+# eval "$(rbenv init - zsh)"
+#
 export PATH="$GEM_HOME/bin:$PATH"
-# export PATH="/usr/local/opt/openssl@3/bin:$PATH"
 export PATH="$HOME/.rbenv/bin:$PATH"
-# export LDFLAGS="-L/Users/nma/.rbenv/versions/2.6.9/lib"
-# export CPPFLAGS="-I/Users/nma/.rbenv/versions/2.6.9/include"
-# export PKG_CONFIG_PATH="/Users/nma/.rbenv/versions/2.6.9/lib/pkgconfig"
 
+# CB-PYTHON
+export PATH=~/.local/bin:$PATH
+# eval "$(cb-pyenv init)"
 
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
+# eval "$(pyenv init -)"
 alias killwf='f(){yes | ./bin/rewarder workflow terminate $(pbpaste) ""};f'
 alias killall="cadence --domain coinbase workflow list --op --pjson | jq -r '.[].execution.workflowId' | grep -v hearbeat | xargs -n 1 cadence --domain coinbase workflow term --workflow_id"
 
@@ -105,3 +105,8 @@ export PATH="/usr/local/sbin:$PATH"
 # export NVM_DIR="$HOME/.nvm"
 # [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 # [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# export FZF_CTRL_R_OPTS='--preview-window=up:10:wrap --preview="echo {}" --height 100%'
+export FZF_CTRL_R_OPTS="--height 50% --preview 'echo {2..} | bat --color=always -pl sh' --preview-window 'wrap,down,5'"
+
+# added by Snowflake SnowSQL installer v1.2
+export PATH=/Applications/SnowSQL.app/Contents/MacOS:$PATH

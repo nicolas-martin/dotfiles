@@ -31,7 +31,7 @@ warn "Symlinking files"
 # install .tmux.conf
 install init.lua "$HOME/.config/nvim/init.lua"
 install plugins.lua "$HOME/.config/nvim/lua/plugins.lua"
-# install alacritty.yml "$HOME/.config/alacritty/alacritty.yml"
+install alacritty.toml "$HOME/.config/alacritty/alacritty.toml"
 # install base.vim "$HOME/base.vim"
 # install .gitattributes
 
