@@ -2,7 +2,8 @@ require('plugins')
 -- require('/Users/nma/dev/dotfiles/mapping')
 
 vim.g.mapleader = ','
-vim.g.font='JetBrainsMonoNL Nerd Font'
+-- vim.g.font='JetBrainsMonoNL Nerd Font'
+vim.g.font='MesloLGS NF'
 vim.opt.foldmethod="expr"
 vim.opt.foldexpr="nvim_treesitter#foldexpr()"
 vim.opt.foldlevelstart=99
@@ -23,15 +24,15 @@ vim.opt.filetype = 'on' -- Enable filetype detection
 vim.opt.smartcase = true -- Ignore case if all lowercase  
 vim.cmd [[colorscheme gruvbox]]
 
-vim.cmd 'autocmd Filetype go setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab signcolumn=yes'
+vim.cmd 'autocmd Filetype go setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab signcolumn='
 vim.cmd 'autocmd Filetype rust setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab signcolumn'
 vim.cmd 'autocmd Filetype ts setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab signcolumn'
-vim.cmd 'autocmd Filetype python setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab	autoindent signcolumn'
-vim.cmd 'autocmd Filetype yaml setlocal tabstop=4 shiftwidth=4 softtabstop=4	expandtab signcolumn'
+vim.cmd 'autocmd Filetype python setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab autoindent signcolumn'
+vim.cmd 'autocmd Filetype yaml setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab signcolumn'
 vim.cmd 'autocmd Filetype javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 noexpandtab signcolumn'
 vim.cmd 'autocmd Filetype typescriptreact setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab signcolumn'
 vim.cmd 'autocmd Filetype proto setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab signcolumn'
-vim.cmd 'autocmd Filetype lua setlocal tabstop=2 shiftwidth=2 softtabstop=2  noexpandtab'
+vim.cmd 'autocmd Filetype lua setlocal tabstop=2 shiftwidth=2 softtabstop=2 noexpandtab signcolumn'
 
 
 local function map(mode, lhs, rhs, opts)
@@ -230,6 +231,10 @@ local on_attach = function(client, bufnr)
 	-- toggle line number for pairing
 
 end
+nvim_lsp.pyright.setup{
+	on_attach = on_attach,
+	capabilities = capabilities,
+}
 
 nvim_lsp.move_analyzer.setup{
 	on_attach = on_attach,

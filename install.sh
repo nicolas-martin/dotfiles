@@ -29,8 +29,8 @@ warn "Symlinking files"
 # install .gitconfig
 # install .zshrc
 # install .tmux.conf
-install init.lua "$HOME/.config/nvim/init.lua"
-install plugins.lua "$HOME/.config/nvim/lua/plugins.lua"
+# install init.lua "$HOME/.config/nvim/init.lua"
+# install plugins.lua "$HOME/.config/nvim/lua/plugins.lua"
 install alacritty.toml "$HOME/.config/alacritty/alacritty.toml"
 # install base.vim "$HOME/base.vim"
 # install .gitattributes

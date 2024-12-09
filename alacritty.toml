@@ -1,33 +1,30 @@
-env:
-  TERM: alacritty
+live_config_reload = true
 
-selection:
-  save_to_clipboard: true
+[env]
+TERM = "alacritty"
 
-live_config_reload: true
+[font]
+size = 14
 
-mouse:
-  hide_when_typing: false
+[font.glyph_offset]
+y = 1
 
-window:
-  # Values for `decorations` (macOS only):
-  #     - transparent: Title bar, transparent background and title bar buttons
-  #     - buttonless: Title bar, transparent background, but no title bar buttons
-  decorations: buttonless
-  opacity: 1.0
+[font.normal]
+# family = "Arial"
+family = "MesloLGS NF"
+# family = "JetBrainsMonoNL Nerd Font Mono"
 
+[mouse]
+hide_when_typing = false
 
-shell:
-   program: /bin/zsh
-   args:
-     - -l
-     - -c
-     - "tmux"
+[selection]
+save_to_clipboard = true
 
-#https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/JetBrainsMono/NoLigatures/Regular/complete/JetBrains%20Mono%20NL%20Regular%20Nerd%20Font%20Complete.ttf
-font:
-  normal:
-    family: "JetBrainsMonoNL Nerd Font Mono"
-  size: 14
-  glyph_offset:
-    y: 1
+[shell]
+args = ["-l", "-c", "tmux"]
+program = "/bin/zsh"
+
+[window]
+decorations = "buttonless"
+opacity = 1.0
+

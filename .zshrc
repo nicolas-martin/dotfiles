@@ -1,10 +1,25 @@
-echo "hello from zshrc"
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
 
+# echo "hello from zshrc"
+# profiler
+# zmodload zsh/zprof
+export DISABLE_AUTO_UPDATE=true
 export ZSH="/Users/nma/.oh-my-zsh"
+autoload -Uz compinit
+if [ $(date +'%j') != $(stat -f '%Sm' -t '%j' ~/.zcompdump) ]; then
+  compinit
+else
+  compinit -C
+fi
 
+ZSH_THEME="powerlevel10k/powerlevel10k"
 # ZSH_THEME="robbyrussell"
-ZSH_THEME="robbyrussell"
-plugins=(vi-mode autojump kubectl)
+plugins=(vi-mode autojump)
 
 source $ZSH/oh-my-zsh.sh
 export SSH_KEY_PATH="~/.ssh/rsa_id"
@@ -12,10 +27,9 @@ export SSH_KEY_PATH="~/.ssh/rsa_id"
 [ -z "$SSH_AUTH_SOCK" ] && eval "$(ssh-agent -s)"
 
 #CB
-export GO111MODULE=on # can be skipped if project files are located outside of your GOPATH already.
+# export GO111MODULE=on # can be skipped if project files are located outside of your GOPATH already.
 export GOPROXY=https://gomodules.cbhq.net/
 export GONOSUMDB=github.cbhq.net  
-
 
 # ssh-add -A
 
@@ -26,10 +40,6 @@ set -o vi
 export GOPATH=$HOME/go
 
 # test 
-# export GOROOT=/usr/local/opt/go@1.20/libexec
-# export PATH="/usr/local/opt/go@1.20/bin:$PATH"
-# export GOROOT=/usr/local/opt/go@1.19/libexec
-# export PATH="/usr/local/opt/go@1.19/bin:$PATH"
 export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:$GOROOT/bin
 # replace make with gmake
@@ -38,8 +48,7 @@ export PATH=$PATH:'/usr/local/opt/make/libexec/gnubin'
 # pretty man
 export MANPAGER='nvim +Man!'
 export EDITOR=nvim
-
-# git aliases
+### git aliases
 alias st='git status '
 alias ga='git add '
 alias br='git branch '
@@ -50,8 +59,8 @@ alias pu='git push '
 alias last='git log -1'
 alias re='git fetch origin master;git rebase origin/master'
 alias g='git '
-alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit -m "--wip--"'
-alias gunwip='git log -n 1 | grep -q -c "\-\-wip\-\-" && git reset HEAD~1'
+alias gwip='git add -a; git rm $(git ls-files --deleted) 2> /dev/null; git commit -m "--wip--"'
+alias gunwip='git log -n 1 | grep -q -c "\-\-wip\-\-" && git reset head~1'
 alias orig="find . -name '*.orig' -delete"
 alias removemerge='git branch --merged | grep -v "\*" | grep -v master | grep -v dev | xargs -n 1 git branch -d'
 alias vim='/usr/bin/vim'
@@ -61,7 +70,8 @@ alias ll='ls -la'
 alias ghc='/usr/local/bin/gh'
 alias b='git branch | grep -v "^\*" | fzf --height=20% --reverse --info=inline | xargs git checkout'
 alias d='git branch | grep -v "^\*" | fzf --height=20% --reverse --info=inline | xargs git branch -D'
-
+alias killwf='f(){yes | ./bin/rewarder workflow terminate $(pbpaste) ""};f'
+alias killall="cadence --domain coinbase workflow list --op --pjson | jq -r '.[].execution.workflowId' | grep -v hearbeat | xargs -n 1 cadence --domain coinbase workflow term --workflow_id"
 alias cssh='ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -71,42 +81,36 @@ mkcd ()
       cd -P -- "$1"
 }
 
-# Get autocompelte with catalina
-autoload -U compinit && compinit
-
-#ruby
-export GEM_HOME="$HOME/.gem"
-# eval "$(rbenv init - zsh)"
-#
-export PATH="$GEM_HOME/bin:$PATH"
-export PATH="$HOME/.rbenv/bin:$PATH"
-
-# CB-PYTHON
-export PATH=~/.local/bin:$PATH
-# eval "$(cb-pyenv init)"
+##ruby
+## SLOW LOAD???
+## export GEM_HOME="$HOME/.gem"
+## eval "$(rbenv init - zsh)"
+##
+## export PATH="$GEM_HOME/bin:$PATH"
+## export PATH="$HOME/.rbenv/bin:$PATH"
 
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
-# eval "$(pyenv init -)"
-alias killwf='f(){yes | ./bin/rewarder workflow terminate $(pbpaste) ""};f'
-alias killall="cadence --domain coinbase workflow list --op --pjson | jq -r '.[].execution.workflowId' | grep -v hearbeat | xargs -n 1 cadence --domain coinbase workflow term --workflow_id"
+# try to lazy load
+pyenv() {
+  eval "$(command pyenv init -)"
+  pyenv "$@"
+}
+
+##eval "$($(go env GOPATH)/bin/assume-role -init)"
+
+## export PATH="/usr/local/sbin:$PATH"
 
 
-# export RUBY_CFLAGS="-Wno-error=implicit-function-declaration -DUSE_FFI_CLOSURE_ALLOC"
-#eval "$($(go env GOPATH)/bin/assume-role -init)"
-
-# export PRIME_API_GATEWAY_PATH="/Users/nma/dev/prime-api-gateway"
-# export MONOREPO_PATH="/Users/nma/dev/repo"
-# source $MONOREPO_PATH/scripts/rc/rc.sh
-
-export PATH="/usr/local/sbin:$PATH"
-
-
-# export NVM_DIR="$HOME/.nvm"
-# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-# export FZF_CTRL_R_OPTS='--preview-window=up:10:wrap --preview="echo {}" --height 100%'
+## export NVM_DIR="$HOME/.nvm"
+## [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+## [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+export FZF_CTRL_R_OPTS='--preview-window=up:10:wrap --preview="echo {}" --height 100%'
 export FZF_CTRL_R_OPTS="--height 50% --preview 'echo {2..} | bat --color=always -pl sh' --preview-window 'wrap,down,5'"
 
-# added by Snowflake SnowSQL installer v1.2
-export PATH=/Applications/SnowSQL.app/Contents/MacOS:$PATH
+
+# zprof
+source /usr/local/share/powerlevel10k/powerlevel10k.zsh-theme
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
