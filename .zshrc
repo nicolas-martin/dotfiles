@@ -1,15 +1,14 @@
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
+#if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+#  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+#fi
 
 # echo "hello from zshrc"
 # profiler
-# zmodload zsh/zprof
-export DISABLE_AUTO_UPDATE=true
-export ZSH="/Users/nma/.oh-my-zsh"
+# export DISABLE_AUTO_UPDATE=true
+export ZSH="/Users/nmartin/.oh-my-zsh"
 autoload -Uz compinit
 if [ $(date +'%j') != $(stat -f '%Sm' -t '%j' ~/.zcompdump) ]; then
   compinit
@@ -17,19 +16,14 @@ else
   compinit -C
 fi
 
-ZSH_THEME="powerlevel10k/powerlevel10k"
-# ZSH_THEME="robbyrussell"
+#ZSH_THEME="powerlevel10k/powerlevel10k"
+ZSH_THEME="robbyrussell"
 plugins=(vi-mode autojump)
 
 source $ZSH/oh-my-zsh.sh
 export SSH_KEY_PATH="~/.ssh/rsa_id"
 # Auto add keys?
 [ -z "$SSH_AUTH_SOCK" ] && eval "$(ssh-agent -s)"
-
-#CB
-# export GO111MODULE=on # can be skipped if project files are located outside of your GOPATH already.
-export GOPROXY=https://gomodules.cbhq.net/
-export GONOSUMDB=github.cbhq.net  
 
 # ssh-add -A
 
@@ -42,8 +36,6 @@ export GOPATH=$HOME/go
 # test 
 export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:$GOROOT/bin
-# replace make with gmake
-export PATH=$PATH:'/usr/local/opt/make/libexec/gnubin'
 
 # pretty man
 export MANPAGER='nvim +Man!'
@@ -81,27 +73,6 @@ mkcd ()
       cd -P -- "$1"
 }
 
-##ruby
-## SLOW LOAD???
-## export GEM_HOME="$HOME/.gem"
-## eval "$(rbenv init - zsh)"
-##
-## export PATH="$GEM_HOME/bin:$PATH"
-## export PATH="$HOME/.rbenv/bin:$PATH"
-
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-# try to lazy load
-pyenv() {
-  eval "$(command pyenv init -)"
-  pyenv "$@"
-}
-
-##eval "$($(go env GOPATH)/bin/assume-role -init)"
-
-## export PATH="/usr/local/sbin:$PATH"
-
-
 ## export NVM_DIR="$HOME/.nvm"
 ## [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 ## [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
@@ -109,8 +80,7 @@ export FZF_CTRL_R_OPTS='--preview-window=up:10:wrap --preview="echo {}" --height
 export FZF_CTRL_R_OPTS="--height 50% --preview 'echo {2..} | bat --color=always -pl sh' --preview-window 'wrap,down,5'"
 
 
-# zprof
-source /usr/local/share/powerlevel10k/powerlevel10k.zsh-theme
+#source /usr/local/share/powerlevel10k/powerlevel10k.zsh-theme
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+#[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

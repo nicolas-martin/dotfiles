@@ -1,7 +1,6 @@
 [user]
 	name = nicolas-martin
-	email = nicolas.martin@coinbase.com
-	signingkey = nicolas.martin@coinbase.com
+	email = nicolas.martin.0986@gmail.com
 [merge]
 	tool = kdiff3
 [diff]
@@ -19,5 +18,5 @@
 	defaultBranch = master
 ; [url "git@github.com:"]
 ; 	insteadOf = https://github.com/
-[commit]
-	gpgsign = true
+; [commit]
+; 	gpgsign = true

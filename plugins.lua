@@ -1,11 +1,11 @@
-
-return require('packer').startup(function()
+return require('packer').startup(function(use)
 	use 'wbthomason/packer.nvim'
 	use 'preservim/nerdtree'
 	use 'tpope/vim-repeat'
 	use 'tpope/vim-surround'
 	use 'tpope/vim-commentary'
-	use 'ellisonleao/gruvbox.nvim'
+	-- use 'ellisonleao/gruvbox.nvim'
+	use 'EdenEast/nightfox.nvim'
 	use 'fatih/vim-go'
 	use 'nvim-treesitter/nvim-treesitter'
 	-- to debug treesitter syntax
@@ -59,5 +59,4 @@ return require('packer').startup(function()
 	use 'github/copilot.vim'
 
 end)
-
 
