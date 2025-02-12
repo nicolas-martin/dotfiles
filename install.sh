@@ -11,9 +11,19 @@ warn() {
 install() {
   local src="$(pwd)/$1"
   local dst=${2:-"$HOME/$1"}
-  info "linking $src to $dst"
-  ln -sf $src $dst
-  # cp $src $dst
+  
+  if [ ! -e "$src" ]; then
+    warn "Source file $src does not exist. Skipping."
+    return
+  fi
+
+  info "Linking $src to $dst"
+  mkdir -p "$(dirname "$dst")" # Ensure the directory exists
+  if ln -sf "$src" "$dst"; then
+    info "Successfully linked $src to $dst"
+  else
+    warn "Failed to link $src to $dst"
+  fi
 }
 
 gitstall() {
@@ -21,30 +31,28 @@ gitstall() {
     rm -rf "$2"
   fi
   git clone "$1" "$2"
-  info "cloning $1 to $2"
+  info "Cloning $1 to $2"
 }
 
 warn "Symlinking files"
 
-# install .gitconfig
-# install .zshrc
-# install .tmux.conf
-# install init.lua "$HOME/.config/nvim/init.lua"
-# install plugins.lua "$HOME/.config/nvim/lua/plugins.lua"
+# General dotfiles
+install .gitconfig
+install .zshrc
+install .tmux.conf
 install alacritty.toml "$HOME/.config/alacritty/alacritty.toml"
+
+# Neovim configuration
+install init.lua "$HOME/.config/nvim/init.lua"
+install lua/plugins.lua "$HOME/.config/nvim/lua/plugins.lua"
+install lua/settings.lua "$HOME/.config/nvim/lua/settings.lua"
+install lua/keymaps.lua "$HOME/.config/nvim/lua/keymaps.lua"
+install lua/lsp.lua "$HOME/.config/nvim/lua/lsp.lua"
+install lua/autocmds.lua "$HOME/.config/nvim/lua/autocmds.lua"
+install lua/telescope.lua "$HOME/.config/nvim/lua/telescope.lua"
+
+# Uncomment these if you want to use them
 # install base.vim "$HOME/base.vim"
 # install .gitattributes
 
-# warn "Installing misc deps"
-
-# curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-#     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-# curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
-#     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-
-warn "Running misc commands"
-
-# $(which vim) +PlugUpdate +qall
-# if command -v nvim; then
-#   $(which nvim) +PlugUpdate +qall
-# fi
+warn "Installation complete!"

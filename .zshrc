@@ -8,7 +8,6 @@
 # echo "hello from zshrc"
 # profiler
 # export DISABLE_AUTO_UPDATE=true
-export ZSH="/Users/nmartin/.oh-my-zsh"
 autoload -Uz compinit
 if [ $(date +'%j') != $(stat -f '%Sm' -t '%j' ~/.zcompdump) ]; then
   compinit
@@ -17,10 +16,11 @@ else
 fi
 
 #ZSH_THEME="powerlevel10k/powerlevel10k"
-ZSH_THEME="robbyrussell"
+export ZSH=$HOME/.oh-my-zsh
 plugins=(vi-mode autojump)
-
+ZSH_THEME="robbyrussell"
 source $ZSH/oh-my-zsh.sh
+
 export SSH_KEY_PATH="~/.ssh/rsa_id"
 # Auto add keys?
 [ -z "$SSH_AUTH_SOCK" ] && eval "$(ssh-agent -s)"

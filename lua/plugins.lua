@@ -12,7 +12,7 @@ return require('packer').startup(function(use)
 	use 'nvim-treesitter/playground'
 
 	-- refactor
-  use 'dyng/ctrlsf.vim'
+        use 'dyng/ctrlsf.vim'
 
 	-- Collection of common configurations for the Nvim LSP client
 	use 'neovim/nvim-lspconfig'
@@ -24,8 +24,8 @@ return require('packer').startup(function(use)
 	use "onsails/lspkind-nvim"
 
 	-- Snippet completion source for nvim-cmp
-  -- Autocompletion framework
-  use("hrsh7th/nvim-cmp")
+        -- Autocompletion framework
+        use("hrsh7th/nvim-cmp")
 	use("hrsh7th/cmp-nvim-lsp")
 	use("hrsh7th/cmp-path")
 	use("hrsh7th/cmp-buffer")
