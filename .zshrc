@@ -21,7 +21,7 @@ plugins=(vi-mode autojump)
 ZSH_THEME="robbyrussell"
 source $ZSH/oh-my-zsh.sh
 
-export SSH_KEY_PATH="~/.ssh/rsa_id"
+# export SSH_KEY_PATH="~/.ssh/rsa_id"
 # Auto add keys?
 [ -z "$SSH_AUTH_SOCK" ] && eval "$(ssh-agent -s)"
 
@@ -73,9 +73,19 @@ mkcd ()
       cd -P -- "$1"
 }
 
-## export NVM_DIR="$HOME/.nvm"
-## [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-## [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+fzf-history-widget() {
+  local selected
+  selected=$(fc -rl 1 | fzf +s --query "$LBUFFER" \
+    --height=10 \
+    --preview 'printf "%b" "$(echo {} | awk '\''{ $1=""; sub(/^ +/,""); print }'\'' | sed -e "s/^'\''//" -e "s/'\''\$//")"' \
+    --preview-window=right:wrap) || return
+  BUFFER=$(echo "$selected" | awk '{ $1=""; sub(/^ +/,""); print }' | sed -e "s/^'//" -e "s/'\$//")
+  CURSOR=${#BUFFER}
+  zle reset-prompt
+}
+zle -N fzf-history-widget
+bindkey '^R' fzf-history-widget
+
 export FZF_CTRL_R_OPTS='--preview-window=up:10:wrap --preview="echo {}" --height 100%'
 export FZF_CTRL_R_OPTS="--height 50% --preview 'echo {2..} | bat --color=always -pl sh' --preview-window 'wrap,down,5'"
 
