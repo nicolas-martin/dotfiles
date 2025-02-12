@@ -49,7 +49,7 @@ install lua/settings.lua "$HOME/.config/nvim/lua/settings.lua"
 install lua/keymaps.lua "$HOME/.config/nvim/lua/keymaps.lua"
 install lua/lsp.lua "$HOME/.config/nvim/lua/lsp.lua"
 install lua/autocmds.lua "$HOME/.config/nvim/lua/autocmds.lua"
-install lua/telescope.lua "$HOME/.config/nvim/lua/telescope.lua"
+install lua/telescope_config.lua "$HOME/.config/nvim/lua/telescope_config.lua"
 
 # Uncomment these if you want to use them
 # install base.vim "$HOME/base.vim"

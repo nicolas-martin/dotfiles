@@ -4,7 +4,12 @@ local map = vim.keymap.set
 -- General mappings
 map('n', '<leader>rc', ':source $MYVIMRC<CR>', default_opts)
 map('n', '<leader>n', ':noh<CR>', default_opts)
-map('n', '<leader>,', ':NERDTreeToggleFind<CR>', default_opts)
+map('n', '<f1>', 'o<Esc>', default_opts)
+map('n', 'Q', '<nop>', default_opts)
+map('n', ']q', ':cn<CR>')                                    -- quickfix navigatio, default_optsn
+map('n', '[q', ':cp<CR>', default_opts)
+map('n', '<leader>)', '<cmd>set nu! rnu!<CR>', default_opts) -- toggle relativenumber and numbers
+map('x', 'p', 'P', default_opts)                             -- xnoremap p P
 
 -- Telescope mappings
 map('n', '<leader>ff', '<cmd>Telescope find_files<cr>', default_opts)
@@ -18,5 +23,17 @@ map('n', '<C-k>', '<C-w>k', default_opts)
 map('n', '<C-l>', '<C-w>l', default_opts)
 map('n', '<C-h>', '<C-w>h', default_opts)
 
+-- tab navigation
+map('n', '<leader>1', '1gt', default_opts)
+map('n', '<leader>2', '2gt', default_opts)
+map('n', '<leader>3', '3gt', default_opts)
+map('n', '<leader>4', '4gt', default_opts)
+map('n', '<leader>5', '5gt', default_opts)
+map('n', '<leader>6', '6gt', default_opts)
+map('n', '<leader>7', '7gt', default_opts)
+map('n', '<leader>8', '8gt', default_opts)
+map('n', '<leader>9', '9gt', default_opts)
+
 -- NERDTree
 map('n', '<C-n>', ':NERDTreeToggle<CR>', default_opts)
+map('n', '<leader>l', ':NERDTreeFind<cr>', default_opts)
