@@ -25,3 +25,6 @@ program = "/bin/zsh"
 decorations = "buttonless"
 opacity = 1.0
 
+[colors.primary]
+background = "#ffffff"
+foreground = "#000000"

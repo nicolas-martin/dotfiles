@@ -62,9 +62,6 @@ alias ll='ls -la'
 alias ghc='/usr/local/bin/gh'
 alias b='git branch | grep -v "^\*" | fzf --height=20% --reverse --info=inline | xargs git checkout'
 alias d='git branch | grep -v "^\*" | fzf --height=20% --reverse --info=inline | xargs git branch -D'
-alias killwf='f(){yes | ./bin/rewarder workflow terminate $(pbpaste) ""};f'
-alias killall="cadence --domain coinbase workflow list --op --pjson | jq -r '.[].execution.workflowId' | grep -v hearbeat | xargs -n 1 cadence --domain coinbase workflow term --workflow_id"
-alias cssh='ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 mkcd ()

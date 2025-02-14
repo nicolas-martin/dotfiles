@@ -50,6 +50,7 @@ install lua/keymaps.lua "$HOME/.config/nvim/lua/keymaps.lua"
 install lua/lsp.lua "$HOME/.config/nvim/lua/lsp.lua"
 install lua/autocmds.lua "$HOME/.config/nvim/lua/autocmds.lua"
 install lua/telescope_config.lua "$HOME/.config/nvim/lua/telescope_config.lua"
+install lua/cmp_config.lua "$HOME/.config/nvim/lua/cmp_config.lua"
 
 # Uncomment these if you want to use them
 # install base.vim "$HOME/base.vim"

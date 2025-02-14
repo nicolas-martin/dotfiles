@@ -16,6 +16,8 @@ map('n', '<leader>ff', '<cmd>Telescope find_files<cr>', default_opts)
 map('n', '<leader>fg', '<cmd>Telescope live_grep<cr>', default_opts)
 map('n', '<leader>fb', '<cmd>Telescope buffers<cr>', default_opts)
 map('n', '<leader>fh', '<cmd>Telescope help_tags<cr>', default_opts)
+map('n', '<leader>ft', '<cmd>Telescope lsp_document_symbols<cr>', default_opts)
+map('n', '<leader>fT', '<cmd>Telescope lsp_dynamic_workspace_symbols<cr>', default_opts)
 
 -- Window navigation
 map('n', '<C-j>', '<C-w>j', default_opts)

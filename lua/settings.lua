@@ -19,7 +19,7 @@ vim.opt.ignorecase = true
 vim.opt.smartcase = true
 
 -- Colorscheme
-vim.cmd [[colorscheme Terafox]]
+vim.cmd [[colorscheme Dayfox]]
 
 -- Disable unused built-in plugins
 vim.g.loaded_gzip = 1
