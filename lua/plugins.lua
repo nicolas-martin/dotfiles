@@ -59,4 +59,12 @@ return require('packer').startup(function(use)
         use 'rvmelkonian/move.vim'
 
         use 'github/copilot.vim'
+
+        use {
+                "pmizio/typescript-tools.nvim",
+                requires = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+                config = function()
+                        require("typescript-tools").setup {}
+                end,
+        }
 end)

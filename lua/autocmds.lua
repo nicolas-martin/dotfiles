@@ -13,7 +13,7 @@ autocmd("FileType", {
 })
 
 autocmd("FileType", {
-        pattern = { "rust", "javascript", "typescriptreact", "proto", "yaml" },
+        pattern = { "rust", "javascript", "typescript", "proto", "yaml" },
         callback = function()
                 vim.opt_local.tabstop = 2
                 vim.opt_local.shiftwidth = 2

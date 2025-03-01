@@ -83,7 +83,8 @@ fzf-history-widget() {
 zle -N fzf-history-widget
 bindkey '^R' fzf-history-widget
 
-export FZF_CTRL_R_OPTS='--preview-window=up:10:wrap --preview="echo {}" --height 100%'
+
+# export FZF_CTRL_R_OPTS='--preview-window=up:10:wrap --preview="echo {}" --height 100%'
 export FZF_CTRL_R_OPTS="--height 50% --preview 'echo {2..} | bat --color=always -pl sh' --preview-window 'wrap,down,5'"
 
 

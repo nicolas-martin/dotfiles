@@ -25,6 +25,11 @@ require('lspconfig').gopls.setup({
         },
 })
 
+require("typescript-tools").setup {
+        on_attach = on_attach,
+        capabilities = capabilities,
+}
+
 require('lspconfig').pyright.setup({
         on_attach = on_attach,
         capabilities = capabilities,
