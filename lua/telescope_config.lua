@@ -21,7 +21,30 @@ telescope.setup {
                         '--smart-case'
                 },
                 -- ignore_symbols = {"field", "struct"},
-                file_ignore_patterns = { "vendor", "go.sum", "go.mod", "module", ".git", "gen", "*.pb.go", "mod", "Cellar", "mocks" },
+                file_ignore_patterns = { 
+                        "vendor/.*",
+                        "node_modules/.*",
+                        "%.git/.*",
+                        "%.next/.*",  -- Next.js build output
+                        "dist/.*",    -- Common build output directory
+                        "build/.*",   -- Common build output directory
+                        "%.pb%.go",   -- Generated protobuf
+                        "%.gen%.go",  -- Generated Go files
+                        "go%.sum",
+                        "go%.mod",
+                        "package%-lock%.json",
+                        "package%.json",
+                        "yarn%.lock",
+                        "%.map",      -- Source maps
+                        "%.min%.js",  -- Minified JS
+                        "%.min%.css", -- Minified CSS
+                        "%.bundle%.js", -- Bundled JS
+                        "Cellar/.*",
+                        "mocks/.*",
+                        "%.test%.",   -- Test files
+                        "%.spec%.",   -- Test files
+                        "%.d%.ts",    -- TypeScript declaration files
+                },
                 layout_config = {
                         width = 0.95,        -- 95% of screen width
                         preview_width = 0.6, -- 60% of telescope window for preview
