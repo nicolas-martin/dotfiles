@@ -22,6 +22,15 @@ telescope.setup {
                 },
                 -- ignore_symbols = {"field", "struct"},
                 file_ignore_patterns = { "vendor", "go.sum", "go.mod", "module", ".git", "gen", "*.pb.go", "mod", "Cellar", "mocks" },
+                layout_config = {
+                        width = 0.95,        -- 95% of screen width
+                        preview_width = 0.6, -- 60% of telescope window for preview
+                        horizontal = {
+                                width = { padding = 0.15 },
+                                preview_width = 0.6,
+                        },
+                },
+                symbol_width = 50, -- Increase symbol name display width
                 mappings = {
                         i = {
                                 ["<C-n>"] = false,
@@ -32,6 +41,16 @@ telescope.setup {
                                 ["<C-k>"] = actions.move_selection_previous,
                                 ["<leader>q"] = actions.send_selected_to_qflist + actions.open_qflist,
                         },
+                }
+        },
+        pickers = {
+                lsp_document_symbols = {
+                        symbol_width = 50,   -- Wider symbol names in document symbols
+                        preview_width = 0.6, -- Wider preview for symbols
+                },
+                lsp_workspace_symbols = {
+                        symbol_width = 50,   -- Wider symbol names in workspace symbols
+                        preview_width = 0.6, -- Wider preview for symbols
                 }
         }
 }

@@ -62,33 +62,28 @@ alias ll='ls -la'
 alias ghc='/usr/local/bin/gh'
 alias b='git branch | grep -v "^\*" | fzf --height=20% --reverse --info=inline | xargs git checkout'
 alias d='git branch | grep -v "^\*" | fzf --height=20% --reverse --info=inline | xargs git branch -D'
+
+# First source fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# Then configure FZF options
+export FZF_DEFAULT_OPTS="--height 40% --reverse"
+export FZF_CTRL_R_OPTS="
+  --no-info
+  --preview 'echo {2..}' 
+  --preview-window 'right:40%:hidden:wrap' 
+  --bind 'ctrl-p:toggle-preview' 
+  --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort' 
+  --color header:italic 
+  --header 'Press CTRL-P to toggle preview, CTRL-Y to copy command' 
+  --height 60%
+"
+
+# Ensure key bindings are set
+bindkey '^R' fzf-history-widget
 
 mkcd ()
 {
     mkdir -p -- "$1" &&
       cd -P -- "$1"
 }
-
-fzf-history-widget() {
-  local selected
-  selected=$(fc -rl 1 | fzf +s --query "$LBUFFER" \
-    --height=10 \
-    --preview 'printf "%b" "$(echo {} | awk '\''{ $1=""; sub(/^ +/,""); print }'\'' | sed -e "s/^'\''//" -e "s/'\''\$//")"' \
-    --preview-window=right:wrap) || return
-  BUFFER=$(echo "$selected" | awk '{ $1=""; sub(/^ +/,""); print }' | sed -e "s/^'//" -e "s/'\$//")
-  CURSOR=${#BUFFER}
-  zle reset-prompt
-}
-zle -N fzf-history-widget
-bindkey '^R' fzf-history-widget
-
-
-# export FZF_CTRL_R_OPTS='--preview-window=up:10:wrap --preview="echo {}" --height 100%'
-export FZF_CTRL_R_OPTS="--height 50% --preview 'echo {2..} | bat --color=always -pl sh' --preview-window 'wrap,down,5'"
-
-
-#source /usr/local/share/powerlevel10k/powerlevel10k.zsh-theme
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-#[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
