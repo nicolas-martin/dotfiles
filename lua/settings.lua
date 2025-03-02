@@ -1,9 +1,14 @@
 -- General settings
 vim.g.mapleader = ',' -- Set leader key
 
+-- Folding settings
 vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
-vim.opt.foldlevelstart = 99
+vim.opt.foldlevelstart = 99  -- Start with all folds open
+vim.opt.foldenable = true    -- Enable folding
+vim.opt.foldnestmax = 10     -- Maximum nesting of folds
+vim.opt.foldminlines = 3     -- Minimum lines needed for a fold
+
 vim.opt.scrolloff = 5
 vim.opt.sidescrolloff = 5
 vim.opt.clipboard = "unnamedplus"
@@ -19,7 +24,7 @@ vim.opt.ignorecase = true
 vim.opt.smartcase = true
 
 -- Colorscheme
-vim.cmd [[colorscheme Dayfox]]
+vim.cmd [[colorscheme retrobox]]
 
 -- Disable unused built-in plugins
 vim.g.loaded_gzip = 1

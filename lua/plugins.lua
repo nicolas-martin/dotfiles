@@ -7,7 +7,7 @@ return require('packer').startup(function(use)
         -- use 'ellisonleao/gruvbox.nvim'
         use 'EdenEast/nightfox.nvim'
         use 'fatih/vim-go'
-        use 'nvim-treesitter/nvim-treesitter'
+        use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
         -- to debug treesitter syntax
         use 'nvim-treesitter/playground'
 
