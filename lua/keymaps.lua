@@ -2,7 +2,7 @@ local default_opts = { noremap = true, silent = true }
 local map = vim.keymap.set
 
 -- General mappings
-map('n', '<leader>rc', ':source $MYVIMRC<CR>', default_opts)
+map('n', '<leader>rc', '<cmd>source ~/.config/nvim/init.lua<CR>', default_opts)
 map('n', '<leader>n', ':noh<CR>', default_opts)
 map('n', '<f1>', 'o<Esc>', default_opts)
 map('n', 'Q', '<nop>', default_opts)

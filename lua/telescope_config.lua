@@ -1,6 +1,15 @@
 local telescope = require('telescope')
 local actions = require('telescope.actions')
 
+-- Define diagnostic icons
+local diagnostic_icons = {
+        -- error = "", -- Using a red 'x' icon
+        error = "", -- Using a red 'x' icon
+        warn = "", -- Using a yellow warning icon
+        info = " ", -- Using a blue info icon
+        hint = "", -- Using a blue lightbulb icon
+}
+
 telescope.setup {
         extensions = {
                 fzf = {
@@ -68,13 +77,60 @@ telescope.setup {
         },
         pickers = {
                 lsp_document_symbols = {
-                        symbol_width = 50,   -- Wider symbol names in document symbols
-                        preview_width = 0.6, -- Wider preview for symbols
+                        layout_config = {
+                                preview_width = 0.6,
+                        },
                 },
                 lsp_workspace_symbols = {
-                        symbol_width = 50,   -- Wider symbol names in workspace symbols
-                        preview_width = 0.6, -- Wider preview for symbols
-                }
+                        layout_config = {
+                                preview_width = 0.6,
+                        },
+                },
+                live_grep = {
+                        layout_config = {
+                                preview_width = 0.6,
+                        },
+                },
+                diagnostics = {
+                        layout_config = {
+                                preview_width = 0.30,
+                        },
+                        wrap_results = true,
+                        entry_maker = function(entry)
+                                local make_entry = require("telescope.make_entry")
+                                -- Use the default diagnostic entry maker as base
+                                local default_maker = make_entry.gen_from_diagnostics()
+                                local entry_tbl = default_maker(entry)
+
+                                -- Just modify the display to be simpler
+                                if entry_tbl then
+                                        local severity = string.lower(entry.type or "unknown")
+                                        local icon = diagnostic_icons[severity] or "?"
+                                        local filename = vim.fn.fnamemodify(entry.filename or "", ":t")
+                                        local message = entry.message or entry.text or ""
+
+                                        entry_tbl.display = function()
+                                                local win_width = vim.api.nvim_win_get_width(0)
+                                                local filename_display = string.format(" (%s)", filename)
+                                                local icon_display = string.format("%s ", icon)
+
+                                                -- Calculate available space for message
+                                                local max_msg_width = win_width - #filename_display - #icon_display - 5
+                                                local msg_display = message
+                                                if #message > max_msg_width then
+                                                        msg_display = string.sub(message, 1, max_msg_width - 3) .. "..."
+                                                else
+                                                        msg_display = message ..
+                                                            string.rep(" ", max_msg_width - #message)
+                                                end
+
+                                                return icon_display .. msg_display .. filename_display
+                                        end
+                                end
+
+                                return entry_tbl
+                        end,
+                },
         }
 }
 
