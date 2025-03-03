@@ -3,7 +3,6 @@ local actions = require('telescope.actions')
 
 -- Define diagnostic icons
 local diagnostic_icons = {
-        -- error = "", -- Using a red 'x' icon
         error = "", -- Using a red 'x' icon
         warn = "", -- Using a yellow warning icon
         info = " ", -- Using a blue info icon
@@ -80,6 +79,66 @@ telescope.setup {
                         layout_config = {
                                 preview_width = 0.6,
                         },
+                        entry_maker = function(entry)
+                                local make_entry = require("telescope.make_entry")
+                                local default_maker = make_entry.gen_from_lsp_symbols()
+                                local entry_tbl = default_maker(entry)
+
+                                if entry_tbl then
+                                        -- Define kind icons with both numeric and string keys
+                                        local kind_icons = {
+                                                ["Text"] = "󰉿",
+                                                ["Method"] = "󰆧",
+                                                ["Function"] = "󰊕",
+                                                ["Constructor"] = "",
+                                                ["Field"] = "󰜢",
+                                                ["Variable"] = "󰀫",
+                                                ["Class"] = "󰠱",
+                                                ["Interface"] = "",
+                                                ["Module"] = "",
+                                                ["Property"] = "󰜢",
+                                                ["Unit"] = "󰑭",
+                                                ["Value"] = "󰎠",
+                                                ["Enum"] = "",
+                                                ["Keyword"] = "󰌋",
+                                                ["Snippet"] = "",
+                                                ["Color"] = "󰏘",
+                                                ["File"] = "󰈙",
+                                                ["Reference"] = "󰈇",
+                                                ["Folder"] = "󰉋",
+                                                ["EnumMember"] = "",
+                                                ["Constant"] = "󰏿",
+                                                ["Struct"] = "󰙅",
+                                                ["Event"] = "",
+                                                ["Operator"] = "󰆕",
+                                                ["TypeParameter"] = "",
+                                        }
+
+                                        entry_tbl.display = function()
+                                                local win_width = vim.api.nvim_win_get_width(0)
+                                                local icon = kind_icons[entry.kind] or "? "
+                                                local kind_name = entry.kind or "Unknown"
+
+                                                local type_display = string.format(" (%s)", kind_name:lower())
+                                                local icon_display = string.format("%s ", icon)
+
+                                                local space_index = string.find(entry.text, " ")
+                                                local name = string.sub(entry.text, space_index + 1)
+
+                                                local max_name_width = win_width - #type_display - #icon_display - 5
+                                                local name_display = name
+                                                if #name > max_name_width then
+                                                        name_display = string.sub(name, 1, max_name_width - 3) .. "..."
+                                                else
+                                                        name_display = name .. string.rep(" ", max_name_width - #name)
+                                                end
+
+                                                return icon_display .. name_display .. type_display
+                                        end
+                                end
+
+                                return entry_tbl
+                        end,
                 },
                 lsp_workspace_symbols = {
                         layout_config = {
