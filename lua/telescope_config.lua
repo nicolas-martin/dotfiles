@@ -1,12 +1,87 @@
 local telescope = require('telescope')
 local actions = require('telescope.actions')
 
+-- Helper function for right-aligned display
+local format_with_right_align = function(icon_str, main_str, type_str)
+        local win_width = vim.api.nvim_win_get_width(0)
+
+        -- Format displays
+        local icon_display = string.format("%s ", icon_str)
+        local type_display = string.format(" (%s)", type_str:lower())
+
+        -- Calculate accurate display widths
+        local icon_width = vim.fn.strwidth(icon_display)
+        local type_width = vim.fn.strwidth(type_display)
+        local main_width = vim.fn.strwidth(main_str)
+
+        -- Calculate available width and truncate if needed
+        local max_main_width = win_width - type_width - icon_width - 2
+        local main_display = main_str
+        if main_width > max_main_width then
+                main_display = string.sub(main_str, 1, max_main_width - 3) .. "..."
+        end
+
+        -- Create a display line with proper alignment
+        local displayer = require("telescope.pickers.entry_display").create {
+                separator = "",
+                items = {
+                        { width = icon_width },
+                        { width = win_width - icon_width - type_width - 2 },
+                        { width = type_width,                             right_justify = true },
+                },
+        }
+        -- TelescopeResultsIdentifier - What you're currently using (blue in most themes)
+        -- TelescopeResultsConstant - Usually a different color like purple
+        -- TelescopeResultsFunction - Often orange or yellow
+        -- TelescopeResultsMethod - Similar to function, but sometimes distinct
+        -- TelescopeResultsOperator - Often pink or red
+        -- TelescopeResultsVariable - Typically light blue or cyan
+        -- TelescopeResultsNumber - Usually distinct color for numbers
+        -- TelescopeResultsComment - Often muted/gray
+        -- TelescopeSelection - The highlight for selected items
+        -- TelescopeMatching - Used for matched text during searches
+
+        return displayer {
+                { icon_display },
+                { main_display },
+                { type_display, "TelescopeResultsComment" },
+        }
+end
+
 -- Define diagnostic icons
 local diagnostic_icons = {
         error = "", -- Using a red 'x' icon
         warn = "", -- Using a yellow warning icon
         info = " ", -- Using a blue info icon
         hint = "", -- Using a blue lightbulb icon
+}
+
+local kind_icons = {
+        ["Text"] = "󰉿",
+        ["Method"] = "󰆧",
+        ["Function"] = "󰊕",
+        ["Constructor"] = "",
+        ["Field"] = "󰜢",
+        ["Variable"] = "󰀫",
+        ["Class"] = "󰠱",
+        ["Interface"] = "",
+        ["Module"] = "",
+        ["Property"] = "󰜢",
+        ["Unit"] = "󰑭",
+        ["Value"] = "󰎠",
+        ["Enum"] = "",
+        ["Keyword"] = "󰌋",
+        ["Snippet"] = "",
+        ["Color"] = "󰏘",
+        ["File"] = "󰈙",
+        ["Reference"] = "󰈇",
+        ["Folder"] = "󰉋",
+        ["EnumMember"] = "",
+        ["Constant"] = "󰏿",
+        ["Struct"] = "󰙅",
+        ["Event"] = "",
+        ["Operator"] = "󰆕",
+        ["TypeParameter"] = " ",
 }
 
 telescope.setup {
@@ -72,12 +147,12 @@ telescope.setup {
                                 ["<C-k>"] = actions.move_selection_previous,
                                 ["<leader>q"] = actions.send_selected_to_qflist + actions.open_qflist,
                         },
-                }
+                },
         },
         pickers = {
                 lsp_document_symbols = {
                         layout_config = {
-                                preview_width = 0.6,
+                                preview_width = 0.4,
                         },
                         entry_maker = function(entry)
                                 local make_entry = require("telescope.make_entry")
@@ -86,54 +161,14 @@ telescope.setup {
 
                                 if entry_tbl then
                                         -- Define kind icons with both numeric and string keys
-                                        local kind_icons = {
-                                                ["Text"] = "󰉿",
-                                                ["Method"] = "󰆧",
-                                                ["Function"] = "󰊕",
-                                                ["Constructor"] = "",
-                                                ["Field"] = "󰜢",
-                                                ["Variable"] = "󰀫",
-                                                ["Class"] = "󰠱",
-                                                ["Interface"] = "",
-                                                ["Module"] = "",
-                                                ["Property"] = "󰜢",
-                                                ["Unit"] = "󰑭",
-                                                ["Value"] = "󰎠",
-                                                ["Enum"] = "",
-                                                ["Keyword"] = "󰌋",
-                                                ["Snippet"] = "",
-                                                ["Color"] = "󰏘",
-                                                ["File"] = "󰈙",
-                                                ["Reference"] = "󰈇",
-                                                ["Folder"] = "󰉋",
-                                                ["EnumMember"] = "",
-                                                ["Constant"] = "󰏿",
-                                                ["Struct"] = "󰙅",
-                                                ["Event"] = "",
-                                                ["Operator"] = "󰆕",
-                                                ["TypeParameter"] = "",
-                                        }
 
                                         entry_tbl.display = function()
-                                                local win_width = vim.api.nvim_win_get_width(0)
                                                 local icon = kind_icons[entry.kind] or "? "
                                                 local kind_name = entry.kind or "Unknown"
-
-                                                local type_display = string.format(" (%s)", kind_name:lower())
-                                                local icon_display = string.format("%s ", icon)
-
                                                 local space_index = string.find(entry.text, " ")
                                                 local name = string.sub(entry.text, space_index + 1)
 
-                                                local max_name_width = win_width - #type_display - #icon_display - 5
-                                                local name_display = name
-                                                if #name > max_name_width then
-                                                        name_display = string.sub(name, 1, max_name_width - 3) .. "..."
-                                                else
-                                                        name_display = name .. string.rep(" ", max_name_width - #name)
-                                                end
-
-                                                return icon_display .. name_display .. type_display
+                                                return format_with_right_align(icon, name, kind_name)
                                         end
                                 end
 
@@ -157,33 +192,17 @@ telescope.setup {
                         wrap_results = true,
                         entry_maker = function(entry)
                                 local make_entry = require("telescope.make_entry")
-                                -- Use the default diagnostic entry maker as base
                                 local default_maker = make_entry.gen_from_diagnostics()
                                 local entry_tbl = default_maker(entry)
 
-                                -- Just modify the display to be simpler
                                 if entry_tbl then
-                                        local severity = string.lower(entry.type or "unknown")
-                                        local icon = diagnostic_icons[severity] or "?"
-                                        local filename = vim.fn.fnamemodify(entry.filename or "", ":t")
-                                        local message = entry.message or entry.text or ""
-
                                         entry_tbl.display = function()
-                                                local win_width = vim.api.nvim_win_get_width(0)
-                                                local filename_display = string.format(" (%s)", filename)
-                                                local icon_display = string.format("%s ", icon)
+                                                local severity = string.lower(entry.type or "unknown")
+                                                local icon = diagnostic_icons[severity] or "?"
+                                                local filename = vim.fn.fnamemodify(entry.filename or "", ":t")
+                                                local message = entry.message or entry.text or ""
 
-                                                -- Calculate available space for message
-                                                local max_msg_width = win_width - #filename_display - #icon_display - 5
-                                                local msg_display = message
-                                                if #message > max_msg_width then
-                                                        msg_display = string.sub(message, 1, max_msg_width - 3) .. "..."
-                                                else
-                                                        msg_display = message ..
-                                                            string.rep(" ", max_msg_width - #message)
-                                                end
-
-                                                return icon_display .. msg_display .. filename_display
+                                                return format_with_right_align(icon, message, filename)
                                         end
                                 end
 
