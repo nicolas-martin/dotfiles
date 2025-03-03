@@ -40,7 +40,6 @@ local format_with_right_align = function(icon_str, main_str, type_str)
         -- TelescopeResultsComment - Often muted/gray
         -- TelescopeSelection - The highlight for selected items
         -- TelescopeMatching - Used for matched text during searches
-
         return displayer {
                 { icon_display },
                 { main_display },
@@ -50,36 +49,36 @@ end
 
 -- Define diagnostic icons
 local diagnostic_icons = {
-        error = "", -- Using a red 'x' icon
-        warn = "", -- Using a yellow warning icon
-        info = " ", -- Using a blue info icon
-        hint = "", -- Using a blue lightbulb icon
+        error = "", -- Using a red 'x' icon
+        warn = "",  -- Using a yellow warning icon
+        info = " ", -- Using a blue info icon
+        hint = "",  -- Using a blue lightbulb icon
 }
 
 local kind_icons = {
         ["Text"] = "󰉿",
         ["Method"] = "󰆧",
         ["Function"] = "󰊕",
-        ["Constructor"] = "",
+        ["Constructor"] = "",
         ["Field"] = "󰜢",
         ["Variable"] = "󰀫",
         ["Class"] = "󰠱",
-        ["Interface"] = "",
-        ["Module"] = "",
+        ["Interface"] = "",
+        ["Module"] = "",
         ["Property"] = "󰜢",
         ["Unit"] = "󰑭",
         ["Value"] = "󰎠",
-        ["Enum"] = "",
+        ["Enum"] = "",
         ["Keyword"] = "󰌋",
-        ["Snippet"] = "",
+        ["Snippet"] = "",
         ["Color"] = "󰏘",
         ["File"] = "󰈙",
         ["Reference"] = "󰈇",
         ["Folder"] = "󰉋",
-        ["EnumMember"] = "",
+        ["EnumMember"] = "",
         ["Constant"] = "󰏿",
         ["Struct"] = "󰙅",
-        ["Event"] = "",
+        ["Event"] = "",
         ["Operator"] = "󰆕",
         ["TypeParameter"] = " ",
 }
@@ -103,21 +102,47 @@ telescope.setup {
                         '--column',
                         '--smart-case'
                 },
-                -- ignore_symbols = {"field", "struct"},
                 file_ignore_patterns = {
+                        -- Go-specific dependency patterns
+                        "github%.com/[^/]+/[^/]+", -- Any GitHub repository
+                        "golang%.org/x/[^/]+",     -- Go standard extended libraries
+                        "gopkg%.in/[^/]+",         -- Gopkg libraries
+                        "go%.uber%.org/[^/]+",     -- Uber Go libraries
+                        "/go/pkg/mod/.*",          -- Go module cache
+                        "/usr/local/go/.*",        -- Go installation
+
+                        -- More aggressive Go patterns (from diagnostics)
+                        "github%.com/.*",   -- All GitHub repos (more aggressive)
+                        "golang%.org/.*",   -- All golang.org packages
+                        "gopkg%.in/.*",     -- All gopkg.in packages
+                        "go%.uber%.org/.*", -- All go.uber.org packages
+                        "%w+%.%w+/.*",      -- Any domain-based import
+                        "%(go%.mod%)",      -- go.mod files as seen in diagnostics
+
+                        -- System paths
+                        "/usr/.*", -- All usr directories
+                        "/opt/.*", -- All opt directories
+
+                        -- Common external code patterns
                         "vendor/.*",
                         "node_modules/.*",
                         "%.git/.*",
                         "%.next/.*", -- Next.js build output
                         "dist/.*",   -- Common build output directory
                         "build/.*",  -- Common build output directory
+
+                        -- Generated files
                         "%.pb%.go",  -- Generated protobuf
                         "%.gen%.go", -- Generated Go files
+
+                        -- Config files
                         "go%.sum",
                         "go%.mod",
                         "package%-lock%.json",
                         "package%.json",
                         "yarn%.lock",
+
+                        -- Other common patterns
                         "%.map",        -- Source maps
                         "%.min%.js",    -- Minified JS
                         "%.min%.css",   -- Minified CSS
@@ -127,6 +152,8 @@ telescope.setup {
                         "%.test%.", -- Test files
                         "%.spec%.", -- Test files
                         "%.d%.ts",  -- TypeScript declaration files
+                        "/usr/include/.*",
+                        "/usr/lib/.*",
                 },
                 layout_config = {
                         width = 0.95,        -- 95% of screen width
@@ -148,11 +175,28 @@ telescope.setup {
                                 ["<leader>q"] = actions.send_selected_to_qflist + actions.open_qflist,
                         },
                 },
+                -- Ignore files in external dependencies and filter node_modules
+                path_display = { "truncate" },
+                respect_gitignore = true,
         },
         pickers = {
                 lsp_document_symbols = {
                         layout_config = {
                                 preview_width = 0.4,
+                        },
+                        -- Add symbols to ignore in LSP document symbols
+                        symbols = {
+                                "class",
+                                "function",
+                                "method",
+                                "constructor",
+                                "interface",
+                                "module",
+                                "property",
+                                "variable",
+                                "struct",
+                                "enum",
+                                -- Add/remove what you need
                         },
                         entry_maker = function(entry)
                                 local make_entry = require("telescope.make_entry")
@@ -160,8 +204,6 @@ telescope.setup {
                                 local entry_tbl = default_maker(entry)
 
                                 if entry_tbl then
-                                        -- Define kind icons with both numeric and string keys
-
                                         entry_tbl.display = function()
                                                 local icon = kind_icons[entry.kind] or "? "
                                                 local kind_name = entry.kind or "Unknown"
@@ -179,6 +221,15 @@ telescope.setup {
                         layout_config = {
                                 preview_width = 0.6,
                         },
+                        -- Ignore node_modules and other external directories
+                        -- additional_args = function()
+                        --         return {
+                        --                 "--ignore-directory=node_modules/",
+                        --                 "--ignore-directory=vendor/",
+                        --                 "--ignore-directory=.git/",
+                        --                 -- Add more directories to ignore
+                        --         }
+                        -- end,
                 },
                 live_grep = {
                         layout_config = {
@@ -191,6 +242,14 @@ telescope.setup {
                         },
                         wrap_results = true,
                         entry_maker = function(entry)
+                                -- Filter out common go module diagnostic messages
+                                -- if entry.text and (
+                                --             entry.text:match("is not used in this module") or
+                                --             entry.text:match("is not in your go%.mod file")
+                                --     ) then
+                                --         return nil
+                                -- end
+
                                 local make_entry = require("telescope.make_entry")
                                 local default_maker = make_entry.gen_from_diagnostics()
                                 local entry_tbl = default_maker(entry)
