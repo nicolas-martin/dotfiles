@@ -52,6 +52,7 @@ install lua/autocmds.lua "$HOME/.config/nvim/lua/autocmds.lua"
 install lua/telescope_config.lua "$HOME/.config/nvim/lua/telescope_config.lua"
 install lua/cmp_config.lua "$HOME/.config/nvim/lua/cmp_config.lua"
 install lua/treesitter.lua "$HOME/.config/nvim/lua/treesitter.lua"
+install lua/codecompanion.lua "$HOME/.config/nvim/lua/codecompanion.lua"
 
 # Uncomment these if you want to use them
 # install base.vim "$HOME/base.vim"

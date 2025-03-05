@@ -21,7 +21,12 @@ return require('packer').startup(function(use)
         -- use 'hrsh7th/cmp-nvim-lsp-signature-help'
         use 'ray-x/lsp_signature.nvim'
         -- add the nice source + completion item kind to the menu
-        use "onsails/lspkind-nvim"
+        use {
+                'onsails/lspkind.nvim',
+                config = function()
+                        require('lspkind').init()
+                end
+        }
 
         -- Snippet completion source for nvim-cmp
         -- Autocompletion framework
@@ -45,7 +50,7 @@ return require('packer').startup(function(use)
         -- Optional
         use 'nvim-lua/popup.nvim'
         use {
-                'nvim-telescope/telescope.nvim', tag = '0.1.8',
+                'nvim-telescope/telescope.nvim',
                 requires = { { 'nvim-lua/plenary.nvim' } }
         }
         use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
@@ -58,7 +63,33 @@ return require('packer').startup(function(use)
         -- move syntax
         use 'rvmelkonian/move.vim'
 
-        use 'github/copilot.vim'
+        -- Copilot setup
+        use {
+                "zbirenbaum/copilot.lua",
+                cmd = "Copilot",
+                event = "InsertEnter",
+                config = function()
+                        require("copilot").setup({
+                                suggestion = { enabled = false },
+                                panel = { enabled = false },
+                        })
+                end,
+        }
+        use {
+                "zbirenbaum/copilot-cmp",
+                after = { "copilot.lua" },
+                config = function()
+                        require("copilot_cmp").setup()
+                end
+        }
+        -- use 'github/copilot.vim'
+        use({
+                "olimorris/codecompanion.nvim",
+                requires = {
+                        "nvim-lua/plenary.nvim",
+                        "nvim-treesitter/nvim-treesitter",
+                }
+        })
 
         use {
                 "pmizio/typescript-tools.nvim",
