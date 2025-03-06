@@ -156,11 +156,11 @@ telescope.setup {
                         "/usr/lib/.*",
                 },
                 layout_config = {
-                        width = 0.95,        -- 95% of screen width
-                        preview_width = 0.6, -- 60% of telescope window for preview
+                        width = 0.95, -- 95% of screen width
+                        -- preview_width = 0.6, -- 60% of telescope window for preview
                         horizontal = {
                                 width = { padding = 0.15 },
-                                preview_width = 0.6,
+                                preview_width = 0.6, -- test remove?.. or the other oen
                         },
                 },
                 symbol_width = 50, -- Increase symbol name display width

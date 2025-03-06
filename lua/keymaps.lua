@@ -48,7 +48,3 @@ map('n', '<leader>Z', 'zR', { noremap = true, desc = 'Open all folds' })
 map('n', '<leader>zz', 'zM', { noremap = true, desc = 'Close all folds' })
 map('n', 'zC', 'zM', { noremap = true, desc = 'Close all folds' })
 map('n', 'zO', 'zR', { noremap = true, desc = 'Open all folds' })
-
--- CodeCompanion keymaps
-map('n', '<leader>cc', '<cmd>CodeCompanionChat<CR>', { noremap = true, silent = true })
-map('n', '<leader>ct', '<cmd>CodeCompanionToggle<CR>', { noremap = true, silent = true })

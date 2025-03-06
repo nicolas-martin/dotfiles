@@ -44,15 +44,20 @@ install alacritty.toml "$HOME/.config/alacritty/alacritty.toml"
 
 # Neovim configuration
 install init.lua "$HOME/.config/nvim/init.lua"
-install lua/plugins.lua "$HOME/.config/nvim/lua/plugins.lua"
-install lua/settings.lua "$HOME/.config/nvim/lua/settings.lua"
-install lua/keymaps.lua "$HOME/.config/nvim/lua/keymaps.lua"
-install lua/lsp.lua "$HOME/.config/nvim/lua/lsp.lua"
-install lua/autocmds.lua "$HOME/.config/nvim/lua/autocmds.lua"
-install lua/telescope_config.lua "$HOME/.config/nvim/lua/telescope_config.lua"
-install lua/cmp_config.lua "$HOME/.config/nvim/lua/cmp_config.lua"
-install lua/treesitter.lua "$HOME/.config/nvim/lua/treesitter.lua"
-install lua/codecompanion.lua "$HOME/.config/nvim/lua/codecompanion.lua"
+
+# Create the target directory if it doesn't exist
+mkdir -p "$HOME/.config/nvim/lua"
+
+# Find all .lua files in the lua directory and install them
+find lua -name "*.lua" -type f | while read -r file; do
+    # Get the relative path within the lua directory
+    relative_path=${file#lua/}
+    # Create target directory if needed
+    target_dir="$HOME/.config/nvim/lua/$(dirname "$relative_path")"
+    # Install the file
+    echo "Installing $file to $target_dir"
+    install "$file" "$HOME/.config/nvim/lua/$relative_path"
+done
 
 # Uncomment these if you want to use them
 # install base.vim "$HOME/base.vim"

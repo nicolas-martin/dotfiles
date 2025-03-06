@@ -82,17 +82,25 @@ return require('packer').startup(function(use)
                         require("copilot_cmp").setup()
                 end
         }
-        -- use 'github/copilot.vim'
-        use {
-                "olimorris/codecompanion.nvim",
+
+        -- avante / cursor ai
+        use 'stevearc/dressing.nvim'
+        use 'nvim-lua/plenary.nvim'
+        use 'MunifTanjim/nui.nvim'
+        use({
+                'MeanderingProgrammer/render-markdown.nvim',
+                after = { 'nvim-treesitter' },
+                requires = { 'nvim-tree/nvim-web-devicons', opt = true }, -- if you prefer nvim-web-devicons
                 config = function()
-                        require("codecompanion").setup()
+                        require('render-markdown').setup({
+                                file_types = { "markdown", "Avante" },
+                        })
                 end,
-                requires = {
-                        "nvim-lua/plenary.nvim",
-                        "nvim-treesitter/nvim-treesitter",
-                }
-        }
+        })
+        use 'HakonHarnes/img-clip.nvim'
+
+        -- Avante.nvim with build process
+        use { 'yetone/avante.nvim', branch = 'main', run = 'make' }
 
         use {
                 "pmizio/typescript-tools.nvim",
