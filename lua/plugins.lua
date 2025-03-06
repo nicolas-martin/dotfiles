@@ -6,7 +6,11 @@ return require('packer').startup(function(use)
         use 'tpope/vim-commentary'
         -- use 'ellisonleao/gruvbox.nvim'
         use 'EdenEast/nightfox.nvim'
-        use 'fatih/vim-go'
+        use { 'fatih/vim-go',
+                config = function()
+                        require('go').setup()
+                end
+        }
         use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
         -- to debug treesitter syntax
         use 'nvim-treesitter/playground'
@@ -55,7 +59,6 @@ return require('packer').startup(function(use)
         }
         use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
 
-        use("simrat39/rust-tools.nvim")
 
         -- lua / plugin
         use 'folke/lua-dev.nvim'
@@ -103,7 +106,7 @@ return require('packer').startup(function(use)
                         'nvim-treesitter/nvim-treesitter',
                         'stevearc/dressing.nvim',
                         'nvim-lua/plenary.nvim',
-                        'MunifTanjim/nui.nvim',
+                        -- 'MunifTanjim/nui.nvim',
                         'MeanderingProgrammer/render-markdown.nvim',
                         'nvim-tree/nvim-web-devicons',
                         'HakonHarnes/img-clip.nvim',
@@ -118,10 +121,15 @@ return require('packer').startup(function(use)
                         -- Load dependencies first
                         require('render-markdown').setup({
                                 file_types = { "Avante" },
+                                inline_highlight = {
+                                        -- Turn on / off inline highlight rendering.
+                                        enabled = false,
+                                },
+
                         })
                         require('img-clip').setup()
                         require('dressing').setup()
-                        
+
                         -- Then load Avante config
                         require('avante_config')
                 end

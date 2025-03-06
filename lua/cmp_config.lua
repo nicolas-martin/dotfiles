@@ -22,7 +22,6 @@ cmp.setup({
                                 nvim_lua = "[nvim]",
                                 path = "[path]",
                                 buffer = "[buffer]",
-                                codecompanion = "[AI]",
                                 copilot = "[GitHub]",
                         },
                 }),
@@ -37,7 +36,7 @@ cmp.setup({
                 completion = cmp.config.window.bordered(),
                 documentation = cmp.config.window.bordered(),
         },
-        mapping = {
+        mapping = cmp.mapping.preset.insert({
                 ['<C-p>'] = cmp.mapping.select_prev_item(),
                 ['<C-n>'] = cmp.mapping.select_next_item(),
                 -- Add tab support
@@ -48,10 +47,9 @@ cmp.setup({
                 ['<C-Space>'] = cmp.mapping.complete(),
                 ['<C-e>'] = cmp.mapping.close(),
                 ['<CR>'] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Insert, select = true }),
-        },
+        }),
         sources = {
                 { name = 'nvim_lsp' },
-                { name = 'codecompanion' },
                 { name = 'luasnip',                max_item_count = 5 },
                 { name = 'copilot' },
                 { name = 'nvim_lua' },
@@ -68,7 +66,7 @@ cmp.setup.cmdline('/', {
         }
 })
 
--- -- Use cmdline & path source for ':'
+-- -- -- Use cmdline & path source for ':'
 cmp.setup.cmdline(':', {
         sources = cmp.config.sources({
                 { name = 'path' }

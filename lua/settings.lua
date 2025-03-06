@@ -24,7 +24,7 @@ vim.opt.ignorecase = true
 vim.opt.smartcase = true
 
 -- Colorscheme
-vim.cmd [[colorscheme retrobox]]
+vim.cmd [[colorscheme nordfox]]
 
 -- Disable unused built-in plugins
 vim.g.loaded_gzip = 1
@@ -47,3 +47,8 @@ vim.g.loaded_netrwPlugin = 1
 -- avante
 -- views can only be fully collapsed with the global statusline
 vim.opt.laststatus = 3
+
+
+-- vim go because it's old
+-- Disable vim-go documentation lookup in favor of LSP
+vim.g.go_doc_keywordprg_enabled = 0
