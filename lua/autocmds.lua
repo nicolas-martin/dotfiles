@@ -29,3 +29,16 @@ autocmd("BufWritePre", {
                 vim.lsp.buf.format({ async = false })
         end,
 })
+
+-- Close terminal and NERDTree if they are the last windows
+autocmd("WinEnter", {
+        callback = function()
+                local wins = vim.api.nvim_tabpage_list_wins(0)
+                if #wins == 1 then
+                        local bufname = vim.api.nvim_buf_get_name(0)
+                        if vim.bo.filetype == "nerdtree" or vim.bo.buftype == "terminal" then
+                                vim.cmd("quit")
+                        end
+                end
+        end,
+})

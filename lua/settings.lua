@@ -4,10 +4,10 @@ vim.g.mapleader = ',' -- Set leader key
 -- Folding settings
 vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
-vim.opt.foldlevelstart = 99  -- Start with all folds open
-vim.opt.foldenable = true    -- Enable folding
-vim.opt.foldnestmax = 10     -- Maximum nesting of folds
-vim.opt.foldminlines = 3     -- Minimum lines needed for a fold
+vim.opt.foldlevelstart = 99 -- Start with all folds open
+vim.opt.foldenable = true   -- Enable folding
+vim.opt.foldnestmax = 10    -- Maximum nesting of folds
+vim.opt.foldminlines = 3    -- Minimum lines needed for a fold
 
 vim.opt.scrolloff = 5
 vim.opt.sidescrolloff = 5
@@ -43,3 +43,7 @@ vim.g.loaded_logiPat = 1
 vim.g.loaded_rrhelper = 1
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
+
+-- avante
+-- views can only be fully collapsed with the global statusline
+vim.opt.laststatus = 3

@@ -91,22 +91,61 @@ return require('packer').startup(function(use)
                 'MeanderingProgrammer/render-markdown.nvim',
                 after = { 'nvim-treesitter' },
                 requires = { 'nvim-tree/nvim-web-devicons', opt = true }, -- if you prefer nvim-web-devicons
-                config = function()
-                        require('render-markdown').setup({
-                                file_types = { "markdown", "Avante" },
-                        })
-                end,
         })
         use 'HakonHarnes/img-clip.nvim'
 
         -- Avante.nvim with build process
-        use { 'yetone/avante.nvim', branch = 'main', run = 'make' }
+        use {
+                'yetone/avante.nvim',
+                branch = 'main',
+                run = 'make',
+                requires = {
+                        'nvim-treesitter/nvim-treesitter',
+                        'stevearc/dressing.nvim',
+                        'nvim-lua/plenary.nvim',
+                        'MunifTanjim/nui.nvim',
+                        'MeanderingProgrammer/render-markdown.nvim',
+                        'nvim-tree/nvim-web-devicons',
+                        'HakonHarnes/img-clip.nvim',
+                },
+                after = {
+                        'nvim-treesitter',
+                        'dressing.nvim',
+                        'render-markdown.nvim',
+                        'img-clip.nvim'
+                },
+                config = function()
+                        -- Load dependencies first
+                        require('render-markdown').setup({
+                                file_types = { "Avante" },
+                        })
+                        require('img-clip').setup()
+                        require('dressing').setup()
+                        
+                        -- Then load Avante config
+                        require('avante_config')
+                end
+        }
 
         use {
                 "pmizio/typescript-tools.nvim",
                 requires = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
                 config = function()
                         require("typescript-tools").setup {}
-                end,
+                end
+        }
+
+        use {
+                "simrat39/rust-tools.nvim",
+                config = function()
+                        require('rust-tools').setup()
+                end
+        }
+
+        use {
+                "folke/neodev.nvim",
+                config = function()
+                        require('neodev').setup()
+                end
         }
 end)
