@@ -6,4 +6,3 @@ require('autocmds')
 require('telescope_config')
 require('cmp_config')
 require('treesitter')
-

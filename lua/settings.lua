@@ -50,5 +50,12 @@ vim.opt.laststatus = 3
 
 
 -- vim go because it's old
--- Disable vim-go documentation lookup in favor of LSP
+-- Disable vim-go LSP features in favor of native LSP
 vim.g.go_doc_keywordprg_enabled = 0
+vim.g.go_def_mapping_enabled = 0
+vim.g.go_gopls_enabled = 0         -- Disable vim-go gopls
+vim.g.go_code_completion_enabled = 0  -- Disable vim-go code completion
+vim.g.go_hover_enabled = 0           -- Disable vim-go hover
+vim.g.go_implements_enabled = 0      -- Disable vim-go implements
+vim.g.go_rename_command = 0          -- Disable vim-go rename
+vim.g.go_textobj_enabled = 0         -- Disable vim-go text objects

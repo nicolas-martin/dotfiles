@@ -12,12 +12,13 @@ require('nvim-treesitter.configs').setup {
 		"html",
 		"css",
 		"markdown",
-		"yaml"
+		"yaml",
+		"markdown_inline"
 	},
-	sync_install = false,     -- Install parsers synchronously (only applied to `ensure_installed`)
-	auto_install = true,      -- Automatically install missing parsers when entering buffer
-	ignore_install = {},      -- List of parsers to ignore installing (or "all")
-	modules = {},             -- List of modules to ignore installing (or "all")
+	sync_install = false, -- Install parsers synchronously (only applied to `ensure_installed`)
+	auto_install = true, -- Automatically install missing parsers when entering buffer
+	ignore_install = {}, -- List of parsers to ignore installing (or "all")
+	modules = {},      -- List of modules to ignore installing (or "all")
 
 	highlight = {
 		enable = true,

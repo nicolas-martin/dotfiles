@@ -1,9 +1,16 @@
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
+-- Configure default hover handler
+vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
+	vim.lsp.handlers.hover, {
+		border = "rounded"
+	}
+)
+
 local on_attach = function(client, bufnr)
 	local buf_opts = { noremap = true, silent = true, buffer = bufnr }
 	vim.keymap.set('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', buf_opts)
-	vim.keymap.set('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', buf_opts)
+	vim.keymap.set('n', 'K', vim.lsp.buf.hover, buf_opts)
 	vim.keymap.set('n', 'gr', '<Cmd>lua vim.lsp.buf.references()<CR>', buf_opts)
 	vim.keymap.set('n', '<leader>rn', '<Cmd>lua vim.lsp.buf.rename()<CR>', buf_opts)
 	vim.keymap.set('n', '<leader>ca', '<Cmd>lua vim.lsp.buf.code_action()<CR>', buf_opts)
@@ -37,19 +44,29 @@ require('lspconfig').gopls.setup({
 				parameterNames = true,
 				rangeVariableTypes = true,
 			},
+			hoverKind = "FullDocumentation",
+			linkTarget = "pkg.go.dev",
+			linksInHover = true,
 		},
 	},
 })
 
 require("typescript-tools").setup {
-	on_attach = on_attach,
+	on_attach = function(client, bufnr)
+		-- Disable tsserver's built-in highlighting in favor of treesitter
+		client.server_capabilities.semanticTokensProvider = nil
+		on_attach(client, bufnr)
+	end,
 	capabilities = capabilities,
 	settings = {
-		-- IT DOESN"T WORK!
 		tsserver_format_options = {
 			indentSize = 4,
 			tabSize = 4,
 			convertTabsToSpaces = false,
+		},
+		-- Complete semantic features
+		complete = {
+			completeFunctionCalls = true,
 		},
 	},
 }
@@ -71,27 +88,23 @@ require('lspconfig').rust_analyzer.setup({
 	},
 })
 
--- Lua Language Server (lua_ls)
 require('lspconfig').lua_ls.setup({
 	on_attach = on_attach,
 	capabilities = capabilities,
 	settings = {
 		Lua = {
 			runtime = {
-				-- Tell the language server which version of Lua you're using (most likely LuaJIT in Neovim)
 				version = 'LuaJIT',
 			},
 			diagnostics = {
-				-- Get the language server to recognize the `vim` global
 				globals = { 'vim' },
 			},
 			workspace = {
-				-- Make the server aware of Neovim runtime files
 				library = vim.api.nvim_get_runtime_file("", true),
-				checkThirdParty = false, -- Disable third-party library checks
+				checkThirdParty = false,
 			},
 			telemetry = {
-				enable = false, -- Disable telemetry
+				enable = false,
 			},
 		},
 	},

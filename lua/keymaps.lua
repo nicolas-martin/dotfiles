@@ -7,6 +7,7 @@ map('n', '<leader>n', ':noh<CR>', default_opts)
 map('n', '<f1>', 'o<Esc>', default_opts)
 map('n', 'Q', '<nop>', default_opts)
 map('n', ']q', ':cn<CR>')                                    -- quickfix navigatio, default_optsn map('n', '[q', ':cp<CR>', default_opts)
+map('n', '[q', ':cp<CR>')                                    -- quickfix navigatio, default_optsn map('n', '[q', ':cp<CR>', default_opts)
 map('n', '<leader>)', '<cmd>set nu! rnu!<CR>', default_opts) -- toggle relativenumber and numbers
 map('x', 'p', 'P', default_opts)                             -- xnoremap p P
 
@@ -48,3 +49,6 @@ map('n', '<leader>Z', 'zR', { noremap = true, desc = 'Open all folds' })
 map('n', '<leader>zz', 'zM', { noremap = true, desc = 'Close all folds' })
 map('n', 'zC', 'zM', { noremap = true, desc = 'Close all folds' })
 map('n', 'zO', 'zR', { noremap = true, desc = 'Open all folds' })
+
+-- Code companion
+map('n', '<leader>cc', ':CodeCompanionChat<cr>', default_opts)

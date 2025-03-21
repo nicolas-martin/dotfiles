@@ -6,7 +6,7 @@ return require('packer').startup(function(use)
 	use 'tpope/vim-commentary'
 	-- use 'ellisonleao/gruvbox.nvim'
 	use 'EdenEast/nightfox.nvim'
-	use 'fatih/vim-go'  -- vim-go doesn't need Lua setup
+	use 'fatih/vim-go' -- vim-go doesn't need Lua setup
 	use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
 	-- to debug treesitter syntax
 	use 'nvim-treesitter/playground'
@@ -81,52 +81,66 @@ return require('packer').startup(function(use)
 			require("copilot_cmp").setup()
 		end
 	}
-
-	-- avante / cursor ai
-	use 'stevearc/dressing.nvim'
-	use 'nvim-lua/plenary.nvim'
-	use 'MunifTanjim/nui.nvim'
-	use({
-		'MeanderingProgrammer/render-markdown.nvim',
-		after = { 'nvim-treesitter' },
-		requires = { 'nvim-tree/nvim-web-devicons', opt = true }, -- if you prefer nvim-web-devicons
-	})
-	use 'HakonHarnes/img-clip.nvim'
-
-	-- Avante.nvim with build process
 	use {
-		'yetone/avante.nvim',
-		branch = 'main',
-		run = 'make',
-		requires = {
-			'nvim-treesitter/nvim-treesitter',
-			'stevearc/dressing.nvim',
-			'nvim-lua/plenary.nvim',
-			'MeanderingProgrammer/render-markdown.nvim',
-			'nvim-tree/nvim-web-devicons',
-			'HakonHarnes/img-clip.nvim',
-		},
-		after = {
-			'nvim-treesitter',
-			'dressing.nvim',
-			'render-markdown.nvim',
-			'img-clip.nvim'
-		},
+		"echasnovski/mini.diff",
 		config = function()
-			-- Load dependencies first
-			require('render-markdown').setup({
-				file_types = { "Avante" },
-				inline_highlight = {
-					enabled = false,
-				},
-			})
-			require('img-clip').setup()
-			require('dressing').setup()
-
-			-- Then load Avante config
-			require('avante_config')
-		end
+			local diff = require "mini.diff"
+			diff.setup {
+				source = diff.gen_source.none(),
+			}
+		end,
 	}
+
+	-- use({
+	-- 	'MeanderingProgrammer/render-markdown.nvim',
+	-- 	after = { 'nvim-treesitter' },
+	-- 	requires = { 'nvim-tree/nvim-web-devicons', opt = true },
+	-- 	config = function()
+	-- 		require('render-markdown').setup({
+	-- 			file_types = { 'markdown', 'codecompanion' },
+	-- 			inline_highlight = {
+	-- 				enabled = true,
+	-- 			},
+	-- 		})
+	-- 	end
+	-- })
+
+	-- use { 'j-hui/fidget.nvim',
+	-- 	config = function()
+	-- 		require('fidget').setup({
+	-- 			notification = {
+	-- 				window = {
+	-- 					winblend = 0,  -- Make the window opaque
+	-- 					relative = "editor",  -- Position relative to the editor
+	-- 					border = "rounded",
+	-- 				},
+	-- 			},
+	-- 			progress = {
+	-- 				ignore = {  -- List of LSP servers to ignore
+	-- 					"gopls",  -- Ignore gopls progress
+	-- 				},
+	-- 			},
+	-- 		})
+	-- 	end
+	-- }
+	-- use({
+	-- 	"olimorris/codecompanion.nvim",
+	-- 	-- after = { 'render-markdown.nvim' },
+	-- 	-- dependencies = {
+	-- 	-- 	"j-hui/fidget.nvim"
+	-- 	--   },
+	-- 	requires = {
+	-- 		"nvim-lua/plenary.nvim",
+	-- 		"nvim-treesitter/nvim-treesitter",
+	-- 		-- 'MeanderingProgrammer/render-markdown.nvim',
+	-- 	},
+	-- 	init = function()
+	-- 		require("codecompanion_fidget"):init()
+	-- 	end,
+	-- 	config = function()
+	-- 		require("codecompanion").setup(require("codecompanion_config"))
+	-- 	end
+	-- })
 
 	use {
 		"pmizio/typescript-tools.nvim",
