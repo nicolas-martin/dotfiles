@@ -1,0 +1,31 @@
+#!/bin/bash
+# This script handles nvim:// URLs in the form:
+# nvim://file//absolute/path:line:column
+# Example:
+# nvim://file//Users/nma/dev/dankfolio/frontend/src/screens/Home/index.tsx:20:1
+
+# Get the URL passed as the first argument.
+URL="$1"
+
+# Remove the "nvim://file" prefix.
+data="${URL#nvim://file}"
+
+# If the path starts with double slash, remove one slash.
+if [[ "$data" == //* ]]; then
+  data="${data:1}"
+fi
+
+# data is now in the form /absolute/path:line:column.
+# Extract the column (after the last colon).
+column="${data##*:}"
+
+# Remove the column part.
+temp="${data%:*}"
+
+# Extract the line (after the last colon in temp).
+line="${temp##*:}"
+
+# The file is the remainder.
+file="${temp%:*}"
+
+nvim +"call cursor($line, $column)" "$file"

@@ -1,5 +1,34 @@
 local autocmd = vim.api.nvim_create_autocmd
 
+-- toggles the ft if there's no exntension
+-- but that also means that the auto detect ft for conf
+-- wont work
+autocmd({ "BufReadPost", "BufEnter", "BufWritePost" }, {
+	pattern = "*/[^./]*", -- matches files without "." in the filename
+	callback = function(args)
+		local bufnr = args.buf
+
+		vim.defer_fn(function()
+			if not vim.api.nvim_buf_is_valid(bufnr) then return end
+
+			local line = vim.api.nvim_buf_get_lines(bufnr, 0, 1, false)[1] or ""
+
+			if line:match("^#!.*bash") then
+				if vim.bo[bufnr].filetype ~= "bash" then
+					vim.bo[bufnr].filetype = "bash"
+				end
+			else
+				vim.defer_fn(function()
+					local ft = vim.bo[bufnr].filetype
+					if ft == "bash" or ft == "conf" then
+						vim.bo[bufnr].filetype = ""
+					end
+				end, 150)
+			end
+		end, 50)
+	end,
+})
+
 -- FileType specific settings
 autocmd("FileType", {
 	pattern = "go",
@@ -11,9 +40,19 @@ autocmd("FileType", {
 		vim.opt_local.signcolumn = "yes"
 	end,
 })
+local files = { "rust",
+	"javascript",
+	"typescript",
+	"typescriptreact",
+	"proto",
+	"yaml",
+	"lua",
+	"javascriptreact",
+	"bash"
+}
 
 autocmd("FileType", {
-	pattern = { "rust", "javascript", "typescript", "typescriptreact", "proto", "yaml", "lua", "javascriptreact" },
+	pattern = files,
 	callback = function()
 		vim.opt_local.tabstop = 4
 		vim.opt_local.shiftwidth = 4

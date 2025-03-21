@@ -1,28 +1,53 @@
 #!/bin/bash
 
+# Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
 info() {
-  echo "$@"
+  # Only show info in debug mode
+  if [ "${DEBUG:-0}" = "1" ]; then
+    echo -e "${BLUE}ℹ️  $@${NC}"
+  fi
 }
 
 warn() {
-  echo "$(tput setaf 1)$@$(tput sgr0)"
+  echo -e "${RED}⚠️  $@${NC}"
+}
+
+success() {
+  echo -e "${GREEN}✅ $@${NC}"
 }
 
 install() {
   local src="$(pwd)/$1"
-  local dst=${2:-"$HOME/$1"}
+  local dst="$2"
   
   if [ ! -e "$src" ]; then
     warn "Source file $src does not exist. Skipping."
     return
   fi
 
-  info "Linking $src to $dst"
-  mkdir -p "$(dirname "$dst")" # Ensure the directory exists
-  if ln -sf "$src" "$dst"; then
-    info "Successfully linked $src to $dst"
-  else
+  # Check if symlink already exists and points to the right place
+  if [ -L "$dst" ]; then
+    current_target="$(readlink "$dst")"
+    if [ "$current_target" = "$src" ]; then
+      info "Symlink already exists and is correct: $dst → $src"
+      return
+    fi
+  fi
+
+  # Create parent directory and remove existing file/symlink
+  mkdir -p "$(dirname "$dst")"
+  [ -e "$dst" ] && rm -f "$dst"
+
+  if ! ln -sf "$src" "$dst"; then
     warn "Failed to link $src to $dst"
+  else
+    success "Linked $src → $dst"
   fi
 }
 
@@ -34,33 +59,41 @@ gitstall() {
   info "Cloning $1 to $2"
 }
 
-warn "Symlinking files"
+DEST_DIR="${XDG_CONFIG_HOME:-/Users/nma}"
+CONFIG_DIR="${XDG_CONFIG_HOME:-/Users/nma/.config}"
+LOCAL_DIR="${XDG_DATA_HOME:-/Users/nma/.local}"
+
+echo -e "\n${YELLOW}🔧 Starting installation...${NC}\n"
+
+# Clean up destination directories first
+echo -e "${BLUE}🧹 Cleaning up old files...${NC}"
+rm -rf "${CONFIG_DIR}/nvim/lua/"*
+mkdir -p "${CONFIG_DIR}/nvim/lua"
+rm -rf "${LOCAL_DIR}/bin/"*
+mkdir -p "${LOCAL_DIR}/bin"
 
 # General dotfiles
-install .gitconfig
-install .zshrc
-install .tmux.conf
-install alacritty.toml "$HOME/.config/alacritty/alacritty.toml"
+echo -e "\n${BLUE}📄 Installing dotfiles...${NC}"
+install .gitconfig "${DEST_DIR}/.gitconfig"
+install .zshrc "${DEST_DIR}/.zshrc"
+install .tmux.conf "${DEST_DIR}/.tmux.conf"
+install alacritty.toml "${CONFIG_DIR}/alacritty/alacritty.toml"
 
 # Neovim configuration
-install init.lua "$HOME/.config/nvim/init.lua"
+echo -e "\n${BLUE}📝 Setting up Neovim...${NC}"
+install init.lua "${CONFIG_DIR}/nvim/init.lua"
 
-# Create the target directory if it doesn't exist
-mkdir -p "$HOME/.config/nvim/lua"
-
-# Find all .lua files in the lua directory and install them
+# Install all .lua files from lua directory
 find lua -name "*.lua" -type f | while read -r file; do
-    # Get the relative path within the lua directory
     relative_path=${file#lua/}
-    # Create target directory if needed
-    target_dir="$HOME/.config/nvim/lua/$(dirname "$relative_path")"
-    # Install the file
-    echo "Installing $file to $target_dir"
-    install "$file" "$HOME/.config/nvim/lua/$relative_path"
+    install "$file" "${CONFIG_DIR}/nvim/lua/$relative_path"
 done
 
-# Uncomment these if you want to use them
-# install base.vim "$HOME/base.vim"
-# install .gitattributes
+# Install bin files to ~/.local/bin
+echo -e "\n${BLUE}🔨 Installing binaries...${NC}"
+mkdir -p "${LOCAL_DIR}/bin"
+find bin -type f | while read -r file; do
+    install "$file" "${LOCAL_DIR}/bin/$(basename "$file")"
+done
 
-warn "Installation complete!"
+echo -e "\n${GREEN}✨ Installation complete! Everything is set up and ready to go!${NC}\n"

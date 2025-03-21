@@ -13,7 +13,8 @@ require('nvim-treesitter.configs').setup {
 		"css",
 		"markdown",
 		"yaml",
-		"markdown_inline"
+		"markdown_inline",
+		"bash"
 	},
 	sync_install = false, -- Install parsers synchronously (only applied to `ensure_installed`)
 	auto_install = true, -- Automatically install missing parsers when entering buffer
