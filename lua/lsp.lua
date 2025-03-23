@@ -3,7 +3,7 @@ local capabilities = require('cmp_nvim_lsp').default_capabilities()
 -- Configure default hover handler
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
 	vim.lsp.handlers.hover, {
-		border = "rounded"
+		-- border = "rounded"
 	}
 )
 
@@ -17,8 +17,7 @@ local on_attach = function(client, bufnr)
 	vim.keymap.set('n', '<leader>fm', '<Cmd>lua vim.lsp.buf.formatting()<CR>', buf_opts)
 end
 
--- LSP servers
-require('lspconfig').gopls.setup({
+require('lspconfig').gopls.setup {
 	on_attach = on_attach,
 	capabilities = capabilities,
 	settings = {
@@ -49,34 +48,11 @@ require('lspconfig').gopls.setup({
 			linksInHover = true,
 		},
 	},
-})
-
-require("typescript-tools").setup {
-	on_attach = function(client, bufnr)
-		-- Disable tsserver's built-in highlighting in favor of treesitter
-		client.server_capabilities.semanticTokensProvider = nil
-		on_attach(client, bufnr)
-	end,
-	capabilities = capabilities,
-	settings = {
-		tsserver_format_options = {
-			indentSize = 4,
-			tabSize = 4,
-			convertTabsToSpaces = false,
-		},
-		-- Complete semantic features
-		complete = {
-			completeFunctionCalls = true,
-		},
-	},
 }
 
-require('lspconfig').pyright.setup({
-	on_attach = on_attach,
-	capabilities = capabilities,
-})
 
-require('lspconfig').rust_analyzer.setup({
+
+require('lspconfig').rust_analyzer.setup {
 	on_attach = on_attach,
 	capabilities = capabilities,
 	settings = {
@@ -86,9 +62,9 @@ require('lspconfig').rust_analyzer.setup({
 			},
 		},
 	},
-})
+}
 
-require('lspconfig').lua_ls.setup({
+require('lspconfig').lua_ls.setup {
 	on_attach = on_attach,
 	capabilities = capabilities,
 	settings = {
@@ -108,4 +84,24 @@ require('lspconfig').lua_ls.setup({
 			},
 		},
 	},
-})
+}
+
+require('lspconfig').taplo.setup {
+	capabilities = capabilities,
+	on_attach = on_attach,
+}
+
+require('lspconfig').bashls.setup {
+	on_attach = on_attach,
+	capabilities = capabilities,
+}
+
+require('lspconfig').pyright.setup {
+	on_attach = on_attach,
+	capabilities = capabilities,
+}
+
+require('typescript-tools').setup {
+	on_attach = on_attach,
+	capabilities = capabilities,
+}

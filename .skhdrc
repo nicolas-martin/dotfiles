@@ -125,3 +125,37 @@ cmd + alt + ctrl - m : osascript -e 'tell application "System Events" to keystro
 # Requires 'dark-mode' CLI tool: https://github.com/sindresorhus/dark-mode
 cmd + alt + ctrl - n : dark-mode toggle
 
+# Layout switching
+shift + alt + ctrl - f : yabai -m space --layout float
+shift + alt + ctrl - b : yabai -m space --layout bsp
+shift + alt + ctrl - s : yabai -m space --layout stack
+
+# Snap floating window
+shift + ctrl - left   : yabai -m window --grid 1:2:0:0:1:1
+shift + ctrl - right  : yabai -m window --grid 1:2:1:0:1:1
+shift + ctrl - up     : yabai -m window --grid 1:1:0:0:1:1
+
+# Move floating window with keyboard
+shift + ctrl - w : yabai -m window --move rel:0:-20
+shift + ctrl - a : yabai -m window --move rel:-20:0
+shift + ctrl - s : yabai -m window --move rel:0:20
+shift + ctrl - d : yabai -m window --move rel:20:0
+
+# Create a new space and move current window
+# What does it do?
+# shift + alt - n : yabai -m space --create && \
+#   index="$(yabai -m query --spaces --display | jq 'map(select(."is-native-fullscreen" == false))[-1].index')" && \
+#   yabai -m window --space "${index}" && \
+#   yabai -m space --focus "${index}"
+
+# cycle focus window
+# cmd + ` : yabai -m window --focus next || yabai -m window --focus first
+# cmd + shift - ` : yabai -m window --focus prev || yabai -m window --focus last
+
+# cmd - i [
+#     "Alacritty" : echo "hello alacritty"
+#     * : echo "hello everyone"
+#     "Google Chrome" : echo "hello qutebrowser"
+#     "terminal" ~
+#     "finder" : false
+# ]

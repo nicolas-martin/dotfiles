@@ -160,3 +160,11 @@ yabai -m config window_zoom_persist on
 # Output a confirmation message upon loading the configuration.
 echo "yabai configuration loaded..."
 
+
+# consider this...
+# Cycle through all floating windows
+# shift + alt - u : \
+#   ids=($(yabai -m query --windows --space | jq -r 'map(select(."is-floating")) | .[].id')); \
+#   for id in "${ids[@]}"; do yabai -m window --focus "$id"; sleep 0.2; done
+
+

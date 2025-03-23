@@ -22,7 +22,8 @@ if [[ ! -f "$CONFIG" ]]; then
 fi
 
 # Filter out comments and empty lines
-CMD=$(grep -v '^\s*#' "$CONFIG" | grep -v '^\s*$' | fzf --prompt="Search & Run yabai: " --preview="echo {}" --preview-window=wrap)
+# CMD=$(grep -v '^\s*#' "$CONFIG" | grep -v '^\s*$' | fzf --prompt="Search & Run yabai: " --preview="echo {}" --preview-window=wrap)
+CMD=$(grep -v '^\s*#' "$CONFIG" | grep -v '^\s*$' | fzf --prompt="Search & Run yabai: ")
 
 # Extract the command part (after the colon)
 if [[ -n "$CMD" ]]; then
