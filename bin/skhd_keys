@@ -26,15 +26,20 @@ CMD=$(grep -v '^\s*#' "$CONFIG" | grep -v '^\s*$' | fzf --prompt="Search & Run y
 
 # Extract the command part (after the colon)
 if [[ -n "$CMD" ]]; then
-	TRIM_WHITESPACE_B_A='s/^[ \t]*//;s/[ \t]*$//'
-  KEY=$(echo "$CMD" | cut -d ':' -f1 | sed "$TRIM_WHITESPACE_B_A")
-  COMMAND=$(echo "$CMD" | cut -d ':' -f2 | sed "$TRIM_WHITESPACE_B_A")
-  green "$KEY"
-	blue "$COMMAND"
+	TRIM_WHITESPACE_B='s/^[ \t]*//'
+	TRIM_WHITESPACE_A='s/[ \t]*$//'
+	TRIM_WHITESPACE='s/^[[:space:]]*//;s/[[:space:]]*$//'
+
+  KEY=$(echo "$CMD" | cut -d ':' -f1 | sed "$TRIM_WHITESPACE")
+  COMMAND=$(echo "$CMD" | cut -d ':' -f2- | sed "$TRIM_WHITESPACE")
+
+	green "$KEY"
+	blue "'$COMMAND'"
+
 	ERROR_OUTPUT=$(eval "$COMMAND" 2>&1)
 	EXIT_CODE=$?
 	if [[ $EXIT_CODE -ne 0 ]]; then
-		red $ERROR_OUTPUT
+		red "$ERROR_OUTPUT"
 	fi
 fi
 

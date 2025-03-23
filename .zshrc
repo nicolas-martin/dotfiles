@@ -30,6 +30,9 @@ source $ZSH/oh-my-zsh.sh
 # use vim
 set -o vi
 
+# export my custom bind
+export PATH=$PATH:$HOME/.local/bin
+
 # export GOBIN=$HOME/go/bin
 export GOPATH=$HOME/go
 
@@ -40,6 +43,7 @@ export PATH=$PATH:$GOROOT/bin
 # pretty man
 export MANPAGER='nvim +Man!'
 export EDITOR=nvim
+
 ### git aliases
 alias st='git status '
 alias ga='git add '
@@ -59,7 +63,6 @@ alias vim='/usr/bin/vim'
 alias v='nvim'
 alias vrc='nvim ~/.config/nvim/init.lua'
 alias ll='ls -la'
-alias ghc='/usr/local/bin/gh'
 alias b='git branch | grep -v "^\*" | fzf --height=20% --reverse --info=inline | xargs git checkout'
 alias d='git branch | grep -v "^\*" | fzf --height=20% --reverse --info=inline | xargs git branch -D'
 alias fzfkill='ps -ef | awk "{print \$2, \$8}" | fzf --height=40% --reverse --info=inline | awk "{print \$1}" | xargs kill -9'

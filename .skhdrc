@@ -5,12 +5,14 @@
 ##################################
 # Move focus between windows in the current space
 # Alternative: Use 'cmd' or 'ctrl' instead of 'alt' if preferred
+#DIR_SEL     := north | east | south | west
 alt - h : yabai -m window --focus west
 alt - j : yabai -m window --focus south
 alt - k : yabai -m window --focus north
 alt - l : yabai -m window --focus east
 
 # Move focus between displays
+# DISPLAY_SEL := prev | next | first | last | recent | mouse | DIR_SEL | <arrangement index (1-based)> | LABEL
 # Alternative: Use 'shift + alt' or 'ctrl + alt' as modifiers
 alt - n : yabai -m display --focus prev
 alt - p : yabai -m display --focus next
