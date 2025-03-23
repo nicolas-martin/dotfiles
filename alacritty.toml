@@ -1,6 +1,13 @@
 [env]
 TERM = "alacritty"
 
+[scrolling]
+# Maximum number of lines in the scrollback buffer.
+# Specifying '0' will disable scrolling.
+history = 10000
+# Scrolling distance multiplier.
+
+multiplier = 3
 [font]
 size = 14
 
@@ -18,16 +25,14 @@ hide_when_typing = false
 save_to_clipboard = true
 
 [terminal.shell]
-args = ["-l", "-c", "tmux"]
+# args = ["-l", "-c", "tmux"]
+args = ["--login", "-c", "/opt/homebrew/bin/tmux attach || //opt/homebrew/bin/tmux"]
 program = "/bin/zsh"
 
 [window]
 decorations = "buttonless"
 opacity = 1.0
 
-[colors.primary]
-# background = "#ffffff"
-# foreground = "#000000"
 
 # Define a hint for URLs (including vscode://).
 [[hints.enabled]]
@@ -40,3 +45,16 @@ persist = false
 mouse.enabled = true
 binding = { key = "O", mods = "Control|Shift" }
 regex = "(ipfs:|ipns:|magnet:|mailto:|gemini://|gopher://|https://|http://|news:|file:|git://|ssh:|ftp://|vscode://)[^\u0000-\u001F\u007F-\u009F<>\"\\s{-}\\^⟨⟩`\\\\]+"
+
+# wip
+[colors.cursor]
+cursor = "CellForeground"
+text = "CellBackground"
+
+[colors.primary]
+background = "#1d1f21"
+foreground = "#c5c8c6"
+
+[colors.vi_mode_cursor]
+cursor = "CellForeground"
+text = "CellBackground"

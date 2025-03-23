@@ -62,11 +62,13 @@ alias ll='ls -la'
 alias ghc='/usr/local/bin/gh'
 alias b='git branch | grep -v "^\*" | fzf --height=20% --reverse --info=inline | xargs git checkout'
 alias d='git branch | grep -v "^\*" | fzf --height=20% --reverse --info=inline | xargs git branch -D'
+alias fzfkill='ps -ef | awk "{print \$2, \$8}" | fzf --height=40% --reverse --info=inline | awk "{print \$1}" | xargs kill -9'
 
 # First source fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Then configure FZF options
+export FZF_COMPLETION_TRIGGER='~~'
 export FZF_DEFAULT_OPTS="--height 40% --reverse"
 export FZF_CTRL_R_OPTS="
   --no-info

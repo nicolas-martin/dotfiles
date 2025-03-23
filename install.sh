@@ -7,12 +7,6 @@ BLUE='\033[0;34m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-info() {
-  # Only show info in debug mode
-  if [ "${DEBUG:-0}" = "1" ]; then
-    echo -e "${BLUE}ℹ️  $@${NC}"
-  fi
-}
 
 warn() {
   echo -e "${RED}⚠️  $@${NC}"
@@ -35,7 +29,7 @@ install() {
   if [ -L "$dst" ]; then
     current_target="$(readlink "$dst")"
     if [ "$current_target" = "$src" ]; then
-      info "Symlink already exists and is correct: $dst → $src"
+      echo "Symlink already exists and is correct: $dst → $src"
       return
     fi
   fi
@@ -56,10 +50,10 @@ gitstall() {
     rm -rf "$2"
   fi
   git clone "$1" "$2"
-  info "Cloning $1 to $2"
+  echo "Cloning $1 to $2"
 }
 
-DEST_DIR="${XDG_CONFIG_HOME:-/Users/nma}"
+HOME_DIR="${XDG_CONFIG_HOME:-/Users/nma}"
 CONFIG_DIR="${XDG_CONFIG_HOME:-/Users/nma/.config}"
 LOCAL_DIR="${XDG_DATA_HOME:-/Users/nma/.local}"
 
@@ -67,16 +61,21 @@ echo -e "\n${YELLOW}🔧 Starting installation...${NC}\n"
 
 # Clean up destination directories first
 echo -e "${BLUE}🧹 Cleaning up old files...${NC}"
-rm -rf "${CONFIG_DIR}/nvim/lua/"*
-mkdir -p "${CONFIG_DIR}/nvim/lua"
-rm -rf "${LOCAL_DIR}/bin/"*
-mkdir -p "${LOCAL_DIR}/bin"
+lua_dir="${CONFIG_DIR}/nvim/lua"
+rm -rf "${lua_dir}"*
+echo -e "${BLUE}    🧹 Removing lua ${lua_dir} ${NC}"
+mkdir -p ${lua_dir}
+bin_dir="${LOCAL_DIR}/bin"
+rm -rf "${bin_dir}/"*
+echo -e "${BLUE}    🧹 Removing bin ${bin_dir} ${NC}"
+mkdir -p "${bin_dir}"
 
 # General dotfiles
 echo -e "\n${BLUE}📄 Installing dotfiles...${NC}"
-install .gitconfig "${DEST_DIR}/.gitconfig"
-install .zshrc "${DEST_DIR}/.zshrc"
-install .tmux.conf "${DEST_DIR}/.tmux.conf"
+install .gitconfig "${HOME_DIR}/.gitconfig"
+install .zshrc "${HOME_DIR}/.zshrc"
+install .tmux.conf "${HOME_DIR}/.tmux.conf"
+install .yabairc "${HOME_DIR}/.yabairc"
 install alacritty.toml "${CONFIG_DIR}/alacritty/alacritty.toml"
 
 # Neovim configuration

@@ -1,0 +1,15 @@
+# Configure the layout mode
+# "stack" - is what I use, keeps a single app on the front
+# "bsp" - binary space partitioning enables automatic tiling (partitioning)
+# "float" - default mode, windows are not managed
+yabai -m config layout stack
+# yabai -m config layout bsp
+# yabai -m config layout float
+
+
+# THIS IS VERY IMPORTANT
+# It ensures that when I restart yabai, all the rules (including the manage=off rules)
+# are reapplied to existing windows
+# Otherwise yabai takes care of management and I couldnt resize apps like
+# packet tracer for example
+yabai -m rule --apply
