@@ -20,7 +20,7 @@ autocmd({ "BufReadPost", "BufEnter", "BufWritePost" }, {
 			else
 				vim.defer_fn(function()
 					local ft = vim.bo[bufnr].filetype
-					if ft == "bash" or ft == "conf" then
+					if ft == "bash" then
 						vim.bo[bufnr].filetype = ""
 					end
 				end, 150)
@@ -40,6 +40,20 @@ autocmd("FileType", {
 		vim.opt_local.signcolumn = "yes"
 	end,
 })
+
+local conf = { "conf", "bash" }
+
+autocmd("FileType", {
+	pattern = conf,
+	callback = function()
+		vim.opt_local.tabstop = 2
+		vim.opt_local.shiftwidth = 2
+		vim.opt_local.softtabstop = 2
+		vim.opt_local.expandtab = false
+		vim.opt_local.signcolumn = "yes"
+	end,
+})
+
 local files = { "rust",
 	"javascript",
 	"typescript",
@@ -48,7 +62,6 @@ local files = { "rust",
 	"yaml",
 	"lua",
 	"javascriptreact",
-	"bash"
 }
 
 autocmd("FileType", {
