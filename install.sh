@@ -100,15 +100,15 @@ install init.lua "${CONFIG_DIR}/nvim/init.lua"
 
 # Install all .lua files from lua directory
 find lua -name "*.lua" -type f | while read -r file; do
-relative_path=${file#lua/}
-install "$file" "${CONFIG_DIR}/nvim/lua/$relative_path"
+	relative_path=${file#lua/}
+	install "$file" "${CONFIG_DIR}/nvim/lua/$relative_path"
 done
 
 # Install bin files to ~/.local/bin
 blue "\n🔨 Installing binaries..."
 mkdir -p "${LOCAL_DIR}/bin"
 find bin -type f | while read -r file; do
-install "$file" "${LOCAL_DIR}/bin/$(basename "$file")"
+	install "$file" "${LOCAL_DIR}/bin/$(basename "$file")"
 done
 
 green "\n✨ Installation complete! Everything is set up and ready to go!"
