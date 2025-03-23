@@ -49,10 +49,10 @@ end
 
 -- Define diagnostic icons
 local diagnostic_icons = {
-	error = "",     -- Using a red 'x' icon
-	warn = "",      -- Using a yellow warning icon
-	info = " ",     -- Using a blue info icon
-	hint = "",      -- Using a blue lightbulb icon
+	error = "", -- Using a red 'x' icon
+	warn = "", -- Using a yellow warning icon
+	info = " ", -- Using a blue info icon
+	hint = "", -- Using a blue lightbulb icon
 }
 
 local kind_icons = {
@@ -86,10 +86,10 @@ local kind_icons = {
 telescope.setup {
 	extensions = {
 		fzf = {
-			fuzzy = true,                               -- false will only do exact matching
-			override_generic_sorter = true,             -- override the generic sorter
-			override_file_sorter = true,                -- override the file sorter
-			case_mode = "smart_case",                   -- or "ignore_case" or "respect_case" the default case_mode is "smart_case"
+			fuzzy = true,          -- false will only do exact matching
+			override_generic_sorter = true, -- override the generic sorter
+			override_file_sorter = true, -- override the file sorter
+			case_mode = "smart_case", -- or "ignore_case" or "respect_case" the default case_mode is "smart_case"
 		},
 	},
 	defaults = {
@@ -104,36 +104,36 @@ telescope.setup {
 		},
 		file_ignore_patterns = {
 			-- Go-specific dependency patterns
-			"github%.com/[^/]+/[^/]+",             -- Any GitHub repository
-			"golang%.org/x/[^/]+",                 -- Go standard extended libraries
-			"gopkg%.in/[^/]+",                     -- Gopkg libraries
-			"go%.uber%.org/[^/]+",                 -- Uber Go libraries
-			"/go/pkg/mod/.*",                      -- Go module cache
-			"/usr/local/go/.*",                    -- Go installation
+			"github%.com/[^/]+/[^/]+", -- Any GitHub repository
+			"golang%.org/x/[^/]+", -- Go standard extended libraries
+			"gopkg%.in/[^/]+", -- Gopkg libraries
+			"go%.uber%.org/[^/]+", -- Uber Go libraries
+			"/go/pkg/mod/.*", -- Go module cache
+			"/usr/local/go/.*", -- Go installation
 
 			-- More aggressive Go patterns (from diagnostics)
-			"github%.com/.*",               -- All GitHub repos (more aggressive)
-			"golang%.org/.*",               -- All golang.org packages
-			"gopkg%.in/.*",                 -- All gopkg.in packages
-			"go%.uber%.org/.*",             -- All go.uber.org packages
-			"%w+%.%w+/.*",                  -- Any domain-based import
-			"%(go%.mod%)",                  -- go.mod files as seen in diagnostics
+			"github%.com/.*", -- All GitHub repos (more aggressive)
+			"golang%.org/.*", -- All golang.org packages
+			"gopkg%.in/.*", -- All gopkg.in packages
+			"go%.uber%.org/.*", -- All go.uber.org packages
+			"%w+%.%w+/.*", -- Any domain-based import
+			"%(go%.mod%)", -- go.mod files as seen in diagnostics
 
 			-- System paths
-			"/usr/.*",             -- All usr directories
-			"/opt/.*",             -- All opt directories
+			"/usr/.*", -- All usr directories
+			"/opt/.*", -- All opt directories
 
 			-- Common external code patterns
 			"vendor/.*",
 			"node_modules/.*",
 			"%.git/.*",
-			"%.next/.*",             -- Next.js build output
-			"dist/.*",               -- Common build output directory
-			"build/.*",              -- Common build output directory
+			"%.next/.*", -- Next.js build output
+			"dist/.*", -- Common build output directory
+			"build/.*", -- Common build output directory
 
 			-- Generated files
-			"%.pb%.go",              -- Generated protobuf
-			"%.gen%.go",             -- Generated Go files
+			"%.pb%.go", -- Generated protobuf
+			"%.gen%.go", -- Generated Go files
 
 			-- Config files
 			"go%.sum",
@@ -143,27 +143,27 @@ telescope.setup {
 			"yarn%.lock",
 
 			-- Other common patterns
-			"%.map",                    -- Source maps
-			"%.min%.js",                -- Minified JS
-			"%.min%.css",               -- Minified CSS
-			"%.bundle%.js",             -- Bundled JS
+			"%.map", -- Source maps
+			"%.min%.js", -- Minified JS
+			"%.min%.css", -- Minified CSS
+			"%.bundle%.js", -- Bundled JS
 			"Cellar/.*",
 			"mocks/.*",
-			"%.test%.",             -- Test files
-			"%.spec%.",             -- Test files
-			"%.d%.ts",              -- TypeScript declaration files
+			"%.test%.", -- Test files
+			"%.spec%.", -- Test files
+			"%.d%.ts", -- TypeScript declaration files
 			"/usr/include/.*",
 			"/usr/lib/.*",
 		},
 		layout_config = {
-			width = 0.95,             -- 95% of screen width
+			width = 0.95, -- 95% of screen width
 			-- preview_width = 0.6, -- 60% of telescope window for preview
 			horizontal = {
 				width = { padding = 0.15 },
-				preview_width = 0.6,                 -- test remove?.. or the other oen
+				preview_width = 0.6, -- test remove?.. or the other oen
 			},
 		},
-		symbol_width = 50,         -- Increase symbol name display width
+		symbol_width = 50, -- Increase symbol name display width
 		mappings = {
 			i = {
 				["<C-n>"] = false,
@@ -270,6 +270,3 @@ telescope.setup {
 		},
 	}
 }
-
--- Load telescope extensions
-telescope.load_extension('fzf')
