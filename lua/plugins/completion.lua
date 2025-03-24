@@ -1,100 +1,130 @@
-return {
-	{
-		"hrsh7th/nvim-cmp",
-		event = { "InsertEnter", "CmdlineEnter" },
-		dependencies = {
-			"hrsh7th/cmp-nvim-lsp",
-			"hrsh7th/cmp-path",
-			"hrsh7th/cmp-buffer",
-			"hrsh7th/cmp-nvim-lua",
-			"L3MON4D3/LuaSnip",
-			"saadparwaiz1/cmp_luasnip",
-			"onsails/lspkind.nvim",
-			"zbirenbaum/copilot-cmp",
+---@diagnostic disable: undefined-field
+local source_mapping = {
+	nvim_lsp = "[LSP]",
+	nvim_lua = "[LUA]",
+	luasnip = "[SNIP]",
+	buffer = "[BUF]",
+	path = "[PATH]",
+	treesitter = "[TREE]",
+}
+
+local config = function()
+	local cmp = require("cmp")
+	local cmp_tailwind = require("cmp-tailwind-colors")
+	local lspkind = require("lspkind")
+	cmp.setup({
+		preselect = cmp.PreselectMode.Item,
+		keyword_length = 2,
+		snippet = {
+			expand = function(args)
+				require("luasnip").lsp_expand(args.body)
+			end,
 		},
-		config = function()
-			local cmp = require("cmp")
-			local luasnip = require("luasnip")
-			local lspkind = require("lspkind")
-
-			-- Set up the GitHub icon color for Copilot
-			vim.api.nvim_set_hl(0, "CmpItemKindCopilot", { fg = "#6CC644" })
-
-			cmp.setup({
-				formatting = {
-					fields = { 'kind', 'abbr', 'menu' }, -- change the order so the icon appear first
-					format = lspkind.cmp_format({
-						-- ?
-						mode = 'symbol_text',
-						maxwidth = 50,
-						ellipsis_char = '...',
-						symbol_map = { Copilot = "", },
-						menu = {
-							nvim_lsp = "[LSP]",
-							luasnip = "[snip]",
-							nvim_lua = "[nvim]",
-							path = "[path]",
-							buffer = "[buffer]",
-							copilot = "[GitHub]",
-						},
-					}),
-				},
-				snippet = {
-					expand = function(args)
-						luasnip.lsp_expand(args.body)
+		window = {
+			completion = cmp.config.window.bordered(),
+			documentation = cmp.config.window.bordered(),
+		},
+		view = {
+			entries = {
+				name = "custom",
+				selection_order = "near_cursor",
+				follow_cursor = true,
+			},
+		},
+		mapping = {
+			["<CR>"] = cmp.mapping(
+				cmp.mapping.confirm({
+					select = true,
+					behavior = cmp.ConfirmBehavior.Insert,
+				}),
+				{ "i", "c" }
+			),
+			["<C-n>"] = cmp.mapping.select_next_item({
+				behavior = cmp.ConfirmBehavior.Insert,
+			}),
+			["<C-p>"] = cmp.mapping.select_prev_item({
+				behavior = cmp.ConfirmBehavior.Insert,
+			}),
+			["<C-b>"] = cmp.mapping.scroll_docs(-5),
+			["<C-f>"] = cmp.mapping.scroll_docs(5),
+			["<C-q>"] = cmp.mapping.abort(),
+		},
+		sources = cmp.config.sources({
+			{ name = "copilot",    group_index = 1 },
+			{
+				name = "luasnip",
+				group_index = 2,
+				option = { use_show_condition = true },
+				entry_filter = function()
+					local context = require("cmp.config.context")
+					return not context.in_treesitter_capture("string")
+						and not context.in_syntax_group("String")
+				end,
+			},
+			{ name = "nvim_lsp",   group_index = 3 },
+			{ name = "nvim_lua",   group_index = 4 },
+			{ name = "treesitter", group_index = 5, keyword_length = 4 },
+			{ name = "path",       group_index = 5, keyword_length = 4 },
+			{
+				name = "buffer",
+				keyword_length = 3,
+				group_index = 6,
+				option = {
+					get_bufnrs = function()
+						local bufs = {}
+						for _, win in ipairs(vim.api.nvim_list_wins()) do
+							bufs[vim.api.nvim_win_get_buf(win)] = true
+						end
+						return vim.tbl_keys(bufs)
 					end,
 				},
-				sources = {
-					{ name = 'nvim_lsp' },
-					{ name = 'luasnip',                max_item_count = 5 },
-					{ name = 'copilot' },
-					{ name = 'nvim_lua' },
-					{ name = 'path' },
-					{ name = 'buffer',                 keyword_length = 3 },
-					{ name = 'nvim_lsp_signature_help' },
-				},
-				mapping = cmp.mapping.preset.insert({
-					["<C-b>"] = cmp.mapping.scroll_docs(-4),
-					["<C-f>"] = cmp.mapping.scroll_docs(4),
-					["<C-Space>"] = cmp.mapping.complete(),
-					["<C-e>"] = cmp.mapping.abort(),
-					["<CR>"] = cmp.mapping.confirm({ select = true }),
-					["<Tab>"] = cmp.mapping(function(fallback)
-						if cmp.visible() then
-							cmp.select_next_item()
-						elseif luasnip.expand_or_jumpable() then
-							luasnip.expand_or_jump()
-						else
-							fallback()
-						end
-					end, { "i", "s" }),
-					["<S-Tab>"] = cmp.mapping(function(fallback)
-						if cmp.visible() then
-							cmp.select_prev_item()
-						elseif luasnip.jumpable(-1) then
-							luasnip.jump(-1)
-						else
-							fallback()
-						end
-					end, { "i", "s" }),
-				}),
-			})
-		end,
-	},
-
-	-- Snippet Engine
-	{
-		"L3MON4D3/LuaSnip",
-		build = "make install_jsregexp",
-		dependencies = {
-			"rafamadriz/friendly-snippets",
+			},
+		}),
+		---@diagnostic disable-next-line: missing-fields
+		formatting = {
+			format = lspkind.cmp_format({
+				mode = "symbol_text",
+				ellipsis_char = "...",
+				before = function(entry, item)
+					cmp_tailwind.format(entry, item)
+					return item
+				end,
+				menu = source_mapping,
+			}),
 		},
-		config = function()
-			require("luasnip.loaders.from_vscode").lazy_load()
-		end,
-	},
+		sorting = {
+			priority_weight = 2,
+			comparators = {
+				cmp.config.compare.offset,
+				cmp.config.compare.exact,
+				cmp.config.compare.score,
+				cmp.config.compare.recently_used,
+				cmp.config.compare.kind,
+				cmp.config.compare.sort_text,
+				cmp.config.compare.length,
+				cmp.config.compare.order,
+			},
+		},
+	})
+end
 
-	-- Copilot
+return {
+	"hrsh7th/nvim-cmp",
+	config = config,
+	event = "InsertEnter",
+	dependencies = {
+		"hrsh7th/cmp-nvim-lsp",
+		dependencies = {
+			"L3MON4D3/LuaSnip",
+			"hrsh7th/cmp-buffer",
+			"hrsh7th/cmp-path",
+			"hrsh7th/cmp-nvim-lua",
+			"ray-x/cmp-treesitter",
+			"saadparwaiz1/cmp_luasnip",
+			"js-everts/cmp-tailwind-colors",
+		},
+	},
+	-- does this work at all?
 	{
 		"zbirenbaum/copilot-cmp",
 		dependencies = {
@@ -107,4 +137,5 @@ return {
 			require("copilot_cmp").setup()
 		end,
 	},
+
 }
