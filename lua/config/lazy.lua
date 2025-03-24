@@ -19,6 +19,20 @@ vim.g.mapleader = ','
 require("lazy").setup({
 	spec = { { import = "plugins" } },
 	install = { colorscheme = { "habamax" } },
-	checker = { enabled = true },
+	checker = { enabled = false },
+	performance = {
+		rtp = {
+			---@type string[] list any plugins you want to disable here
+			disabled_plugins = {
+				-- "gzip",
+				-- "matchit",
+				-- "matchparen",
+				"netrwPlugin",
+				-- "tarPlugin",
+				-- "tohtml",
+				-- "tutor",
+				-- "zipPlugin",
+			},
+		},
+	},
 })
-

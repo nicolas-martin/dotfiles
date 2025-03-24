@@ -6,7 +6,30 @@ return {
 	-- File explorer
 	{
 		"preservim/nerdtree",
+		enabled = false,
 		init = function()
+			local log_file = vim.fn.expand("~/.config/nvim/event_log.txt")
+
+			local function log_event(event)
+				local log_entry = string.format(
+					"[%s] Event: %s, File: %s\n",
+					os.date("%Y-%m-%d %H:%M:%S"),
+					event.event,
+					event.file or "N/A"
+				)
+				local file = io.open(log_file, "a")
+				if file then
+					file:write(log_entry)
+					file:close()
+				else
+					print("Error: Unable to open log file.")
+				end
+			end
+
+			vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
+				callback = log_event,
+			})
+
 			-- Disable netrw completely
 			vim.g.loaded_netrw = 1
 			vim.g.loaded_netrwPlugin = 1
@@ -22,6 +45,18 @@ return {
 				['file'] = { where = 'p', reuse = 'all', keepopen = 1 }
 			}
 
+			-- Set up window navigation mappings for NERDTree buffer
+			vim.api.nvim_create_autocmd("FileType", {
+				pattern = "nerdtree",
+				callback = function()
+					local opts = { buffer = true, noremap = true, silent = true }
+					vim.keymap.set('n', '<C-h>', '<C-w>h', opts)
+					vim.keymap.set('n', '<C-j>', '<C-w>j', opts)
+					vim.keymap.set('n', '<C-k>', '<C-w>k', opts)
+					vim.keymap.set('n', '<C-l>', '<C-w>l', opts)
+				end
+			})
+
 			-- Auto open NERDTree when opening a directory
 			vim.api.nvim_create_autocmd("VimEnter", {
 				callback = function()
@@ -29,18 +64,9 @@ return {
 						-- Change to the directory
 						vim.cmd("cd " .. vim.fn.argv(0))
 						-- Open NERDTree in the current directory
-						vim.cmd("NERDTree")
+						vim.cmd("NERDTreeToggle")
 						-- Focus the other window
-						vim.cmd("wincmd p")
-					end
-				end,
-			})
-
-			-- Close vim if NERDTree is the only window remaining
-			vim.api.nvim_create_autocmd("BufEnter", {
-				callback = function()
-					if vim.fn.winnr("$") == 1 and vim.bo.filetype == "nerdtree" then
-						vim.cmd("quit")
+						-- vim.cmd("wincmd p")
 					end
 				end,
 			})

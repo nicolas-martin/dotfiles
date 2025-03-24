@@ -6,8 +6,8 @@ TERM = "alacritty"
 # Specifying '0' will disable scrolling.
 history = 10000
 # Scrolling distance multiplier.
-
 multiplier = 3
+
 [font]
 size = 14
 
@@ -26,7 +26,11 @@ save_to_clipboard = true
 
 [terminal.shell]
 # args = ["-l", "-c", "tmux"]
-args = ["--login", "-c", "/opt/homebrew/bin/tmux attach || //opt/homebrew/bin/tmux"]
+args = [
+	"--login",
+	"-c",
+	"/opt/homebrew/bin/tmux attach || //opt/homebrew/bin/tmux",
+]
 program = "/bin/zsh"
 
 [window]
@@ -36,9 +40,8 @@ opacity = 1.0
 
 # Define a hint for URLs (including vscode://).
 [[hints.enabled]]
-# command = "xdg-open" # On Linux/BSD
-command = "open" # On macOS
-# command = { program = "cmd", args = [ "/c", "start", "" ] } # On Windows
+# On macOS
+command = "open"
 hyperlinks = true
 post_processing = true
 persist = false
