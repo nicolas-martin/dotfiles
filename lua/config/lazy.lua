@@ -20,6 +20,7 @@ require("lazy").setup({
 	spec = { { import = "plugins" } },
 	install = { colorscheme = { "habamax" } },
 	checker = { enabled = false },
+	lockfile = "~/dotfiles/lua/config/lazy-lock.json",
 	performance = {
 		rtp = {
 			---@type string[] list any plugins you want to disable here
