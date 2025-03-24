@@ -3,9 +3,8 @@ return {
 	-- Package manager
 	{ "folke/lazy.nvim",       version = "*" },
 
-	-- File explorer
-	{ "preservim/nerdtree" },
 
+	
 	-- Essential editing plugins
 	{ "tpope/vim-repeat" },
 	{ "tpope/vim-surround" },
@@ -13,7 +12,14 @@ return {
 	{ "tpope/vim-fugitive" },
 
 	-- Colorschemes
-	{ "EdenEast/nightfox.nvim" },
+	{
+		"EdenEast/nightfox.nvim",
+		lazy = false, -- make sure we load this during startup
+		priority = 1000, -- make sure to load this before all the other start plugins
+		config = function()
+			vim.cmd([[colorscheme nightfox]])
+		end,
+	},
 
 	-- Go development plugin
 	{ "fatih/vim-go",          build = ":GoUpdateBinaries" },

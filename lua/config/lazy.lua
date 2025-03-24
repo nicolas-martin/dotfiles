@@ -13,7 +13,7 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 -- Set leader key
-vim.g.mapleader = " "
+vim.g.mapleader = ','
 
 -- Load plugins using lazy.nvim
 require("lazy").setup({
@@ -21,12 +21,3 @@ require("lazy").setup({
   install = { colorscheme = { "habamax" } },
   checker = { enabled = true },
 })
-
--- -- Load additional configurations
--- require("settings")
--- require("keymaps")
--- require("lsp")
--- require("autocmds")
--- require("telescope_config")
--- require("cmp_config")
--- require("treesitter")

@@ -6,15 +6,6 @@ return {
       "nvim-lua/plenary.nvim",
       { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
     },
-    keys = {
-      { "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find Files" },
-      { "<leader>fg", "<cmd>Telescope live_grep<cr>", desc = "Live Grep" },
-      { "<leader>fb", "<cmd>Telescope buffers<cr>", desc = "Buffers" },
-      { "<leader>fh", "<cmd>Telescope help_tags<cr>", desc = "Help Tags" },
-      { "<leader>fr", "<cmd>Telescope oldfiles<cr>", desc = "Recent Files" },
-      { "<leader>fs", "<cmd>Telescope git_status<cr>", desc = "Git Status" },
-      { "<leader>fc", "<cmd>Telescope git_commits<cr>", desc = "Git Commits" },
-    },
     config = function()
       local actions = require('telescope.actions')
 
