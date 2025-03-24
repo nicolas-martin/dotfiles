@@ -1,28 +1,10 @@
 -- lua/plugins.lua
 return {
 	-- Package manager
-	{ "folke/lazy.nvim",       version = "*" },
-
-
-	
-	-- Essential editing plugins
-	{ "tpope/vim-repeat" },
-	{ "tpope/vim-surround" },
-	{ "tpope/vim-commentary" },
-	{ "tpope/vim-fugitive" },
-
-	-- Colorschemes
-	{
-		"EdenEast/nightfox.nvim",
-		lazy = false, -- make sure we load this during startup
-		priority = 1000, -- make sure to load this before all the other start plugins
-		config = function()
-			vim.cmd([[colorscheme nightfox]])
-		end,
-	},
+	{ "folke/lazy.nvim", version = "*" },
 
 	-- Go development plugin
-	{ "fatih/vim-go",          build = ":GoUpdateBinaries" },
+	{ "fatih/vim-go",    build = ":GoUpdateBinaries" },
 
 	-- Treesitter configurations and abstraction layer
 	{
@@ -97,18 +79,4 @@ return {
 			require("telescope").setup()
 		end,
 	},
-
-	-- Status line
-	{
-		"nvim-lualine/lualine.nvim",
-		dependencies = { "kyazdani42/nvim-web-devicons" },
-		event = "VeryLazy",
-		config = function()
-			require("lualine").setup({
-				options = { theme = "auto" },
-				-- Add other configurations here
-			})
-		end,
-	},
-
 }

@@ -91,8 +91,8 @@ return {
 			-- Don't fold by default when opening a file
 			vim.opt.foldenable = false
 			vim.opt.foldlevel = 99
-vim.opt.foldminlines = 3    -- Minimum lines needed for a fold
+			vim.opt.foldminlines = 3 -- Minimum lines needed for a fold
 		end,
 	},
 }
-  
+

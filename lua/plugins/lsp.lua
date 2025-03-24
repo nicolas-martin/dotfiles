@@ -9,7 +9,7 @@ return {
 		},
 		config = function()
 			local capabilities = require('cmp_nvim_lsp').default_capabilities()
-			
+
 			-- Configure default hover handler
 			vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
 				vim.lsp.handlers.hover, {}
@@ -23,7 +23,7 @@ return {
 				vim.keymap.set('n', '<leader>rn', '<Cmd>lua vim.lsp.buf.rename()<CR>', buf_opts)
 				vim.keymap.set('n', '<leader>ca', '<Cmd>lua vim.lsp.buf.code_action()<CR>', buf_opts)
 				vim.keymap.set('n', '<leader>fm', '<Cmd>lua vim.lsp.buf.formatting()<CR>', buf_opts)
-				
+
 				require("lsp_signature").setup({
 					bind = true,
 					handler_opts = {
