@@ -37,7 +37,7 @@ return {
 					sorter = sorter,
 					layout_strategy = "center",
 					layout_config = {
-						width = 0.4,
+						width = 0.2,
 						height = 0.3,
 					},
 					attach_mappings = function(prompt_buffer_number)
