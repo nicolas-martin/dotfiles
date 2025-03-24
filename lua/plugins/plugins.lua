@@ -6,14 +6,11 @@ return {
 	-- File explorer
 	{ "preservim/nerdtree" },
 
-	-- Repeat plugin
+	-- Essential editing plugins
 	{ "tpope/vim-repeat" },
-
-	-- Surround plugin
 	{ "tpope/vim-surround" },
-
-	-- Commenting utility
 	{ "tpope/vim-commentary" },
+	{ "tpope/vim-fugitive" },
 
 	-- Colorschemes
 	{ "EdenEast/nightfox.nvim" },
@@ -94,9 +91,6 @@ return {
 			require("telescope").setup()
 		end,
 	},
-
-	-- Git integration
-	{ "tpope/vim-fugitive" },
 
 	-- Status line
 	{
