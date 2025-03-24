@@ -45,7 +45,7 @@ map('n', '<leader>9', '9gt')
 
 -- NvimTree
 map('n', '<C-n>', ':NvimTreeToggle<CR>', { desc = "Toggle NvimTree" })
-map('n', '<leader>l', ':NvimTreeFocus<CR>', { desc = "Focus NvimTree" })
+map('n', '<leader>l', ':NvimTreeFindFile<CR>', { desc = "Focus NvimTree" })
 
 -- Folding keymaps
 map('n', 'zf', 'za', { desc = 'Toggle fold under cursor' }) -- Easier toggle fold
