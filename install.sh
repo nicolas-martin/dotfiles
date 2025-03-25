@@ -76,10 +76,11 @@ yellow 🔧 Starting installation...
 
 # Clean up destination directories first
 blue 🧹 Cleaning up old files...
-LUA_DIR="${CONFIG_DIR}/nvim/lua"
-rm -rf "${LUA_DIR}"*
-blue    🧹 Removing lua ${LUA_DIR}
-mkdir -p ${LUA_DIR}
+# will also remove any .json / ./log or anything else
+NVIM_DIR="${CONFIG_DIR}/nvim"
+rm -rf "${NVIM_DIR}"*
+blue    🧹 Removing nvim ${NVIM_DIR}
+mkdir -p ${NVIM_DIR}
 BIN_DIR="${LOCAL_DIR}/bin"
 rm -rf "${BIN_DIR}/"*
 blue    🧹 Removing bin ${BIN_DIR}
@@ -96,19 +97,16 @@ install alacritty.toml "${CONFIG_DIR}/alacritty/alacritty.toml"
 
 # Neovim configuration
 blue "\n📝 Setting up Neovim..."
-install init.lua "${CONFIG_DIR}/nvim/init.lua"
 
-# Install all .lua files from lua directory
-find lua -name "*.lua" -type f | while read -r file; do
-	relative_path=${file#lua/}
-	install "$file" "${CONFIG_DIR}/nvim/lua/$relative_path"
+# Install all .lua files from nvim directory
+find nvim -name "*.lua" -type f | while read -r file; do
+	install "$file" "${NVIM_DIR}/${file#nvim}"
 done
 
 # Install bin files to ~/.local/bin
 blue "\n🔨 Installing binaries..."
-mkdir -p "${LOCAL_DIR}/bin"
 find bin -type f | while read -r file; do
-	install "$file" "${LOCAL_DIR}/bin/$(basename "$file")"
+	install "$file" "${BIN_DIR}/$(basename "$file")"
 done
 
 green "\n✨ Installation complete! Everything is set up and ready to go!"
