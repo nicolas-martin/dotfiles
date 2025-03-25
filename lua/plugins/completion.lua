@@ -72,7 +72,6 @@ local config = function()
 					local context = require("cmp.config.context")
 					local ok = not context.in_treesitter_capture("string")
 						and not context.in_syntax_group("String")
-					require("util").log("luasnip entry_filter: " .. tostring(ok))
 					return ok
 				end,
 			},
@@ -169,6 +168,63 @@ return {
 				},
 			})
 		end,
+	}, {
+	"L3MON4D3/LuaSnip",
+	run = "make install_jsregexp",
+	-- TODO: Do I need this?
+	dependencies = {
+		'nvim-treesitter/nvim-treesitter',
+	},
+	version = 'v2.*',
+	lazy = false,
+	init = function()
+		local ls = require('luasnip')
+		ls.setup({
+			-- Required to automatically include base snippets, like "c" snippets for "cpp"
+			load_ft_func = require('luasnip_snippets.common.snip_utils').load_ft_func,
+			ft_func = require('luasnip_snippets.common.snip_utils').ft_func,
+			-- To enable auto expansin
+			enable_autosnippets = true,
+			-- Uncomment to enable visual snippets triggered using <c-x>
+			-- store_selection_keys = '<c-x>',
+		})
+	end,
+	keys = {
+		{
+			-- TODO: KEYS DON"T WORK
+			"<leader>n",
+			function() require("luasnip").jump(1) end,
+			-- 	function() if ls.expand_or_jumpable() then ls.expand_or_jump() else vim.api.nvim_input('<C-V><Tab>') end end,
+			desc = "Jump forward a snippet placement",
+			mode = "i",
+			noremap = true,
+			silent = true
+		},
+		{
+			"<leader>p",
+			function() require("luasnip").jump(-1) end,
+			-- vim.keymap.set({ "i", "s" }, "<S-Tab>", function() ls.jump(-1) end, { silent = true })
+			desc = "Jump backward a snippet placement",
+			mode = "i",
+			noremap = true,
+			silent = true
+		}
+		-- vim.keymap.set({ "i", "s" }, "<C-E>", function() if ls.choice_active() then ls.change_choice(1) end end,
+	},
+	-- custom path
+	-- config = function()
+	-- 	require("luasnip.loaders.from_lua").load({ paths = "~/.snippets" })
+	-- end
+},
+	{
+		-- (snipMate & UltiSnip Snippets) converted to native luasnip snippets
+		'mireq/luasnip-snippets',
+		dependencies = { 'L3MON4D3/LuaSnip' },
+		init = function()
+			-- Mandatory setup function
+			require('luasnip_snippets.common.snip_utils').setup()
+		end
+
 	},
 
 }
