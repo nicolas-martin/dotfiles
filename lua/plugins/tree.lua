@@ -72,7 +72,6 @@ return {
 			local function my_on_attach(bufnr)
 				local api = require('nvim-tree.api')
 				api.config.mappings.default_on_attach(bufnr)
-				print("📎 [nvim-tree] attached")
 				vim.keymap.set("n", "<C-Space>", tree_actions_menu, { buffer = bufnr, noremap = true, silent = true })
 			end
 			require("nvim-tree").setup({

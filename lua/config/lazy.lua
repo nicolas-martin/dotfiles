@@ -17,8 +17,18 @@ vim.g.mapleader = ','
 
 -- Load plugins using lazy.nvim
 require("lazy").setup({
+	defaults = {
+		notify = function(msg)
+			vim.schedule(function()
+				vim.notify(msg, vim.log.levels.INFO, { title = "!Lazy.nvim" })
+			end)
+		end,
+	},
 	spec = { { import = "plugins" } },
 	install = { colorscheme = { "habamax" } },
+	-- colorscheme = function()
+	-- 	require("tokyonight").load()
+	-- end,
 	checker = { enabled = false },
 	lockfile = "~/dotfiles/lua/config/lazy-lock.json",
 	performance = {

@@ -12,6 +12,7 @@ local config = function()
 	local cmp = require("cmp")
 	local cmp_tailwind = require("cmp-tailwind-colors")
 	local lspkind = require("lspkind")
+
 	cmp.setup({
 		preselect = cmp.PreselectMode.Item,
 		keyword_length = 2,
@@ -57,8 +58,10 @@ local config = function()
 				option = { use_show_condition = true },
 				entry_filter = function()
 					local context = require("cmp.config.context")
-					return not context.in_treesitter_capture("string")
+					local ok = not context.in_treesitter_capture("string")
 						and not context.in_syntax_group("String")
+					require("util").log("luasnip entry_filter: " .. tostring(ok))
+					return ok
 				end,
 			},
 			{ name = "nvim_lsp",   group_index = 3 },
@@ -107,14 +110,13 @@ local config = function()
 		},
 	})
 end
-
 return {
-	"hrsh7th/nvim-cmp",
-	config = config,
-	event = "InsertEnter",
-	dependencies = {
-		"hrsh7th/cmp-nvim-lsp",
+	{
+		"hrsh7th/nvim-cmp",
+		-- config = config_debug,
 		dependencies = {
+			"hrsh7th/cmp-nvim-lsp",
+			"hrsh7th/cmp-emoji",
 			"L3MON4D3/LuaSnip",
 			"hrsh7th/cmp-buffer",
 			"hrsh7th/cmp-path",
@@ -123,8 +125,9 @@ return {
 			"saadparwaiz1/cmp_luasnip",
 			"js-everts/cmp-tailwind-colors",
 		},
+		opts = config
+
 	},
-	-- does this work at all?
 	{
 		"zbirenbaum/copilot-cmp",
 		dependencies = {

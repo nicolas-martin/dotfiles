@@ -10,8 +10,8 @@ end
 map('n', '<leader>n', ':noh<CR>', { desc = "Hide search highlight text" })
 map('n', '<f1>', 'o<Esc>', { desc = "Add a line abaove" })
 map('n', 'Q', '<nop>', { desc = "Remove the annoying Q" })
-map('n', ']q', ':cn<CR>', { desc = "Previous item in quickfix" })
-map('n', '[q', ':cp<CR>', { desc = "Next item in quickfix" })
+map('n', '[q', vim.cmd.cprev, { desc = 'Previous Quickfix' })
+map('n', ']q', vim.cmd.cnext, { desc = 'Next Quickfix' })
 map('n', '<leader>)', '<cmd>set nu! rnu!<CR>', { desc = "toggle relativenumber and numbers" })
 map('x', 'p', 'P', { desc = "xnoremap p P" })
 
@@ -25,7 +25,6 @@ map('n', '<leader>ft', builtin.lsp_dynamic_workspace_symbols, { desc = '!!Telesc
 map('n', '<leader>fT', builtin.lsp_dynamic_workspace_symbols, { desc = 'Telescope dynamic workspace symbols' })
 map('n', '<leader>fd', builtin.diagnostics, { desc = 'Telescope diagnostics' })
 
--- Window navigation with higher priority to override NERDTree mappings
 map('n', '<C-j>', '<C-w>j', { desc = 'Move down' })
 map('n', '<C-k>', '<C-w>k', { desc = 'Move up' })
 map('n', '<C-l>', '<C-w>l', { desc = 'Move right' })
@@ -56,3 +55,21 @@ map('n', 'zO', 'zR', { desc = 'Open all folds' })
 
 -- Code companion
 map('n', '<leader>cc', ':CodeCompanionChat<cr>')
+
+-- Move Lines
+map("n", "<A-j>", "<cmd>execute 'move .+' . v:count1<cr>==", { desc = "Move Down" })
+map("n", "<A-k>", "<cmd>execute 'move .-' . (v:count1 + 1)<cr>==", { desc = "Move Up" })
+map("i", "<A-j>", "<esc><cmd>m .+1<cr>==gi", { desc = "Move Down" })
+map("i", "<A-k>", "<esc><cmd>m .-2<cr>==gi", { desc = "Move Up" })
+map("v", "<A-j>", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv", { desc = "Move Down" })
+map("v", "<A-k>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move Up" })
+
+-- better indenting
+map("v", "<", "<gv", { desc = "better indenting? <gv" })
+map("v", ">", ">gv", { desc = "better indenting? >gv" })
+
+-- save
+map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
+
+-- quit
+map("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit All" })
