@@ -1,3 +1,5 @@
+-- TOOD: when calling NvimTreeToggle, I want to find the file in the tree
+-- no matter if it's in my current working directory or not
 return {
 	{
 		"nvim-tree/nvim-tree.lua",

@@ -25,7 +25,6 @@ return {
 				vim.keymap.set('n', '<leader>fm', '<Cmd>lua vim.lsp.buf.formatting()<CR>', buf_opts)
 			end
 
-			-- Configure LSP servers
 			require('lspconfig').gopls.setup {
 				on_attach = on_attach,
 				capabilities = capabilities,
@@ -103,7 +102,10 @@ return {
 			end
 		end
 	},
-
+	{
+		"folke/lazydev.nvim",
+		ft = "lua", -- only load on lua files
+	},
 	-- TypeScript Tools
 	{
 		"pmizio/typescript-tools.nvim",

@@ -9,12 +9,13 @@ local source_mapping = {
 	copilot = "[CO]",
 }
 
-local config = function()
+---@return cmp.ConfigSchema
+local function config()
 	local cmp = require("cmp")
 	local cmp_tailwind = require("cmp-tailwind-colors")
 	local lspkind = require("lspkind")
 
-	cmp.setup({
+	return cmp.setup({
 		preselect = cmp.PreselectMode.Item,
 		keyword_length = 2,
 		-- completion = {
@@ -144,6 +145,7 @@ return {
 			"L3MON4D3/LuaSnip",
 			"saadparwaiz1/cmp_luasnip",
 		},
+		---@type fun(): cmp.ConfigSchema
 		opts = config
 
 	},

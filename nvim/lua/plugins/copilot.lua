@@ -3,8 +3,11 @@ return {
 		"zbirenbaum/copilot.lua",
 		cmd = "Copilot",
 		event = "InsertEnter",
+
+		---@type fun(): copilot_config
 		config = function()
-			require("copilot").setup({
+			---@type copilot_config
+			return require("copilot").setup({
 				filetypes = {
 					yaml = true,
 				},

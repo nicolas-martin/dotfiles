@@ -39,7 +39,7 @@ require("lazy").setup({
 	-- 	require("tokyonight").load()
 	-- end,
 	checker = { enabled = false },
-	lockfile = "~/dotfiles/lua/config/lazy-lock.json",
+	lockfile = "~/dotfiles/nvim/lua/config/lazy-lock.json",
 	performance = {
 		rtp = {
 			---@type string[] list any plugins you want to disable here
