@@ -7,25 +7,36 @@ return {
 			{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
 		},
 		config = function()
+			vim.fn.sign_define("DiagnosticSignError", { text = "", texthl = "DiagnosticError" })
+			vim.fn.sign_define("DiagnosticSignWarn", { text = "", texthl = "DiagnosticWarn" })
+			vim.fn.sign_define("DiagnosticSignInfo", { text = "", texthl = "DiagnosticInfo" })
+			vim.fn.sign_define("DiagnosticSignHint", { text = "", texthl = "DiagnosticHint" })
 			local actions = require('telescope.actions')
 
 			-- Helper function for right-aligned display
 			local format_with_right_align = function(icon_str, main_str, type_str)
 				local win_width = vim.api.nvim_win_get_width(0)
-				local icon_display = string.format("%s ", icon_str)
+
+				-- support string or { text, hl_group }
+				local icon_display, icon_width
+				if type(icon_str) == "table" then
+					icon_display = { string.format("%s ", icon_str[1]), icon_str[2] }
+					icon_width = vim.fn.strwidth(icon_str[1]) + 1
+				else
+					icon_display = string.format("%s ", icon_str)
+					icon_width = vim.fn.strwidth(icon_display)
+				end
+
 				local type_display = string.format(" (%s)", type_str:lower())
-				local icon_width = vim.fn.strwidth(icon_display)
 				local type_width = vim.fn.strwidth(type_display)
 				local main_width = vim.fn.strwidth(main_str)
 
-				-- Calculate available width and truncate if needed
 				local max_main_width = win_width - type_width - icon_width - 2
 				local main_display = main_str
 				if main_width > max_main_width then
 					main_display = string.sub(main_str, 1, max_main_width - 3) .. "..."
 				end
 
-				-- Create a display line with proper alignment
 				local displayer = require("telescope.pickers.entry_display").create {
 					separator = "",
 					items = {
@@ -36,47 +47,24 @@ return {
 				}
 
 				return displayer {
-					{ icon_display },
-					{ main_display },
+					icon_display,
+					main_display,
 					{ type_display, "TelescopeResultsComment" },
 				}
 			end
 
+			local function get_sign_icon(name)
+				-- { name = "DiagnosticSignError", text = "", texthl = "DiagnosticError" }
+				local sign = vim.fn.sign_getdefined(name)[1]
+				return sign and sign.text or "?"
+			end
+
 			-- Define diagnostic icons
 			local diagnostic_icons = {
-				error = "", -- Using a red 'x' icon
-				warn = "", -- Using a yellow warning icon
-				info = " ", -- Using a blue info icon
-				hint = "", -- Using a blue lightbulb icon
-			}
-
-			-- Define LSP kind icons
-			local kind_icons = {
-				["Text"] = "󰉿",
-				["Method"] = "󰆧",
-				["Function"] = "󰊕",
-				["Constructor"] = "",
-				["Field"] = "󰜢",
-				["Variable"] = "󰀫",
-				["Class"] = "󰠱",
-				["Interface"] = "",
-				["Module"] = "",
-				["Property"] = "󰜢",
-				["Unit"] = "󰑭",
-				["Value"] = "󰎠",
-				["Enum"] = "",
-				["Keyword"] = "󰌋",
-				["Snippet"] = "",
-				["Color"] = "󰏘",
-				["File"] = "󰈙",
-				["Reference"] = "󰈇",
-				["Folder"] = "󰉋",
-				["EnumMember"] = "",
-				["Constant"] = "󰏿",
-				["Struct"] = "󰙅",
-				["Event"] = "",
-				["Operator"] = "󰆕",
-				["TypeParameter"] = " ",
+				error = get_sign_icon("DiagnosticSignError"),
+				warn  = get_sign_icon("DiagnosticSignWarn"),
+				info  = get_sign_icon("DiagnosticSignInfo"),
+				hint  = get_sign_icon("DiagnosticSignHint"),
 			}
 
 			require('telescope').setup({
@@ -155,45 +143,85 @@ return {
 					respect_gitignore = true,
 				},
 				pickers = {
+					lsp_dynamic_workspace_symbols = {
+						layout_config = {
+							preview_width = 0.6,
+						},
+						entry_maker = (function()
+							local allowed_kinds = {
+								["Function"] = true,
+								["Method"] = true,
+								["Struct"] = true,
+								["Class"] = true,
+								["Interface"] = true,
+								["Enum"] = true,
+								["Module"] = true,
+								["Constructor"] = true,
+								["Field"] = true,
+								["Constant"] = true,
+								["Variable"] = true,
+							}
+
+							return function(entry)
+								if not allowed_kinds[entry.kind] then
+									print("?Skipping lsp ws symbols", entry.kind)
+									return nil
+								end
+
+								local make_entry = require("telescope.make_entry")
+								local lspkind = require("lspkind")
+								local default_maker = make_entry.gen_from_lsp_symbols()
+								local entry_tbl = default_maker(entry)
+
+								if entry_tbl then
+									local kind = entry.kind or "Unknown"
+									local icon = lspkind.symbolic(kind, { mode = "symbol" }) or "? "
+									local hl_group = "CmpItemKind" .. kind:gsub("%s", "")
+
+									entry_tbl.display = function()
+										return format_with_right_align({ icon, hl_group }, entry.text, kind)
+									end
+								end
+
+								return entry_tbl
+							end
+						end)()
+					},
 					lsp_document_symbols = {
 						layout_config = {
 							preview_width = 0.4,
 						},
-						symbols = {
-							"class",
-							"function",
-							"method",
-							"constructor",
-							"interface",
-							"module",
-							"property",
-							"variable",
-							"struct",
-							"enum",
-						},
 						entry_maker = function(entry)
+							local allowed_kinds = {
+								["Function"] = true,
+								["Method"] = true,
+								["Struct"] = true,
+								["Class"] = true,
+								["Constant"] = true,
+								["Field"] = true,
+								["Variable"] = true,
+							}
+							if not allowed_kinds[entry.kind] then
+								print("Skipping lsp doc symbols", entry.kind)
+								return nil
+							end
 							local make_entry = require("telescope.make_entry")
+							local lspkind = require("lspkind")
 							local default_maker = make_entry.gen_from_lsp_symbols()
 							local entry_tbl = default_maker(entry)
 
 							if entry_tbl then
 								entry_tbl.display = function()
-									local icon = kind_icons[entry.kind] or "? "
-									local kind_name = entry.kind or "Unknown"
-									local space_index = string.find(entry.text, " ")
-									local name = string.sub(entry.text, space_index + 1)
+									local kind = entry.kind or "Unknown"
+									local icon = lspkind.symbolic(kind, { mode = "symbol" }) or "? "
+									local hl_group = "CmpItemKind" .. kind:gsub("%s", "")
 
-									return format_with_right_align(icon, name, kind_name)
+									return format_with_right_align({ icon, hl_group }, entry.text, kind)
 								end
 							end
 
 							return entry_tbl
 						end,
-					},
-					lsp_workspace_symbols = {
-						layout_config = {
-							preview_width = 0.6,
-						},
 					},
 					live_grep = {
 						layout_config = {
