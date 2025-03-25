@@ -15,10 +15,9 @@ return {
 
 			-- Helper function for right-aligned display
 			local format_with_right_align = function(icon_str, main_str, type_str)
-				print("[telescope-format] called with:", vim.inspect({ icon_str, main_str, type_str }))
 				local win_width = vim.api.nvim_win_get_width(0)
 
-				-- support string or { text, hl_group }
+				-- handle icon: string or { text, hl_group }
 				local icon_display, icon_width
 				if type(icon_str) == "table" then
 					icon_display = { string.format("%s ", icon_str[1]), icon_str[2] }
@@ -27,6 +26,9 @@ return {
 					icon_display = string.format("%s ", icon_str)
 					icon_width = vim.fn.strwidth(icon_display)
 				end
+
+				-- strip `[Kind] ` prefix from name
+				main_str = main_str:gsub("^%[[^%]]+%]%s*", "")
 
 				local type_display = string.format(" (%s)", type_str:lower())
 				local type_width = vim.fn.strwidth(type_display)
@@ -140,11 +142,11 @@ return {
 							["<leader>q"] = actions.send_selected_to_qflist + actions.open_qflist,
 						},
 					},
-					path_display = { "truncate" },
 					respect_gitignore = true,
 				},
 				pickers = {
 					lsp_dynamic_workspace_symbols = {
+						-- path_display = { "truncate" },
 						layout_config = {
 							preview_width = 0.6,
 						},
@@ -193,6 +195,7 @@ return {
 							preview_width = 0.4,
 						},
 						entry_maker = function(entry)
+							local lspkind = require("lspkind")
 							local allowed_kinds = {
 								["Function"] = true,
 								["Method"] = true,
@@ -207,22 +210,17 @@ return {
 								return nil
 							end
 							local make_entry = require("telescope.make_entry")
-							local lspkind = require("lspkind")
 							local default_maker = make_entry.gen_from_lsp_symbols()
 							local entry_tbl = default_maker(entry)
 
 							if entry_tbl then
-								print(string.format(
-									"[telescope-symbols] %s -> icon=%s, hl=%s",
-									name, icon, hl_group
-								))
-								entry_tbl.display = function()
-									local kind = entry.kind or "Unknown"
-									local icon = lspkind.symbolic(kind, { mode = "symbol" }) or "? "
-									local hl_group = "CmpItemKind" .. kind:gsub("%s", "")
+								local kind = entry.kind or "Unknown"
+								local icon = lspkind.symbolic(kind, { mode = "symbol" }) or "? "
+								local hl_group = "CmpItemKind" .. kind:gsub("%s", "")
+								local name = entry.text or "<none>"
 
-									print("hl_group: ", vim.inspect(hl_group))
-									return format_with_right_align({ icon, hl_group }, entry.text, kind)
+								entry_tbl.display = function()
+									return format_with_right_align({ icon, hl_group }, name, kind)
 								end
 							end
 
