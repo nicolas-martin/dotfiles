@@ -1,5 +1,3 @@
-require("config.lazy") -- Load plugins
+require("config.lazy")
 
-require("settings")
-require("keymaps")
-require("autocmds")
+-- require("utils")

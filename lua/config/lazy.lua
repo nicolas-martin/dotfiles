@@ -24,7 +24,15 @@ require("lazy").setup({
 			end)
 		end,
 	},
-	spec = { { import = "plugins" } },
+	spec = {
+		-- add LazyVim and import its plugins
+		-- They're so good, should find the best one/configs
+		-- and extract them
+		-- { "LazyVim/LazyVim", import = "lazyvim.plugins" },
+		-- import/override with your plugins
+		{ import = "plugins" },
+	},
+	change_detection = { notify = true },
 	install = { colorscheme = { "habamax" } },
 	-- colorscheme = function()
 	-- 	require("tokyonight").load()
@@ -35,14 +43,14 @@ require("lazy").setup({
 		rtp = {
 			---@type string[] list any plugins you want to disable here
 			disabled_plugins = {
-				-- "gzip",
-				-- "matchit",
-				-- "matchparen",
+				"gzip",
+				"matchit",
+				"matchparen",
 				"netrwPlugin",
-				-- "tarPlugin",
-				-- "tohtml",
-				-- "tutor",
-				-- "zipPlugin",
+				"tarPlugin",
+				"tohtml",
+				"tutor",
+				"zipPlugin",
 			},
 		},
 	},
