@@ -87,26 +87,29 @@ blue    🧹 Removing bin ${BIN_DIR}
 mkdir -p "${BIN_DIR}"
 
 # General dotfiles
-blue "\n📄 Installing dotfiles..."
+blue "\n📄 Installing dotfiles → ${HOME}"
 install .gitconfig "${HOME_DIR}/.gitconfig"
 install .zshrc "${HOME_DIR}/.zshrc"
 install .tmux.conf "${HOME_DIR}/.tmux.conf"
 install .yabairc "${HOME_DIR}/.yabairc"
 install .skhdrc "${HOME_DIR}/.skhdrc"
-install alacritty.toml "${CONFIG_DIR}/alacritty/alacritty.toml"
+
+# Setting up ~/.config
+blue "\n📄 Installing .config → ${CONFIG_DIR}"
+find .config -type f | while read -r file; do
+	install ${file} "${CONFIG_DIR}/${file#.config/}"
+done
 
 # Neovim configuration
-blue "\n📝 Setting up Neovim..."
-
-# Install all .lua files from nvim directory
+blue "\n📝 Setting up Neovim → ${NVIM_DIR}"
 find nvim -name "*.lua" -type f | while read -r file; do
 	install "$file" "${NVIM_DIR}/${file#nvim}"
 done
 
 # Install bin files to ~/.local/bin
-blue "\n🔨 Installing binaries..."
+blue "\n🔨 Installing binaries → ${BIN_DIR}"
 find bin -type f | while read -r file; do
 	install "$file" "${BIN_DIR}/$(basename "$file")"
 done
 
-green "\n✨ Installation complete! Everything is set up and ready to go!"
+green "\n✨ Installation complete!"

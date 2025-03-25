@@ -168,3 +168,5 @@ echo "yabai configuration loaded..."
 #   for id in "${ids[@]}"; do yabai -m window --focus "$id"; sleep 0.2; done
 
 
+# use `borders` 
+# borders active_color=0x8fce00 inactive_color=0xF44336 width=9.0 &
