@@ -23,13 +23,6 @@ return {
 				vim.keymap.set('n', '<leader>rn', '<Cmd>lua vim.lsp.buf.rename()<CR>', buf_opts)
 				vim.keymap.set('n', '<leader>ca', '<Cmd>lua vim.lsp.buf.code_action()<CR>', buf_opts)
 				vim.keymap.set('n', '<leader>fm', '<Cmd>lua vim.lsp.buf.formatting()<CR>', buf_opts)
-
-				require("lsp_signature").setup({
-					bind = true,
-					handler_opts = {
-						border = "rounded"
-					}
-				})
 			end
 
 			-- Configure LSP servers

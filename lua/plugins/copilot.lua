@@ -5,10 +5,13 @@ return {
 		event = "InsertEnter",
 		config = function()
 			require("copilot").setup({
+				filetypes = {
+					yaml = true,
+				},
 				suggestion = {
 					enabled = true,
 					auto_trigger = false,
-					hide_during_completion = false,
+					hide_during_completion = true,
 					debounce = 25,
 					keymap = {
 						accept = false,

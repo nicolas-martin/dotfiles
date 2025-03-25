@@ -5,6 +5,7 @@ vim.opt.incsearch = true
 vim.opt.hlsearch = true
 vim.opt.showmatch = true
 vim.opt.relativenumber = true
+vim.opt.number = true
 vim.opt.completeopt = { 'menu', 'menuone', 'noselect' }
 vim.opt.writebackup = false
 vim.opt.swapfile = false

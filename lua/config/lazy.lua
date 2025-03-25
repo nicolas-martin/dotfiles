@@ -24,6 +24,7 @@ require("lazy").setup({
 			end)
 		end,
 	},
+	--@type require('lazy').spec
 	spec = {
 		-- add LazyVim and import its plugins
 		-- They're so good, should find the best one/configs
@@ -32,7 +33,7 @@ require("lazy").setup({
 		-- import/override with your plugins
 		{ import = "plugins" },
 	},
-	change_detection = { notify = true },
+	change_detection = { enabled = false },
 	install = { colorscheme = { "habamax" } },
 	-- colorscheme = function()
 	-- 	require("tokyonight").load()

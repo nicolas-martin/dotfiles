@@ -22,24 +22,6 @@ return {
 	-- LSP configurations
 	{ "neovim/nvim-lspconfig" },
 
-	-- LSP signature hint when you type
-	{
-		"ray-x/lsp_signature.nvim",
-		config = function()
-			require("lsp_signature").setup()
-		end,
-	},
-
 	-- VSCode-like pictograms for neovim lsp completion items
 	{ "onsails/lspkind.nvim" },
-
-	-- Fuzzy finder
-	{
-		"nvim-telescope/telescope.nvim",
-		dependencies = { "nvim-lua/plenary.nvim" },
-		cmd = "Telescope",
-		config = function()
-			require("telescope").setup()
-		end,
-	},
 }

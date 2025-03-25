@@ -72,4 +72,7 @@ map("v", ">", ">gv", { desc = "better indenting? >gv" })
 map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
 
 -- quit
--- map("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit All" })
+map("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit All" })
+
+map("i", "<C-n>", "<nop>", { desc = "disable the built in cmp menu thing" })
+map("i", "<C-p>", "<nop>", { desc = "disable the built in cmp menu thing" })
