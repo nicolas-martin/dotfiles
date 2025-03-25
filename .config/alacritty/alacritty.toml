@@ -25,19 +25,23 @@ hide_when_typing = false
 save_to_clipboard = true
 
 [terminal.shell]
-args = ["-l", "-c", "tmux"]
+# args = ["-l", "-c", "tmux"]
 # When opening a new alacritty it connects to any existing
 # tmux instance... sometimes I don't want that...
-# args = [
-# 	"--login",
-# 	"-c",
-# 	"/opt/homebrew/bin/tmux attach || //opt/homebrew/bin/tmux",
-# ]
+args = [
+	"--login",
+	"-c",
+	"/opt/homebrew/bin/tmux attach || //opt/homebrew/bin/tmux",
+]
 program = "/bin/zsh"
 
 [window]
 decorations = "buttonless"
 opacity = 1.0
+
+[window.padding]
+x = 10
+y = 10
 
 
 # Define a hint for URLs (including vscode://).

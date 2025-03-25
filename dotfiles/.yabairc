@@ -1,172 +1,43 @@
 #!/usr/bin/env sh
+# dude whatever.. default
+    # window_animation_easing      ease_out_circ  \
+yabai -m config                                 \
+    external_bar                 off:40:0       \
+    window_zoom_persist          off             \
+    mouse_follows_focus          off            \
+    focus_follows_mouse          off            \
+    auto_balance                 off            \
+    menubar_opacity              1.0            \
+    display_arrangement_order    default        \
+    window_origin_display        default        \
+    window_placement             second_child   \
+    window_insertion_point       focused        \
+    window_shadow                float          \
+    window_animation_duration    1.5            \
+    window_animation_easing      ease_out_circ  \
+    window_opacity_duration      0.0            \
+    active_window_opacity        1.0            \
+    normal_window_opacity        0.8            \
+    window_opacity               off            \
+    insert_feedback_color        0xffd75f5f     \
+    split_ratio                  0.50           \
+    split_type                   auto           \
+    top_padding                  12             \
+    bottom_padding               12             \
+    left_padding                 12             \
+    right_padding                12             \
+    window_gap                   12             \
+    layout                       bsp            \
+    mouse_modifier               fn             \
+    mouse_action1                move           \
+    mouse_action2                resize         \
+    mouse_drop_action            swap
 
-##################################
-# 1. Scripting Additions
-##################################
-# Load scripting additions to enable advanced window management features.
-# Ensure 'sudo' is configured to run this command without a password prompt.
-# Refer to: https://github.com/koekeishiya/yabai/wiki/Installing-yabai-(latest-release)#configure-scripting-addition
-yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
-sudo yabai --load-sa
+# Exclude problematic apps from being managed:
+yabai -m rule --add app="^(LuLu|Calculator|Software Update|Dictionary|VLC|System Preferences|System Settings|zoom.us|Photo Booth|Archive Utility|Python|LibreOffice|App Store|Steam|Alfred|Activity Monitor)$" manage=off
+yabai -m rule --add label="Finder" app="^Finder$" title="(Co(py|nnect)|Move|Info|Pref)" manage=off
+yabai -m rule --add label="Safari" app="^Safari$" title="^(General|(Tab|Password|Website|Extension)s|AutoFill|Se(arch|curity)|Privacy|Advance)$" manage=off
+yabai -m rule --add label="About This Mac" app="System Information" title="About This Mac" manage=off
+yabai -m rule --add label="Select file to save to" app="^Inkscape$" title="Select file to save to" manage=off
 
-##################################
-# 2. Layout and Window Behavior
-##################################
-# Set the default layout for new spaces.
-# Options:
-#   bsp   - Binary Space Partitioning (automatic tiling)
-#   stack - Stack windows in a single column
-#   float - Windows are not managed by yabai
-yabai -m config layout bsp
-
-# Define how new windows are added to the layout.
-# Options:
-#   first_child  - New window appears to the left/top of the focused window
-#   second_child - New window appears to the right/bottom of the focused window
-yabai -m config window_placement second_child
-
-# Set the default split ratio for new windows.
-# Values range from 0.1 to 0.9, representing the proportion of space allocated.
-yabai -m config split_ratio 0.50
-
-# Define the split type for new windows.
-# Options:
-#   vertical   - Split windows vertically
-#   horizontal - Split windows horizontally
-#   auto       - Automatically determine split direction
-yabai -m config split_type auto
-
-# Enable or disable automatic balancing of window sizes after closing a window.
-# Options:
-#   on  - Enable auto-balancing
-#   off - Disable auto-balancing
-yabai -m config auto_balance off
-
-##################################
-# 3. Padding and Gaps
-##################################
-# Set padding around the screen edges and gaps between windows (in pixels).
-yabai -m config top_padding    12
-yabai -m config bottom_padding 12
-yabai -m config left_padding   12
-yabai -m config right_padding  12
-yabai -m config window_gap     12
-
-# If using an external bar (e.g., simple-bar), adjust padding accordingly.
-# Example for a 28px bar at the top:
-# yabai -m config external_bar all:28:0
-
-##################################
-# 4. Mouse Behavior
-##################################
-# Enable or disable focus-follows-mouse.
-# Options:
-#   off       - Disable focus-follows-mouse
-#   autoraise - Focus follows mouse with autoraise
-#   autofocus - Focus follows mouse without autoraise
-yabai -m config focus_follows_mouse off
-
-# Enable or disable mouse-follows-focus.
-# When enabled, the mouse cursor moves to the focused window.
-yabai -m config mouse_follows_focus off
-
-# Set a modifier key for mouse actions (e.g., move, resize).
-# Common choices: fn, alt, cmd, ctrl, shift
-yabai -m config mouse_modifier fn
-
-# Define mouse actions when combined with the mouse_modifier.
-# mouse_action1: Typically left-click + modifier
-# mouse_action2: Typically right-click + modifier
-yabai -m config mouse_action1 move
-yabai -m config mouse_action2 resize
-
-# Define the action when a window is dropped onto another.
-# Options:
-#   swap - Swap the positions of the two windows
-#   stack - Stack the windows together
-yabai -m config mouse_drop_action swap
-
-##################################
-# 5. Window Appearance
-##################################
-# Enable or disable window shadows.
-yabai -m config window_shadow on
-
-# Enable or disable window opacity adjustments.
-yabai -m config window_opacity off
-
-# Set the opacity levels for active and normal (inactive) windows.
-# Values range from 0.0 (fully transparent) to 1.0 (fully opaque).
-yabai -m config active_window_opacity 1.0
-yabai -m config normal_window_opacity 0.90
-
-# Set the duration for window opacity transitions (in seconds).
-yabai -m config window_opacity_duration 0.0
-
-# Set the duration for window animations (in seconds).
-yabai -m config window_animation_duration 0.0
-
-# Define the easing function for window animations.
-# Options include: ease_in, ease_out, ease_in_out, linear, etc.
-yabai -m config window_animation_easing ease_out_circ
-
-# Define the color for the insertion feedback indicator.
-# Format: 0xAARRGGBB (Alpha, Red, Green, Blue)
-yabai -m config insert_feedback_color 0xffd75f5f
-
-##################################
-# 6. Application-Specific Rules
-##################################
-# Prevent yabai from managing certain applications.
-# Add rules for applications that should float or be excluded from tiling.
-# Example:
-# yabai -m rule --add app="^System Settings$" manage=off
-# yabai -m rule --add app="^Calculator$" manage=off
-# yabai -m rule --add app="^Karabiner-Elements$" manage=off
-
-# Apply rules to existing windows upon yabai restart.
-# This ensures that rules are reapplied to windows already open.
-yabai -m rule --apply
-
-##################################
-# 7. Miscellaneous
-##################################
-# Set the display arrangement order.
-# Options:
-#   default - Use macOS display arrangement
-#   topmost - Arrange displays from top to bottom
-#   leftmost - Arrange displays from left to right
-yabai -m config display_arrangement_order default
-
-# Set the behavior for window origin when moving between displays.
-# Options:
-#   default - Retain window position relative to the display
-#   pointer - Move window to the position of the mouse pointer
-yabai -m config window_origin_display default
-
-# Set the insertion point for new windows.
-# Options:
-#   automatic - Determine insertion point automatically
-#   focused   - Insert new window next to the focused window
-yabai -m config window_insertion_point focused
-
-# Enable or disable persistent zoom for windows.
-# When enabled, zoomed windows retain their size after focus changes.
-# Options:
-#   on  - Enable persistent zoom
-#   off - Disable persistent zoom
-yabai -m config window_zoom_persist on
-
-# Output a confirmation message upon loading the configuration.
-echo "yabai configuration loaded..."
-
-
-# consider this...
-# Cycle through all floating windows
-# shift + alt - u : \
-#   ids=($(yabai -m query --windows --space | jq -r 'map(select(."is-floating")) | .[].id')); \
-#   for id in "${ids[@]}"; do yabai -m window --focus "$id"; sleep 0.2; done
-
-
-# use `borders` 
-# borders active_color=0x8fce00 inactive_color=0xF44336 width=9.0 &
+echo "yabai configuration loaded.."
