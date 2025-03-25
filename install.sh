@@ -86,28 +86,23 @@ rm -rf "${BIN_DIR}/"*
 blue    🧹 Removing bin ${BIN_DIR}
 mkdir -p "${BIN_DIR}"
 
-# General dotfiles
-blue "\n📄 Installing dotfiles → ${HOME}"
-install .gitconfig "${HOME_DIR}/.gitconfig"
-install .zshrc "${HOME_DIR}/.zshrc"
-install .tmux.conf "${HOME_DIR}/.tmux.conf"
-install .yabairc "${HOME_DIR}/.yabairc"
-install .skhdrc "${HOME_DIR}/.skhdrc"
+blue "\n📄 Installing dotfiles → ${HOME_DIR}"
+find dotfiles -type f | while read -r file; do
+	install ${file} "${HOME_DIR}/${file#dotfiles/}"
+done
 
-# Setting up ~/.config
 blue "\n📄 Installing .config → ${CONFIG_DIR}"
 find .config -type f | while read -r file; do
 	install ${file} "${CONFIG_DIR}/${file#.config/}"
 done
 
-# Neovim configuration
-blue "\n📝 Setting up Neovim → ${NVIM_DIR}"
+blue "\n📄  Installing nvim → ${NVIM_DIR}"
 find nvim -name "*.lua" -type f | while read -r file; do
 	install "$file" "${NVIM_DIR}/${file#nvim}"
 done
 
 # Install bin files to ~/.local/bin
-blue "\n🔨 Installing binaries → ${BIN_DIR}"
+blue "\n📄 Installing bin → ${BIN_DIR}"
 find bin -type f | while read -r file; do
 	install "$file" "${BIN_DIR}/$(basename "$file")"
 done
