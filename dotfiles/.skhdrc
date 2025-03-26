@@ -99,8 +99,8 @@ cmd + alt + ctrl - f : open -na "Firefox"
 ##################################
 # Restart yabai and skhd services
 # Useful for applying new configurations
-cmd + alt + ctrl - y : brew services restart yabai
-cmd + alt + ctrl - k : brew services restart skhd
+cmd + alt + ctrl - y : yabai --restart-service
+cmd + alt + ctrl - k : skhd --restart-service
 
 # Lock the screen
 # Alternative: Use 'pmset displaysleepnow' to turn off displays
