@@ -69,6 +69,7 @@ shift + cmd - b : yabai -m space --balance
 ##################################
 # Move window to specific space
 # Adjust space numbers as per your setup
+# TODO: CTRL + ALT + CMD - arrow
 shift + alt - 1 : yabai -m window --space 1
 shift + alt - 2 : yabai -m window --space 2
 shift + alt - 3 : yabai -m window --space 3
