@@ -46,6 +46,7 @@ source "$ITEM_DIR/spotify.sh"
 
 source "$ITEM_DIR/left/spaces.sh"
 source "$ITEM_DIR/left/front_app.sh"
+source "$ITEM_DIR/left/yabai.sh"
 ##### Adding Right Items #####
 # In the same way as the left items we can add items to the right side.
 # Additional position (e.g. center) are available, see:

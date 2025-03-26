@@ -164,3 +164,10 @@ shift + ctrl - d : yabai -m window --move rel:20:0
 #     "terminal" ~
 #     "finder" : false
 # ]
+#
+# # Arrow Keys
+# TODO: Neat
+# fn - h : skhd -k "left"
+# fn - j : skhd -k "down"
+# fn - k : skhd -k "up"
+# fn - l : skhd -k "right"
