@@ -92,7 +92,6 @@ cmd + alt + ctrl - t : open -na "Terminal"
 cmd + alt + ctrl - c : open -na "Google Chrome"
 cmd + alt + ctrl - v : open -na "Visual Studio Code"
 cmd + alt + ctrl - s : open -na "Slack"
-cmd + alt + ctrl - f : open -na "Firefox"
 
 ##################################
 # 6. System Controls
@@ -108,6 +107,7 @@ cmd + alt + ctrl - l : /System/Library/CoreServices/Menu\ Extras/User.menu/Conte
 
 # Toggle Do Not Disturb
 # Requires 'do-not-disturb' CLI tool: https://github.com/sindresorhus/do-not-disturb-cli
+# TODO: Install
 cmd + alt + ctrl - d : do-not-disturb toggle
 
 ##################################
@@ -115,7 +115,8 @@ cmd + alt + ctrl - d : do-not-disturb toggle
 ##################################
 # Reload skhd configuration
 # Useful after making changes to this file
-cmd + alt + ctrl - r : skhd --reload
+# TODO: Does skhd support --reload?
+# cmd + alt + ctrl - r : skhd --reload
 
 # Show desktop (minimize all windows)
 # Alternative: Use 'yabai -m window --minimize' to minimize the focused window
@@ -123,6 +124,7 @@ cmd + alt + ctrl - m : osascript -e 'tell application "System Events" to keystro
 
 # Toggle Dark Mode
 # Requires 'dark-mode' CLI tool: https://github.com/sindresorhus/dark-mode
+# TODO: Install
 cmd + alt + ctrl - n : dark-mode toggle
 
 # Layout switching
@@ -142,16 +144,18 @@ shift + ctrl - s : yabai -m window --move rel:0:20
 shift + ctrl - d : yabai -m window --move rel:20:0
 
 # Create a new space and move current window
-# What does it do?
+# TODO: What does it do?
 # shift + alt - n : yabai -m space --create && \
 #   index="$(yabai -m query --spaces --display | jq 'map(select(."is-native-fullscreen" == false))[-1].index')" && \
 #   yabai -m window --space "${index}" && \
 #   yabai -m space --focus "${index}"
 
 # cycle focus window
+# TODO: Get the code for `
 # cmd + ` : yabai -m window --focus next || yabai -m window --focus first
 # cmd + shift - ` : yabai -m window --focus prev || yabai -m window --focus last
 
+# One command that executes differently depending on the app
 # cmd - i [
 #     "Alacritty" : echo "hello alacritty"
 #     * : echo "hello everyone"
