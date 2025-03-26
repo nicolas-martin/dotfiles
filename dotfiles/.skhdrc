@@ -6,10 +6,10 @@
 # Move focus between windows in the current space
 # Alternative: Use 'cmd' or 'ctrl' instead of 'alt' if preferred
 #DIR_SEL     := north | east | south | west
-alt - h : yabai -m window --focus west
-alt - j : yabai -m window --focus south
-alt - k : yabai -m window --focus north
-alt - l : yabai -m window --focus east
+cmd - h : yabai -m window --focus west
+cmd - j : yabai -m window --focus south
+cmd - k : yabai -m window --focus north
+cmd - l : yabai -m window --focus east
 
 # Move focus between displays
 # DISPLAY_SEL := prev | next | first | last | recent | mouse | DIR_SEL | <arrangement index (1-based)> | LABEL
@@ -22,17 +22,17 @@ alt - p : yabai -m display --focus next
 ##################################
 # Swap windows
 # Alternative: Use 'cmd + shift' or 'ctrl + shift' as modifiers
-shift + alt - h : yabai -m window --swap west
-shift + alt - j : yabai -m window --swap south
-shift + alt - k : yabai -m window --swap north
-shift + alt - l : yabai -m window --swap east
+cmd + shift - h : yabai -m window --swap west
+cmd + shift - j : yabai -m window --swap south
+cmd + shift - k : yabai -m window --swap north
+cmd + shift - l : yabai -m window --swap east
 
 # Move windows
 # Alternative: Use 'cmd + ctrl' or 'shift + ctrl' as modifiers
-shift + alt + ctrl - h : yabai -m window --warp west
-shift + alt + ctrl - j : yabai -m window --warp south
-shift + alt + ctrl - k : yabai -m window --warp north
-shift + alt + ctrl - l : yabai -m window --warp east
+shift + cmd + ctrl - h : yabai -m window --warp west
+shift + cmd + ctrl - j : yabai -m window --warp south
+shift + cmd + ctrl - k : yabai -m window --warp north
+shift + cmd + ctrl - l : yabai -m window --warp east
 
 # Resize windows
 # Alternative: Adjust resize increments as needed
