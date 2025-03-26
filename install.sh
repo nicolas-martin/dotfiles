@@ -50,6 +50,7 @@ HOME_DIR="${XDG_CONFIG_HOME:-/Users/nma}"
 CONFIG_DIR="${XDG_CONFIG_HOME:-/Users/nma/.config}"
 LOCAL_DIR="${XDG_DATA_HOME:-/Users/nma/.local}"
 NVIM_DIR="${CONFIG_DIR}/nvim"
+SKETCHY_DIR="${CONFIG_DIR}/sketchybar"
 BIN_DIR="${LOCAL_DIR}/bin"
 
 yellow $'🔧 Starting installation'
@@ -58,6 +59,10 @@ blue $'\n🧹 Cleaning up'
 rm -rf "${NVIM_DIR}"*
 mkdir -p "${NVIM_DIR}"
 blue "• Reset nvim dir"
+
+rm -rf "${SKETCHY_DIR}"
+mkdir -p "${SKETCHY_DIR}"
+blue "• Reset sketchybar dir"
 
 rm -rf "${BIN_DIR}/"*
 mkdir -p "${BIN_DIR}"
