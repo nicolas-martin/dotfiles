@@ -7,6 +7,20 @@ return {
 			{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
 		},
 		config = function()
+			-- signs = {
+			-- 	text = {
+			-- 		[vim.diagnostic.severity.ERROR] = ' ',
+			-- 		[vim.diagnostic.severity.WARN] = ' ',
+			-- 		[vim.diagnostic.severity.INFO] = ' ',
+			-- 		[vim.diagnostic.severity.HINT] = '',
+			-- 	},
+			-- 	texthl = {
+			-- 		[vim.diagnostic.severity.ERROR] = "DiagnosticError",
+			-- 		[vim.diagnostic.severity.WARN] = "DiagnosticWarn",
+			-- 		[vim.diagnostic.severity.INFO] = "DiagnosticInfo",
+			-- 		[vim.diagnostic.severity.HINT] = "DiagnosticHint",
+			-- 	},
+			-- },
 			vim.fn.sign_define("DiagnosticSignError", { text = "", texthl = "DiagnosticError" })
 			vim.fn.sign_define("DiagnosticSignWarn", { text = "", texthl = "DiagnosticWarn" })
 			vim.fn.sign_define("DiagnosticSignInfo", { text = "", texthl = "DiagnosticInfo" })

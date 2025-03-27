@@ -3,17 +3,23 @@ return {
 		"neovim/nvim-lspconfig",
 		event = { "BufReadPre", "BufNewFile" },
 		dependencies = {
-			"hrsh7th/cmp-nvim-lsp",
+			-- "hrsh7th/cmp-nvim-lsp",
+			"saghen/blink.cmp",
 			"ray-x/lsp_signature.nvim",
 			"onsails/lspkind.nvim",
 		},
 		config = function()
-			local capabilities = require('cmp_nvim_lsp').default_capabilities()
+			-- test idk what it does
+			local capabilities = {
+				textDocument = {
+					foldingRange = {
+						dynamicRegistration = false,
+						lineFoldingOnly = true
+					}
+				}
+			}
+			capabilities = require('blink.cmp').get_lsp_capabilities(capabilities)
 
-			-- Configure default hover handler
-			vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
-				vim.lsp.handlers.hover, {}
-			)
 
 			local on_attach = function(client, bufnr)
 				local buf_opts = { noremap = true, silent = true, buffer = bufnr }

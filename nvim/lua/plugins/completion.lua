@@ -116,7 +116,7 @@ local function config()
 			priority_weight = 2,
 			comparators = {
 				-- test
-				require("copilot_cmp.comparators").prioritize,
+				-- require("copilot_cmp.comparators").prioritize,
 				-- test
 				cmp.config.compare.offset,
 				cmp.config.compare.exact,
@@ -132,6 +132,7 @@ local function config()
 end
 return {
 	{
+		enabled = false,
 		"hrsh7th/nvim-cmp",
 		-- config = config_debug,
 		dependencies = {
@@ -150,6 +151,7 @@ return {
 
 	},
 	{
+		enabled = false,
 		"zbirenbaum/copilot-cmp",
 		dependencies = {
 			"zbirenbaum/copilot.lua",
@@ -172,7 +174,8 @@ return {
 		end,
 	}, {
 	"L3MON4D3/LuaSnip",
-	run = "make install_jsregexp",
+	build = "make install_jsregexp",
+	-- - use vim.diagnostic.config() instead.
 	-- TODO: Do I need this?
 	dependencies = {
 		'nvim-treesitter/nvim-treesitter',

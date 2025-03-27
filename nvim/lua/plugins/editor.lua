@@ -5,6 +5,7 @@ return {
 	{ "tpope/vim-commentary" },
 	-- Git integration
 	{
+		enabled = false,
 		"tpope/vim-fugitive",
 		cmd = { "Git", "Gstatus", "Gblame", "Gpush", "Gpull" }
 	}, -- Status line
