@@ -35,3 +35,23 @@ vim.g.go_hover_enabled = 0           -- Disable vim-go hover
 vim.g.go_implements_enabled = 0      -- Disable vim-go implements
 vim.g.go_rename_command = 0          -- Disable vim-go rename
 vim.g.go_textobj_enabled = 0         -- Disable vim-go text objects
+
+vim.diagnostic.config({
+	virtual_text = true,
+	-- virtual_lines = true,
+	signs = {
+		-- virtual_text = true,
+		text = {
+			[vim.diagnostic.severity.ERROR] = ' ',
+			[vim.diagnostic.severity.WARN] = ' ',
+			[vim.diagnostic.severity.INFO] = ' ',
+			[vim.diagnostic.severity.HINT] = '',
+		},
+		texthl = {
+			[vim.diagnostic.severity.ERROR] = "DiagnosticError",
+			[vim.diagnostic.severity.WARN] = "DiagnosticWarn",
+			[vim.diagnostic.severity.INFO] = "DiagnosticInfo",
+			[vim.diagnostic.severity.HINT] = "DiagnosticHint",
+		},
+	},
+})

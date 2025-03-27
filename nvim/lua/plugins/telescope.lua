@@ -7,37 +7,19 @@ return {
 			{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
 		},
 		config = function()
-			-- signs = {
-			-- 	text = {
-			-- 		[vim.diagnostic.severity.ERROR] = ' ',
-			-- 		[vim.diagnostic.severity.WARN] = ' ',
-			-- 		[vim.diagnostic.severity.INFO] = ' ',
-			-- 		[vim.diagnostic.severity.HINT] = '',
-			-- 	},
-			-- 	texthl = {
-			-- 		[vim.diagnostic.severity.ERROR] = "DiagnosticError",
-			-- 		[vim.diagnostic.severity.WARN] = "DiagnosticWarn",
-			-- 		[vim.diagnostic.severity.INFO] = "DiagnosticInfo",
-			-- 		[vim.diagnostic.severity.HINT] = "DiagnosticHint",
-			-- 	},
-			-- },
-			vim.fn.sign_define("DiagnosticSignError", { text = "", texthl = "DiagnosticError" })
-			vim.fn.sign_define("DiagnosticSignWarn", { text = "", texthl = "DiagnosticWarn" })
-			vim.fn.sign_define("DiagnosticSignInfo", { text = "", texthl = "DiagnosticInfo" })
-			vim.fn.sign_define("DiagnosticSignHint", { text = "", texthl = "DiagnosticHint" })
 			local actions = require('telescope.actions')
 
 			-- Helper function for right-aligned display
-			local format_with_right_align = function(icon_str, main_str, type_str)
+			local format_with_right_align = function(icon, main_str, type_str)
 				local win_width = vim.api.nvim_win_get_width(0)
 
 				-- handle icon: string or { text, hl_group }
 				local icon_display, icon_width
-				if type(icon_str) == "table" then
-					icon_display = { string.format("%s ", icon_str[1]), icon_str[2] }
-					icon_width = vim.fn.strwidth(icon_str[1]) + 1
+				if type(icon) == "table" then
+					icon_display = { string.format("%s ", icon[1]), icon[2] }
+					icon_width = vim.fn.strwidth(icon[1]) + 1
 				else
-					icon_display = string.format("%s ", icon_str)
+					icon_display = string.format("%s ", icon)
 					icon_width = vim.fn.strwidth(icon_display)
 				end
 
@@ -69,20 +51,6 @@ return {
 					{ type_display, "TelescopeResultsComment" },
 				}
 			end
-
-			local function get_sign_icon(name)
-				-- { name = "DiagnosticSignError", text = "", texthl = "DiagnosticError" }
-				local sign = vim.fn.sign_getdefined(name)[1]
-				return sign and sign.text or "?"
-			end
-
-			-- Define diagnostic icons
-			local diagnostic_icons = {
-				error = get_sign_icon("DiagnosticSignError"),
-				warn  = get_sign_icon("DiagnosticSignWarn"),
-				info  = get_sign_icon("DiagnosticSignInfo"),
-				hint  = get_sign_icon("DiagnosticSignHint"),
-			}
 
 			require('telescope').setup({
 				defaults = {
@@ -252,18 +220,22 @@ return {
 						},
 						wrap_results = true,
 						entry_maker = function(entry)
+							print(vim.inspect(entry))
 							local make_entry = require("telescope.make_entry")
 							local default_maker = make_entry.gen_from_diagnostics()
 							local entry_tbl = default_maker(entry)
 
 							if entry_tbl then
 								entry_tbl.display = function()
-									local severity = string.lower(entry.type or "unknown")
-									local icon = diagnostic_icons[severity] or "?"
+									local entry_type = entry.type
+									local int_sev = vim.diagnostic.severity[entry_type]
+									local icon = vim.diagnostic.config().signs.text[int_sev]
+									local hl_group = vim.diagnostic.config().signs.texthl[int_sev]
 									local filename = vim.fn.fnamemodify(entry.filename or "", ":t")
 									local message = entry.message or entry.text or ""
 
-									return format_with_right_align(icon, message, filename)
+									-- return format_with_right_align({ icon, hl_group }, entry.text, kind)
+									return format_with_right_align({ icon, hl_group }, message, filename)
 								end
 							end
 

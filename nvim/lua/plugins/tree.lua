@@ -7,7 +7,6 @@ return {
 			"nvim-tree/nvim-web-devicons", -- Optional for file icons
 		},
 		config = function()
-			print("in config")
 			local tree_actions = {
 				{ name = "Create node",       handler = require("nvim-tree.api").fs.create, },
 				{ name = "Remove node",       handler = require("nvim-tree.api").fs.remove, },
