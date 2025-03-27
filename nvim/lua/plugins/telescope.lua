@@ -149,7 +149,6 @@ return {
 
 							return function(entry)
 								if not allowed_kinds[entry.kind] then
-									print("?Skipping lsp ws symbols", entry.kind)
 									return nil
 								end
 
@@ -188,7 +187,6 @@ return {
 								["Variable"] = true,
 							}
 							if not allowed_kinds[entry.kind] then
-								print("Skipping lsp doc symbols", entry.kind)
 								return nil
 							end
 							local make_entry = require("telescope.make_entry")
@@ -220,7 +218,6 @@ return {
 						},
 						wrap_results = true,
 						entry_maker = function(entry)
-							print(vim.inspect(entry))
 							local make_entry = require("telescope.make_entry")
 							local default_maker = make_entry.gen_from_diagnostics()
 							local entry_tbl = default_maker(entry)
