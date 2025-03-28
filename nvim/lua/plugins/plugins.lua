@@ -15,8 +15,17 @@ return {
 		event = "VeryLazy",
 		opts = {
 			options = {
+				-- theme = "catppuccin"
 				theme = "auto"
-			}
+			},
+			sections = {
+				lualine_a = { "mode" },
+				lualine_b = { "diff", "diagnostics" },
+				lualine_c = { "filename" },
+				lualine_x = { "filetype" },
+				lualine_y = { "progress" },
+				lualine_z = { "location" }
+			},
 		}
 	},
 	{
@@ -33,6 +42,11 @@ return {
 		name = "catppuccin",
 		priority = 1000,
 		config = {
+			flavour = "auto",
+			color_overrides = {
+				macchiato = {
+				},
+			},
 			integrations = {
 				nvimtree = true,
 				treesitter = true,
