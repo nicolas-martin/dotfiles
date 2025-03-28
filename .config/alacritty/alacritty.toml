@@ -1,5 +1,13 @@
+[general]
+import = [
+	# "~/dotfiles/.config/alacritty/themes/catppuccin-frappe.toml",
+	# "~/.config/alacritty/themes/catppuccin-frappe.toml",
+	"~/.config/alacritty/themes/catppuccin-macchiato.toml",
+	# "~/.config/alacritty/themes/catppuccin-mocha.toml",
+]
+
 [env]
-TERM = "alacritty"
+TERM = "xterm-256color"
 
 [scrolling]
 # Maximum number of lines in the scrollback buffer.
@@ -55,15 +63,15 @@ mouse.enabled = true
 binding = { key = "O", mods = "Control|Shift" }
 regex = "(ipfs:|ipns:|magnet:|mailto:|gemini://|gopher://|https://|http://|news:|file:|git://|ssh:|ftp://|vscode://)[^\u0000-\u001F\u007F-\u009F<>\"\\s{-}\\^⟨⟩`\\\\]+"
 
-# wip
-[colors.cursor]
-cursor = "CellForeground"
-text = "CellBackground"
+# # wip
+# [colors.cursor]
+# cursor = "CellForeground"
+# text = "CellBackground"
 
-[colors.primary]
-background = "#1d1f21"
-foreground = "#c5c8c6"
+# [colors.primary]
+# background = "#1d1f21"
+# foreground = "#c5c8c6"
 
-[colors.vi_mode_cursor]
-cursor = "CellForeground"
-text = "CellBackground"
+# [colors.vi_mode_cursor]
+# cursor = "CellForeground"
+# text = "CellBackground"
