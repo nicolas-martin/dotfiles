@@ -9,16 +9,8 @@ return {
 			"onsails/lspkind.nvim",
 		},
 		config = function()
-			-- test idk what it does
-			local capabilities = {
-				textDocument = {
-					foldingRange = {
-						dynamicRegistration = false,
-						lineFoldingOnly = true
-					}
-				}
-			}
-			capabilities = require('blink.cmp').get_lsp_capabilities(capabilities)
+			local capabilities = vim.lsp.protocol.make_client_capabilities()
+			-- local capabilities = require('blink.cmp').get_lsp_capabilities()
 
 
 			local on_attach = function(client, bufnr)

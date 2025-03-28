@@ -1,4 +1,3 @@
--- lua/plugins/treesitter.lua
 return {
 	{
 		"nvim-treesitter/nvim-treesitter",
@@ -10,6 +9,8 @@ return {
 		opts = {
 			highlight = {
 				enable = true,
+				-- TODO: For the theme?
+				additional_vim_regex_highlighting = false,
 			},
 			indent = {
 				enable = true,
