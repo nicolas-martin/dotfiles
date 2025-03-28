@@ -29,24 +29,11 @@ return {
 		}
 	},
 	{
-		"EdenEast/nightfox.nvim",
-		enabled = false,
-		lazy = false,
-		priority = 1000,
-		config = function()
-			vim.cmd([[colorscheme nightfox]])
-		end
-	},
-	{
 		"catppuccin/nvim",
 		name = "catppuccin",
 		priority = 1000,
 		config = {
 			flavour = "auto",
-			color_overrides = {
-				macchiato = {
-				},
-			},
 			integrations = {
 				nvimtree = true,
 				treesitter = true,

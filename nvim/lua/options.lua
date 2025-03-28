@@ -39,7 +39,7 @@ vim.g.go_textobj_enabled = 0         -- Disable vim-go text objects
 
 -- colorscheme catppuccin " catppuccin-latte, catppuccin-frappe, catppuccin-macchiato, catppuccin-mocha
 vim.o.termguicolors = true
-vim.cmd.colorscheme "catppuccin"
+vim.cmd.colorscheme "catppuccin-macchiato"
 
 vim.diagnostic.config({
 	virtual_text = true,
