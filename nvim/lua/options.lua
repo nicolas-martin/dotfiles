@@ -38,7 +38,9 @@ vim.g.go_rename_command = 0          -- Disable vim-go rename
 vim.g.go_textobj_enabled = 0         -- Disable vim-go text objects
 
 -- colorscheme catppuccin " catppuccin-latte, catppuccin-frappe, catppuccin-macchiato, catppuccin-mocha
+vim.o.termguicolors = true
 vim.cmd.colorscheme "catppuccin"
+
 vim.diagnostic.config({
 	virtual_text = true,
 	-- virtual_lines = true,
