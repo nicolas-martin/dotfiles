@@ -23,9 +23,34 @@ return {
 				},
 				renderer = {
 					group_empty = true,
+					indent_markers = {
+						enable = true,
+					},
+					icons = {
+						git_placement = "after",
+						modified_placement = "after",
+					},
 				},
 				filters = {
 					dotfiles = true,
+				},
+				notify = {
+					threshold = vim.log.levels.WARN,
+				},
+				help = {
+					sort_by = "desc",
+				},
+				ui = {
+					confirm = {
+						default_yes = true,
+					},
+				},
+				diagnostics = {
+					enable = true,
+					show_on_dirs = true,
+					severity = {
+						min = vim.diagnostic.severity.ERROR,
+					},
 				},
 			})
 		end,
