@@ -53,9 +53,9 @@ sketchybar --add item date right \
 
 source "$HOME/.config/sketchybar/colors.sh" # Loads all defined colors 
 source "$HOME/.config/sketchybar/icons.sh" # Loads all defined icons
-source "$ITEM_DIR/right/wifi.sh"
-source "$ITEM_DIR/right/cpu_temp.sh"
-source "$ITEM_DIR/right/weather.sh"
+# source "$ITEM_DIR/right/wifi.sh"
+# source "$ITEM_DIR/right/cpu_temp.sh"
+# source "$ITEM_DIR/right/weather.sh"
 
 source "$ITEM_DIR/spotify.sh"
 
