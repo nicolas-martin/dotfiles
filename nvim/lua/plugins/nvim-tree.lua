@@ -12,8 +12,12 @@ return {
 				local api = require('nvim-tree.api')
 				api.config.mappings.default_on_attach(bufnr)
 				-- vim.keymap.set("n", "<C-Space>", m.tree_actions_menu, { buffer = bufnr, noremap = true, silent = true })
+				-- vim.keymap.set('n', '<C-n>', api.tree.toggle, { desc = "Toggle NvimTree" })
+				vim.keymap.set('n', '<C-n>', ':NvimTreeToggle<CR>', { desc = "Toggle NvimTree" })
+				vim.keymap.set('n', '<leader>l', ':NvimTreeFindFile<CR>', { desc = "Focus NvimTree" })
 			end
 			require("nvim-tree").setup({
+				-- NvimTree
 				on_attach = my_on_attach,
 				sort = {
 					sorter = "case_sensitive",
@@ -35,7 +39,7 @@ return {
 					dotfiles = true,
 				},
 				notify = {
-					threshold = vim.log.levels.WARN,
+					threshold = vim.log.levels.INFO,
 				},
 				help = {
 					sort_by = "desc",
