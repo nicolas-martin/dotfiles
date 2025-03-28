@@ -19,6 +19,7 @@ vim.g.loaded_vimballPlugin = 1
 vim.g.loaded_2html_plugin = 1
 vim.g.loaded_logiPat = 1
 vim.g.loaded_rrhelper = 1
+-- test
 
 -- avante
 -- views can only be fully collapsed with the global statusline

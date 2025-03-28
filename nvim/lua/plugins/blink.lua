@@ -45,10 +45,12 @@ return {
 				draw = {
 					-- use tree sitter to label
 					treesitter = { "lsp" },
+					-- TODO: label_description
+					-- i
 					columns = {
 						{ "kind_icon" },
 						{ "label" },
-						{ "kind",     "source_name" },
+						{ "source_name" },
 					},
 					components = {
 						kind_icon = {
@@ -74,11 +76,6 @@ return {
 			},
 		},
 
-		-- See :h blink-cmp-config-keymap for defining your own keymap
-		-- 'default' (recommended) for mappings similar to built-in completions (C-y to accept)
-		-- 'super-tab' for mappings similar to vscode (tab to accept)
-		-- 'enter' for enter to accept
-		-- 'none' for no mappings
 		--- @type blink.cmp.KeymapConfig
 		keymap = {
 			preset = 'super-tab',
@@ -96,7 +93,6 @@ return {
 		-- elsewhere in your config, without redefining it, due to `opts_extend`
 		--- @type blink.cmp.SourceConfigPartial
 		sources = {
-			--- @type table<string, blink.cmp.SourceProviderConfigPartial>		
 			providers = {
 				copilot = {
 					enabled = false,
@@ -104,7 +100,7 @@ return {
 					module = "blink-cmp-copilot",
 					score_offset = 100,
 					async = true,
-					transform_items = function(ctx, items)
+					transform_items = function(_, items)
 						for _, item in ipairs(items) do
 							item.kind_icon = ''
 							item.kind_name = 'Copilot'
@@ -119,9 +115,17 @@ return {
 					enabled = true,
 					fallbacks = { "lsp" },
 				},
+				lazydev = {
+					name = "LazyDev",
+					module = "lazydev.integrations.blink",
+					-- make lazydev completions top priority (see `:h blink.cmp`)
+					score_offset = 100,
+				},
 				buffer = { max_items = 5 },
 			},
-			default = { 'lsp', 'path', 'snippets', 'buffer', 'cmdline', 'lazydev', 'copilot' },
+
+			-- TODO: Renable copilot later.. it still fails even if I disable it
+			default = { 'lsp', 'path', 'snippets', 'buffer', 'cmdline', 'lazydev' },
 		},
 
 		--- @type blink.cmp.FuzzyConfigPartial

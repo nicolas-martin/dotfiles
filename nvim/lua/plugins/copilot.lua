@@ -1,7 +1,7 @@
 return {
 	{
-		enabled = false,
 		"zbirenbaum/copilot.lua",
+		enabled = false,
 		cmd = "Copilot",
 		event = "InsertEnter",
 
