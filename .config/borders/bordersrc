@@ -1,15 +1,14 @@
 #!/bin/bash
 
 # 0xAARRGGBB
+
 options=(
 	style=round
-	width=9.0
-	hidpi=on
-	active_color=0xaa34b334
-	inactive_color=0xaaed872d
-	# idk if i'm on master?
-	# if i see red, it's from here
-	# background_color=0xaaff0000
+	width=6.0
+	hidpi=off
+	active_color=0xffe2e2e3
+	inactive_color=0xff414550
 )
-#?
+
+borders "${options[@]}"
 borders "${options[@]}"

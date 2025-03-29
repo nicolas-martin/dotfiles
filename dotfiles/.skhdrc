@@ -7,7 +7,7 @@
 # Alternative: Use 'cmd' or 'ctrl' instead of 'alt' if preferred
 #DIR_SEL     := north | east | south | west
 cmd - h : yabai -m window --focus west
-cmd - j : yabai -m window --focus south
+cmd - j : yabai -m window --focus southaltalt
 cmd - k : yabai -m window --focus north
 cmd - l : yabai -m window --focus east
 
@@ -54,7 +54,7 @@ shift + alt - y : yabai -m space --mirror y-axis
 
 # Toggle window floating
 # Centers the window on the screen when floated
-shift + alt - t : yabai -m window --toggle float;\
+cmd + shift - t : yabai -m window --toggle float;\
                   yabai -m window --grid 4:4:1:1:2:2
 
 # Toggle window fullscreen zoom
@@ -63,6 +63,9 @@ cmd + alt - f : yabai -m window --toggle zoom-fullscreen
 
 # Balance window sizes within the space
 shift + cmd - b : yabai -m space --balance
+
+# toggle window split type
+alt - e : yabai -m window --togle split
 
 ##################################
 # 4. Space and Display Management
