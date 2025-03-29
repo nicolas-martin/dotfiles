@@ -9,6 +9,7 @@ sbar.begin_config()
 require("bar")
 require("default")
 require("items")
+sbar.set("global", { font = "SF Pro" })
 sbar.end_config()
 
 -- Run the event loop of the sketchybar module (without this there will be no
