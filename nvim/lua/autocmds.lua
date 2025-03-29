@@ -84,12 +84,28 @@ autocmd("BufWritePre", {
 
 -- close if nvim-tree is the last buffer
 vim.api.nvim_create_autocmd("BufEnter", {
-	group = vim.api.nvim_create_augroup("NvimTreeClose", { clear = true }),
-	pattern = "NvimTree_*",
+	group = vim.api.nvim_create_augroup("NeoTreeAutoClose", { clear = true }),
 	callback = function()
-		local layout = vim.api.nvim_call_function("winlayout", {})
-		if layout[1] == "leaf" and vim.api.nvim_buf_get_option(vim.api.nvim_win_get_buf(layout[2]), "filetype") == "NvimTree" and layout[3] == nil then
-			vim.cmd("confirm quit")
-		end
-	end
+		-- defer check to allow buffer switch to complete
+		vim.defer_fn(function()
+			local wins = vim.api.nvim_list_wins()
+			local real_win_count = 0
+			local neo_tree_win = nil
+
+			for _, win in ipairs(wins) do
+				local buf = vim.api.nvim_win_get_buf(win)
+				local ft = vim.api.nvim_buf_get_option(buf, "filetype")
+				if ft ~= "neo-tree" then
+					real_win_count = real_win_count + 1
+				else
+					neo_tree_win = win
+				end
+			end
+
+			-- if no real windows, only neo-tree left
+			if real_win_count == 0 and neo_tree_win then
+				vim.cmd("quit")
+			end
+		end, 50) -- 50ms delay gives time for file picker to switch buffer
+	end,
 })
