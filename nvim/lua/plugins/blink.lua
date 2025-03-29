@@ -5,7 +5,7 @@ return {
 		"rafamadriz/friendly-snippets",
 		"nvim-tree/nvim-web-devicons", -- Optional for file icons
 		"onsails/lspkind.nvim",  --optional icons
-		"giuxtaposition/blink-cmp-copilot",
+		-- "giuxtaposition/blink-cmp-copilot",
 		"L3MON4D3/LuaSnip",
 	},
 
@@ -94,20 +94,20 @@ return {
 		--- @type blink.cmp.SourceConfigPartial
 		sources = {
 			providers = {
-				copilot = {
-					enabled = false,
-					name = "copilot",
-					module = "blink-cmp-copilot",
-					score_offset = 100,
-					async = true,
-					transform_items = function(_, items)
-						for _, item in ipairs(items) do
-							item.kind_icon = ''
-							item.kind_name = 'Copilot'
-						end
-						return items
-					end
-				},
+				-- copilot = {
+				-- 	enabled = false,
+				-- 	name = "copilot",
+				-- 	module = "blink-cmp-copilot",
+				-- 	score_offset = 100,
+				-- 	async = true,
+				-- 	transform_items = function(_, items)
+				-- 		for _, item in ipairs(items) do
+				-- 			item.kind_icon = ''
+				-- 			item.kind_name = 'Copilot'
+				-- 		end
+				-- 		return items
+				-- 	end
+				-- },
 				-- I don't actually know what it does
 				markdown = {
 					name = "markdown",

@@ -4,8 +4,7 @@ return {
 		enabled = false,
 		cmd = "Copilot",
 		event = "InsertEnter",
-
-		config = {
+		opts = {
 			filetypes = {
 				yaml = true,
 			},

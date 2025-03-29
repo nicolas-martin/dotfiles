@@ -14,6 +14,9 @@ return {
 
 
 			local on_attach = function(client, bufnr)
+				-- TODO: DIABLE ALL SYNTAX FROM LSP.. LET TREESITTER HANDLE IT
+				client.server_capabilities.semanticTokensProvider = nil
+
 				local buf_opts = { noremap = true, silent = true, buffer = bufnr }
 				vim.keymap.set('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', buf_opts)
 				vim.keymap.set('n', 'K', vim.lsp.buf.hover, buf_opts)
