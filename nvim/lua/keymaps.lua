@@ -43,10 +43,6 @@ map('n', '<leader>7', '7gt', { desc = 'Switch to 7th tab' })
 map('n', '<leader>8', '8gt', { desc = 'Switch to 8th tab' })
 map('n', '<leader>9', '9gt', { desc = 'Switch to 9th tab' })
 
--- NvimTree
-map('n', '<C-n>', '<Cmd>Neotree toggle<CR>', { desc = "Toggle Neo-tree" })
-map('n', '<leader>l', '<Cmd>Neotree reveal<CR>', { desc = "Reveal current file in Neo-tree" })
-
 -- Folding keymaps
 map('n', 'zf', 'za', { desc = 'Toggle fold under cursor' })
 map('n', '<leader>z', 'za', { desc = 'Toggle fold under cursor' })
@@ -67,12 +63,14 @@ map("v", "<A-j>", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv", { desc 
 map("v", "<A-k>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move Up" })
 
 -- better indenting
-map("v", "<", "<gv", { desc = "better indenting? <gv" })
-map("v", ">", ">gv", { desc = "better indenting? >gv" })
+-- map("v", "<", "<gv", { desc = "better indenting? <gv" })
+-- map("v", ">", ">gv", { desc = "better indenting? >gv" })
+
+map('n', '<C-n>', ':NvimTreeToggle<CR>', { desc = "Toggle NvimTree" })
+map('n', '<leader>l', ':NvimTreeFindFile<CR>', { desc = "Focus NvimTree" })
 
 -- save
 map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
-
 -- quit
 map("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit All" })
 

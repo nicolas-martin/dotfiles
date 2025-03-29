@@ -1,6 +1,6 @@
 [general]
 import = [
-	# "~/dotfiles/.config/alacritty/themes/catppuccin-frappe.toml",
+	# "~/.config/alacritty/themes/catppuccin-frappe.toml",
 	# "~/.config/alacritty/themes/catppuccin-frappe.toml",
 	"~/.config/alacritty/themes/catppuccin-macchiato.toml",
 	# "~/.config/alacritty/themes/catppuccin-mocha.toml",
@@ -33,19 +33,12 @@ hide_when_typing = false
 save_to_clipboard = true
 
 [terminal.shell]
-# args = ["-l", "-c", "tmux"]
-# When opening a new alacritty it connects to any existing
-# tmux instance... sometimes I don't want that...
-args = [
-	"--login",
-	"-c",
-	"/opt/homebrew/bin/tmux attach || //opt/homebrew/bin/tmux",
-]
+args = ["-l", "-c", "tmux new-session -A -s default"]
 program = "/bin/zsh"
 
 [window]
 decorations = "buttonless"
-opacity = 1.0
+opacity = 0.9
 
 [window.padding]
 x = 10
@@ -62,16 +55,3 @@ persist = false
 mouse.enabled = true
 binding = { key = "O", mods = "Control|Shift" }
 regex = "(ipfs:|ipns:|magnet:|mailto:|gemini://|gopher://|https://|http://|news:|file:|git://|ssh:|ftp://|vscode://)[^\u0000-\u001F\u007F-\u009F<>\"\\s{-}\\^⟨⟩`\\\\]+"
-
-# # wip
-# [colors.cursor]
-# cursor = "CellForeground"
-# text = "CellBackground"
-
-# [colors.primary]
-# background = "#1d1f21"
-# foreground = "#c5c8c6"
-
-# [colors.vi_mode_cursor]
-# cursor = "CellForeground"
-# text = "CellBackground"

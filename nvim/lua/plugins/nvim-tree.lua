@@ -13,8 +13,8 @@ return {
 				api.config.mappings.default_on_attach(bufnr)
 				-- vim.keymap.set("n", "<C-Space>", m.tree_actions_menu, { buffer = bufnr, noremap = true, silent = true })
 				-- vim.keymap.set('n', '<C-n>', api.tree.toggle, { desc = "Toggle NvimTree" })
-				vim.keymap.set('n', '<C-n>', ':NvimTreeToggle<CR>', { desc = "Toggle NvimTree" })
-				vim.keymap.set('n', '<leader>l', ':NvimTreeFindFile<CR>', { desc = "Focus NvimTree" })
+				-- vim.keymap.set('n', '<C-n>', ':NvimTreeToggle<CR>', { desc = "Toggle NvimTree" })
+				-- vim.keymap.set('n', '<leader>l', ':NvimTreeFindFile<CR>', { desc = "Focus NvimTree" })
 			end
 			require("nvim-tree").setup({
 				-- NvimTree

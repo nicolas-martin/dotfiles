@@ -7,7 +7,7 @@
 # Alternative: Use 'cmd' or 'ctrl' instead of 'alt' if preferred
 #DIR_SEL     := north | east | south | west
 cmd - h : yabai -m window --focus west
-cmd - j : yabai -m window --focus southaltalt
+cmd - j : yabai -m window --focus south
 cmd - k : yabai -m window --focus north
 cmd - l : yabai -m window --focus east
 
@@ -65,7 +65,7 @@ cmd + alt - f : yabai -m window --toggle zoom-fullscreen
 shift + cmd - b : yabai -m space --balance
 
 # toggle window split type
-alt - e : yabai -m window --togle split
+alt - e : yabai -m window --toggle split
 
 ##################################
 # 4. Space and Display Management
