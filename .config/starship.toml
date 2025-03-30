@@ -22,10 +22,6 @@ $docker_context\
 $kubernetes\
 $container\
 $jobs\
-<<<<<<< HEAD
-$status\
-=======
->>>>>>> d82fd17 (colorizer and more starship settings)
 $line_break\
 $character\
 """
