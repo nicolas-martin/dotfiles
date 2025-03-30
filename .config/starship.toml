@@ -10,21 +10,30 @@ $git_branch\
 $git_commit\
 $git_state\
 $git_metrics\
+$status\
+$fill\
 $rust\
 $golang\
 $nodejs\
 $python\
+$lua\
 $package\
 $docker_context\
 $kubernetes\
 $container\
 $jobs\
+<<<<<<< HEAD
 $status\
+=======
+>>>>>>> d82fd17 (colorizer and more starship settings)
 $line_break\
 $character\
 """
 
 palette = 'gruvbox_dark'
+
+[fill]
+symbol = ' '
 
 [palettes.default]
 color_ok = 'bright-green'
@@ -35,7 +44,7 @@ color_username = 'red'
 color_directory = 'yellow'
 color_git = 'cyan'
 color_git_added = 'bright-green'
-color_git_deleted = 'bright-red'
+color_git_deleted = 'Bright-red'
 color_env = 'blue'
 color_kubernetes = 'purple'
 color_docker = 'blue'
@@ -71,7 +80,6 @@ color_vimcmd_replace = '#b16286'
 color_vimcmd_visual = '#d79921'
 
 [palettes.gruvbox_light]
-
 color_ok = '#79740e'
 color_danger = '#9d0006'
 color_caution = '#d79921'
@@ -158,7 +166,8 @@ format = '[( $symbol( $version) )]($style)'
 [golang]
 symbol = "󰟓"
 style = "fg:color_env"
-format = '[( $symbol( $version) )]($style)'
+format = '[ $symbol ]($style)'
+# format = '[( $symbol( $version) )]($style)'
 
 [python]
 symbol = ""
@@ -196,10 +205,10 @@ number_threshold = 1
 
 [status]
 disabled = false
-format = '[( $symbol | $common_meaning $signal_name )]($style)'
+success_symbol = ''
+format = '$symbol$signal_name$maybe_int'
 map_symbol = true
 pipestatus = true
-success_symbol = ''
 not_executable_symbol = '󰂭'
 not_found_symbol = '󰍉'
 sigint_symbol = '󰐊'
