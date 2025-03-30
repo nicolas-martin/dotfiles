@@ -11,7 +11,7 @@ return {
 			-- TODO: Panel can be slow?
 			panel = { enabled = false },
 			suggestion = {
-				-- TODO: Let blink cmp take over
+				-- NOTE:: Let blink cmp take over
 				enabled = false,
 				auto_trigger = false,
 				hide_during_completion = true,

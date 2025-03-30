@@ -54,7 +54,8 @@ shift + alt - y : yabai -m space --mirror y-axis
 
 # Toggle window floating
 # Centers the window on the screen when floated
-cmd + shift - t : yabai -m window --toggle float;\
+#cmd + shift - t conflicts with re-open tab in chrome 
+alt + shift - t : yabai -m window --toggle float;\
                   yabai -m window --grid 4:4:1:1:2:2
 
 # Toggle window fullscreen zoom

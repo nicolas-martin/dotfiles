@@ -45,8 +45,6 @@ return {
 				draw = {
 					-- use tree sitter to label
 					treesitter = { "lsp" },
-					-- TODO: label_description
-					-- i
 					columns = {
 						{ "kind_icon" },
 						{ "label" },

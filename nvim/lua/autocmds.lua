@@ -109,3 +109,17 @@ vim.api.nvim_create_autocmd("BufEnter", {
 		end, 50) -- 50ms delay gives time for file picker to switch buffer
 	end,
 })
+
+vim.api.nvim_create_user_command("Vins", function(opts)
+	local expr = opts.args
+	local ok, result = pcall(load("return " .. expr))
+	if ok then
+		print(vim.inspect(result))
+	else
+		print("Error evaluating expression: " .. result)
+	end
+end, { nargs = 1, desc = "Evaluate and inspect a Lua expression" })
+
+vim.cmd [[
+  cabbrev <expr> vi getcmdline() == "vi" ? "lua print(vim.inspect(" : getcmdline()
+]]
