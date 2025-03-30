@@ -120,12 +120,13 @@ return {
 								["Struct"] = true,
 								["Class"] = true,
 								["Interface"] = true,
-								["Enum"] = true,
+								["Enum"] = false,
 								["Module"] = true,
 								["Constructor"] = true,
-								["Field"] = true,
-								["Constant"] = true,
-								["Variable"] = true,
+								-- Hide these when looking through globally
+								["Field"] = false,
+								["Constant"] = false,
+								["Variable"] = false,
 							}
 
 							return function(entry)
@@ -164,8 +165,9 @@ return {
 								["Struct"] = true,
 								["Class"] = true,
 								["Constant"] = true,
-								["Field"] = true,
-								["Variable"] = true,
+								-- thide these when looking through document symbols
+								["Field"] = false,
+								["Variable"] = false,
 							}
 							if not allowed_kinds[entry.kind] then
 								return nil

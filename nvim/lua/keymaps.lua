@@ -51,16 +51,14 @@ map('n', '<leader>zz', 'zM', { desc = 'Close all folds' })
 map('n', 'zC', 'zM', { desc = 'Close all folds' })
 map('n', 'zO', 'zR', { desc = 'Open all folds' })
 
--- Code companion
-map('n', '<leader>cc', ':CodeCompanionChat<cr>')
-
 -- Move Lines
-map("n", "<A-j>", "<cmd>execute 'move .+' . v:count1<cr>==", { desc = "Move Down" })
-map("n", "<A-k>", "<cmd>execute 'move .-' . (v:count1 + 1)<cr>==", { desc = "Move Up" })
-map("i", "<A-j>", "<esc><cmd>m .+1<cr>==gi", { desc = "Move Down" })
-map("i", "<A-k>", "<esc><cmd>m .-2<cr>==gi", { desc = "Move Up" })
-map("v", "<A-j>", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv", { desc = "Move Down" })
-map("v", "<A-k>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move Up" })
+-- work around to using <alt-j/k>
+map("n", "∆", "<cmd>execute 'move .+' . v:count1<cr>==", { desc = "Move Down" })
+map("n", "˚", "<cmd>execute 'move .-' . (v:count1 + 1)<cr>==", { desc = "Move Up" })
+map("i", "∆", "<esc><cmd>m .+1<cr>==gi", { desc = "Move Down" })
+map("i", "˚", "<esc><cmd>m .-2<cr>==gi", { desc = "Move Up" })
+map("v", "∆", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv", { desc = "Move Down" })
+map("v", "˚", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move Up" })
 
 -- better indenting
 -- map("v", "<", "<gv", { desc = "better indenting? <gv" })
