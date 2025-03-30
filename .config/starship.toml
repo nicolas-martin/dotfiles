@@ -19,7 +19,6 @@ $docker_context\
 $kubernetes\
 $container\
 $jobs\
-$cmd_duration\
 $status\
 $line_break\
 $character\
@@ -28,11 +27,9 @@ $character\
 palette = 'gruvbox_dark'
 
 [palettes.default]
-
 color_ok = 'bright-green'
 color_danger = 'bright-red'
 color_caution = 'bright-yellow'
-
 color_os = 'red'
 color_username = 'red'
 color_directory = 'yellow'
@@ -47,7 +44,6 @@ color_container = ''
 color_other = ''
 color_time = ''
 color_duration = ''
-
 color_vimcmd_ok = 'green'
 color_vimcmd_replace = 'purple'
 color_vimcmd_visual = 'yellow'
@@ -200,17 +196,15 @@ number_threshold = 1
 
 [status]
 disabled = false
-format = '($style)'
+format = '[( $symbol | $common_meaning $signal_name )]($style)'
 map_symbol = true
 pipestatus = true
-symbol = '✖'
 success_symbol = ''
 not_executable_symbol = '󰂭'
 not_found_symbol = '󰍉'
 sigint_symbol = '󰐊'
 signal_symbol = '󱐋'
 style = 'bold fg:color_danger'
-recognize_signal_code = true
 
 [line_break]
 disabled = false
