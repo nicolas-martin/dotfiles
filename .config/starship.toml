@@ -25,7 +25,7 @@ $line_break\
 $character\
 """
 
-palette = 'default'
+palette = 'gruvbox_dark'
 
 [palettes.default]
 
@@ -53,11 +53,9 @@ color_vimcmd_replace = 'purple'
 color_vimcmd_visual = 'yellow'
 
 [palettes.gruvbox_dark]
-
 color_ok = '#b8bb26'
 color_danger = '#fb4934'
 color_caution = '#d79921'
-
 color_os = '#d65d0e'
 color_username = '#d65d0e'
 color_directory = '#d79921'
@@ -72,7 +70,6 @@ color_container = '#cc241d'
 color_other = '#d5c4a1'
 color_time = '#fbf1c7'
 color_duration = '#fbf1c7'
-
 color_vimcmd_ok = '#8ec07c'
 color_vimcmd_replace = '#b16286'
 color_vimcmd_visual = '#d79921'
@@ -82,7 +79,6 @@ color_vimcmd_visual = '#d79921'
 color_ok = '#79740e'
 color_danger = '#9d0006'
 color_caution = '#d79921'
-
 color_os = '#d65d0e'
 color_username = '#d65d0e'
 color_directory = '#d79921'
@@ -97,7 +93,6 @@ color_container = '#cc241d'
 color_other = '#504945'
 color_time = '#282828'
 color_duration = '#282828'
-
 color_vimcmd_ok = '#689d6a'
 color_vimcmd_replace = '#b16286'
 color_vimcmd_visual = '#d79921'
@@ -203,32 +198,12 @@ format = '[ $symbol( $number) ]($style)'
 symbol_threshold = 1
 number_threshold = 1
 
-[custom.memory_usage]
-command = "starship module memory_usage"
-when = '[ "${STARSHIP_COCKPIT_MEMORY_USAGE_ENABLED:-false}" = "true" ]'
-format = "( $output )"
-disabled = false
-
-[memory_usage]
-threshold = 0
-symbol = "󰓅"
-style = "fg:color_other"
-format = '( [$symbol( ${ram})]($style) )'
-disabled = false
-
-[cmd_duration]
-min_time = 2000
-format = '[ 󱫑 $duration ]($style)'
-style = 'fg:color_duration'
-show_milliseconds = false
-disabled = false
-
 [status]
 disabled = false
-format = '[( $symbol( $common_meaning)( $signal_name) )]($style)'
+format = '($style)'
 map_symbol = true
 pipestatus = true
-symbol = '󰅙'
+symbol = '✖'
 success_symbol = ''
 not_executable_symbol = '󰂭'
 not_found_symbol = '󰍉'
@@ -242,33 +217,9 @@ disabled = false
 
 [character]
 disabled = false
-success_symbol = '[❯](bold fg:color_ok)'
-error_symbol = '[❯](bold fg:color_danger)'
-vimcmd_symbol = '[❮](bold fg:color_vimcmd_ok)'
-vimcmd_replace_one_symbol = '[❮](bold fg:color_vimcmd_replace)'
-vimcmd_replace_symbol = '[❮](bold fg:color_vimcmd_replace)'
-vimcmd_visual_symbol = '[❮](bold fg:color_vimcmd_visual)'
-
-[custom.keyboard_layout]
-command = """
-
-# Set env variables if you want to use layout aliases (in uppercase)
-#     export STARSHIP_COCKPIT_KEYBOARD_LAYOUT_ABC=ENG
-#     export STARSHIP_COCKPIT_KEYBOARD_LAYOUT_UKRAINIAN=UKR
-# 
-# Implementations:
-#     macOS
-
-if [ "$(uname -s)" = "Darwin" ]; then
-        input_source=$(defaults read ~/Library/Preferences/com.apple.HIToolbox.plist AppleCurrentKeyboardLayoutInputSourceID)
-        layout_id=$(echo "$input_source" | cut -d '.' -f4)
-        layout=$(printenv "STARSHIP_COCKPIT_KEYBOARD_LAYOUT_$(echo "$layout_id" | tr '[:lower:]' '[:upper:]')")
-        echo "$layout" || echo "$layout_id"
-fi
-
-"""
-symbol = "󰌌"
-style = "fg:color_other"
-format = '[( $symbol $output )]($style)'
-when = '[ "${STARSHIP_COCKPIT_KEYBOARD_LAYOUT_ENABLED:-false}" = "true" ]'
-disabled = false
+success_symbol = '[→](bold fg:color_ok)'
+error_symbol = '[→](bold fg:color_danger)'
+vimcmd_symbol = '[←](bold fg:color_vimcmd_ok)'
+vimcmd_replace_one_symbol = '[←](bold fg:color_vimcmd_replace)'
+vimcmd_replace_symbol = '[←](bold fg:color_vimcmd_replace)'
+vimcmd_visual_symbol = '[←](bold fg:color_vimcmd_visual)'
