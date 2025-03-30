@@ -37,12 +37,11 @@ args = ["-l", "-c", "tmux new-session -A -s default"]
 program = "/bin/zsh"
 
 [window]
-decorations = "buttonless"
-opacity = 0.9
-
-[window.padding]
-x = 10
-y = 10
+decorations = "Buttonless"
+opacity = 0.8
+blur = true
+padding.x = 10
+padding.y = 10
 
 
 # Define a hint for URLs (including vscode://).
