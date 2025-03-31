@@ -41,6 +41,9 @@ vim.g.go_textobj_enabled = 0         -- Disable vim-go text objects
 vim.opt.termguicolors = true
 vim.cmd.colorscheme "catppuccin-macchiato"
 
+-- looks for editorconfig shit... idk
+vim.g.editorconfig = false
+
 vim.diagnostic.config({
 	virtual_text = true,
 	-- virtual_lines = true,

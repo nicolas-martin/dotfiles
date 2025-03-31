@@ -114,7 +114,13 @@ return {
 		opts = {
 			capabilities = capabilities,
 			on_attach = on_attach,
+			settings = {
+				tsserver_format_options = {
+					indentSize = 4,
+					tabSize = 4,
+					convertTabsToSpaces = false, -- use tabs
+				},
+			},
 		},
-
 	},
 }
