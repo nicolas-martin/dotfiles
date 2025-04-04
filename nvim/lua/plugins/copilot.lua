@@ -1,14 +1,12 @@
 return {
 	{
 		"zbirenbaum/copilot.lua",
-		enabled = false,
 		cmd = "Copilot",
 		event = "InsertEnter",
 		opts = {
 			filetypes = {
 				yaml = true,
 			},
-			-- TODO: Panel can be slow?
 			panel = { enabled = false },
 			suggestion = {
 				-- NOTE:: Let blink cmp take over

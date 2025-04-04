@@ -12,7 +12,7 @@ map('n', '<f1>', 'o<Esc>', { desc = "Add a line abaove" })
 map('n', 'Q', '<nop>', { desc = "Remove the annoying Q" })
 map('n', '[q', vim.cmd.cprev, { desc = 'Previous Quickfix' })
 map('n', ']q', vim.cmd.cnext, { desc = 'Next Quickfix' })
-map('n', '<leader>)', '<cmd>set nu! rnu!<CR>', { desc = "toggle relativenumber and numbers" })
+map('n', '<leader>)', '<cmd>set rnu!<CR>', { desc = "toggle relativenumber and numbers" })
 map('x', 'p', 'P', { desc = "xnoremap p P" })
 
 -- Telescope mappings
