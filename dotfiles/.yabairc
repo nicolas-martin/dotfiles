@@ -1,7 +1,8 @@
 #!/usr/bin/env sh
 # https://github.com/koekeishiya/yabai/wiki/Disabling-System-Integrity-Protection
-sudo yabai --load-sa
+# had to do some crazy shit in "sudo visudo -f /private/etc/sudoers.d/yabai"
 yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
+sudo yabai --load-sa
 
 yabai -m config external_bar                 all:40:0
 yabai -m config window_zoom_persist          off

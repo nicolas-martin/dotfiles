@@ -85,5 +85,6 @@ mkcd ()
       cd -P -- "$1"
 }
 
+export GEMINI_API_KEY=$(pass show nico/gemini)
 export BRAVE_API_KEY=$(pass show nico/brave)
 eval "$(starship init zsh)"
