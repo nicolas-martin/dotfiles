@@ -56,7 +56,9 @@ shift + alt - y : yabai -m space --mirror y-axis
 # Centers the window on the screen when floated
 #cmd + shift - t conflicts with re-open tab in chrome 
 alt + shift - t : yabai -m window --toggle float;\
-                  yabai -m window --grid 4:4:1:1:2:2
+                  yabai -m window --grid 4:4:1:1:2:2;\
+		  sketchybar --trigger update_window_mode
+
 
 # Toggle window fullscreen zoom
 # Alternative: Use 'native-fullscreen' for macOS native fullscreen
@@ -133,9 +135,9 @@ cmd + alt + ctrl - m : osascript -e 'tell application "System Events" to keystro
 cmd + alt + ctrl - n : dark-mode toggle
 
 # Layout switching
-shift + alt + ctrl - f : yabai -m space --layout float
-shift + alt + ctrl - b : yabai -m space --layout bsp
-shift + alt + ctrl - s : yabai -m space --layout stack
+# shift + alt + ctrl - f : yabai -m space --layout float
+# shift + alt + ctrl - b : yabai -m space --layout bsp
+# shift + alt + ctrl - s : yabai -m space --layout stack
 
 # Snap floating window
 shift + ctrl - left   : yabai -m window --grid 1:2:0:0:1:1

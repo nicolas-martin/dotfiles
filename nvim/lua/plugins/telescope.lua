@@ -214,10 +214,11 @@ return {
 
 							if entry_tbl then
 								entry_tbl.display = function()
-									local entry_type = entry.type
-									if not allowed_sev[entry_type] then
-										return nil
-									end
+									-- NOTE: This doesn't skip the entry it makes it empty, so that's not quite it
+									-- local entry_type = entry.type
+									-- if not allowed_sev[entry_type] then
+									-- 	return nil
+									-- end
 									local int_sev = vim.diagnostic.severity[entry_type]
 									local icon = vim.diagnostic.config().signs.text[int_sev]
 									local hl_group = vim.diagnostic.config().signs.texthl[int_sev]
