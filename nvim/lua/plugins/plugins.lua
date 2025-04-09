@@ -61,4 +61,8 @@ return {
 			require('colorizer').setup()
 		end,
 	},
+	-- I don't think I need to download it here also...
+	-- {
+	-- 	"giuxtaposition/blink-cmp-copilot",
+	-- },
 }

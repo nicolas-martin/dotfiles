@@ -8,10 +8,8 @@ return {
 		"giuxtaposition/blink-cmp-copilot",
 		"L3MON4D3/LuaSnip",
 	},
-
 	-- use a release tag to download pre-built binaries
 	version = '1.*',
-
 	---@module 'blink.cmp'
 	---@type blink.cmp.Config
 	opts = {
@@ -31,12 +29,13 @@ return {
 		--- @type blink.cmp.CompletionConfigPartial
 		completion = {
 			ghost_text = {
-				enabled = vim.g.ai_cmp,
+				enabled = true,
+				show_with_menu = false,
 			},
 			-- (Default) Only show the documentation popup when manually triggered
 			---@type blink.cmp.CompletionDocumentationConfigPartial
 			documentation = {
-				auto_show = true,
+				auto_show = false,
 				auto_show_delay_ms = 300,
 			},
 			---@type blink.cmp.CompletionMenuConfigPartial
@@ -93,7 +92,7 @@ return {
 		sources = {
 			providers = {
 				copilot = {
-					enabled = false,
+					enabled = true,
 					name = "copilot",
 					module = "blink-cmp-copilot",
 					score_offset = 100,

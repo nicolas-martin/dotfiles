@@ -113,27 +113,10 @@ return {
 						layout_config = {
 							preview_width = 0.6,
 						},
+						-- ["Field"] = false, ["Constant"] = false, ["Variable"] = false,
+						symbols = { "Function", "Method", "Struct", "Class", "Interface", "Enum", "Module", "Constructor", },
 						entry_maker = (function()
-							local allowed_kinds = {
-								["Function"] = true,
-								["Method"] = true,
-								["Struct"] = true,
-								["Class"] = true,
-								["Interface"] = true,
-								["Enum"] = false,
-								["Module"] = true,
-								["Constructor"] = true,
-								-- Hide these when looking through globally
-								["Field"] = false,
-								["Constant"] = false,
-								["Variable"] = false,
-							}
-
 							return function(entry)
-								if not allowed_kinds[entry.kind] then
-									return nil
-								end
-
 								local make_entry = require("telescope.make_entry")
 								local lspkind = require("lspkind")
 								local default_maker = make_entry.gen_from_lsp_symbols()
@@ -157,21 +140,10 @@ return {
 						layout_config = {
 							preview_width = 0.4,
 						},
+						-- we don't care field and variable
+						symbols = { "Function", "Method", "Struct", "Class", "Constant" },
 						entry_maker = function(entry)
 							local lspkind = require("lspkind")
-							local allowed_kinds = {
-								["Function"] = true,
-								["Method"] = true,
-								["Struct"] = true,
-								["Class"] = true,
-								["Constant"] = true,
-								-- thide these when looking through document symbols
-								["Field"] = false,
-								["Variable"] = false,
-							}
-							if not allowed_kinds[entry.kind] then
-								return nil
-							end
 							local make_entry = require("telescope.make_entry")
 							local default_maker = make_entry.gen_from_lsp_symbols()
 							local entry_tbl = default_maker(entry)
@@ -199,27 +171,16 @@ return {
 						layout_config = {
 							preview_width = 0.30,
 						},
+						-- severity = vim.diagnostic.severity.WARN,
 						wrap_results = true,
 						entry_maker = function(entry)
-							local allowed_sev = {
-								["ERROR"] = true,
-								["WARNING"] = true,
-								["INFO"] = false,
-								["HINT"] = false,
-							}
-
 							local make_entry = require("telescope.make_entry")
 							local default_maker = make_entry.gen_from_diagnostics()
 							local entry_tbl = default_maker(entry)
 
 							if entry_tbl then
 								entry_tbl.display = function()
-									-- NOTE: This doesn't skip the entry it makes it empty, so that's not quite it
-									-- local entry_type = entry.type
-									-- if not allowed_sev[entry_type] then
-									-- 	return nil
-									-- end
-									local int_sev = vim.diagnostic.severity[entry_type]
+									local int_sev = vim.diagnostic.severity[entry.type]
 									local icon = vim.diagnostic.config().signs.text[int_sev]
 									local hl_group = vim.diagnostic.config().signs.texthl[int_sev]
 									local filename = vim.fn.fnamemodify(entry.filename or "", ":t")
