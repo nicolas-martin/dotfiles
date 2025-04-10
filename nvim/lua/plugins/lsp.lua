@@ -1,11 +1,12 @@
 local capabilities = vim.lsp.protocol.make_client_capabilities()
--- local capabilities = require('blink.cmp').get_lsp_capabilities()
 
+local on_init = function(client)
+	-- NOTE:: DIABLE ALL SYNTAX FROM LSP.. LET TREESITTER HANDLE IT
+	-- Should be on_init instead of on_attach?
+	client.server_capabilities.semanticTokensProvider = nil
+end
 
 local on_attach = function(client, bufnr)
-	-- NOTE:: DIABLE ALL SYNTAX FROM LSP.. LET TREESITTER HANDLE IT
-	client.server_capabilities.semanticTokensProvider = nil
-
 	local buf_opts = { noremap = true, silent = true, buffer = bufnr }
 	vim.keymap.set('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', buf_opts)
 	vim.keymap.set('n', 'K', vim.lsp.buf.hover, buf_opts)
@@ -26,6 +27,7 @@ return {
 		},
 		config = function()
 			require('lspconfig').gopls.setup {
+				on_init = on_init,
 				on_attach = on_attach,
 				capabilities = capabilities,
 				settings = {
@@ -59,6 +61,7 @@ return {
 			}
 
 			require('lspconfig').rust_analyzer.setup {
+				on_init = on_init,
 				on_attach = on_attach,
 				capabilities = capabilities,
 				settings = {
@@ -71,6 +74,7 @@ return {
 			}
 
 			require('lspconfig').lua_ls.setup {
+				on_init = on_init,
 				on_attach = on_attach,
 				capabilities = capabilities,
 				settings = {
@@ -96,6 +100,7 @@ return {
 			local servers = { 'taplo', 'bashls', 'pyright' }
 			for _, lsp in ipairs(servers) do
 				require('lspconfig')[lsp].setup {
+					on_init = on_init,
 					on_attach = on_attach,
 					capabilities = capabilities,
 				}
@@ -112,6 +117,7 @@ return {
 		dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
 		ft = { "typescript", "javascript", "typescriptreact", "javascriptreact" },
 		opts = {
+			on_init = on_init,
 			capabilities = capabilities,
 			on_attach = on_attach,
 			settings = {

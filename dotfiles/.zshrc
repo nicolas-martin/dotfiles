@@ -88,3 +88,5 @@ mkcd ()
 export GEMINI_API_KEY=$(pass show nico/gemini)
 export BRAVE_API_KEY=$(pass show nico/brave)
 eval "$(starship init zsh)"
+
+PATH=~/.console-ninja/.bin:$PATH
