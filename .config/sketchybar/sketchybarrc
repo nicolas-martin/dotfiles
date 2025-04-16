@@ -2,8 +2,9 @@
 
 
 source "$HOME/.config/sketchybar/colors.sh"
+CONFIG_DIR="$HOME/.config/sketchybar"
 PLUGIN_DIR="$CONFIG_DIR/plugins"
-ITEM_DIR="$HOME/.config/sketchybar/items" # Directory where the items are configured
+ITEM_DIR="$CONFIG_DIR/items" # Directory where the items are configured
 ITEM_CORNER_RADIUS=3
 ITEM_BACKGROUND_HEIGHT=26
 ITEM_PADDING=14
