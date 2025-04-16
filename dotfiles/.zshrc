@@ -10,7 +10,6 @@ fi
 
 export ZSH=$HOME/.oh-my-zsh
 plugins=(vi-mode autojump)
-ZSH_THEME="robbyrussell"
 source $ZSH/oh-my-zsh.sh
 
 # export SSH_KEY_PATH="~/.ssh/rsa_id"

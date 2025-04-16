@@ -54,7 +54,6 @@ source "$ITEM_DIR/spotify.sh"
 source "$ITEM_DIR/left/spaces.sh"
 source "$ITEM_DIR/left/front_app.sh"
 source "$ITEM_DIR/left/yabai_mode2.sh"
-# source "$ITEM_DIR/left/yabai.sh"
 
 sketchybar --add item volume right \
            --set volume script="$PLUGIN_DIR/volume.sh" \
@@ -64,4 +63,8 @@ sketchybar --add item battery right \
            --set battery update_freq=120 script="$PLUGIN_DIR/battery.sh" \
            --subscribe battery system_woke power_source_change
 
+sketchybar --hotload true
+
 sketchybar --update
+
+echo "sketchybar configuration loaded.."
