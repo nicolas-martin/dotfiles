@@ -32,11 +32,6 @@ if pgrep -xq Spotify; then
   fi
 fi
 
-# echo "[spotify plugin] triggering media_change with:" >&2
-# echo "  app: $APP" >&2
-# echo "  state: $STATE" >&2
-# echo "  title: $TITLE" >&2
-# echo "  artist: $ARTIST" >&2
 if [[ -n "$TITLE" && -n "$ARTIST" ]]; then
   INFO=$(jq -nc \
     --arg app "$APP" \
@@ -48,8 +43,8 @@ if [[ -n "$TITLE" && -n "$ARTIST" ]]; then
 
 
 if [[ -n "$INFO" ]]; then
-  echo "[spotify plugin] handling media_change with INFO:" >&2
-  echo "$INFO" | jq . >&2
+  # echo "[spotify plugin] handling media_change with INFO:" >&2
+  # echo "$INFO" | jq . >&2
 
   APP=$(echo "$INFO" | jq -r '.app // empty')
   STATE=$(echo "$INFO" | jq -r '.state // empty')

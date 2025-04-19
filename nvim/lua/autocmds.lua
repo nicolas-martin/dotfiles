@@ -78,11 +78,12 @@ autocmd("FileType", {
 -- Format on save
 -- false causes some issue
 -- true causes weird formatting..
-autocmd("BufWritePre", {
-	callback = function()
-		vim.lsp.buf.format({ async = false })
-	end,
-})
+-- BUG: https://github.com/neovim/neovim/issues/33224
+-- autocmd("BufWritePre", {
+-- 	callback = function()
+-- 		vim.lsp.buf.format({ async = false })
+-- 	end,
+-- })
 
 vim.api.nvim_create_user_command("Vins", function(opts)
 	local expr = opts.args
