@@ -66,14 +66,6 @@ return {
 		},
 		config = function(_, opts)
 			require("nvim-treesitter.configs").setup(opts)
-
-			-- Disable default folding
-			vim.opt.foldmethod = "expr"
-			vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
-			-- Don't fold by default when opening a file
-			vim.opt.foldenable = false
-			vim.opt.foldlevel = 99
-			vim.opt.foldminlines = 3 -- Minimum lines needed for a fold
 		end,
 	},
 }

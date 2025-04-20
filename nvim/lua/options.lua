@@ -25,6 +25,12 @@ vim.g.loaded_rrhelper = 1
 -- views can only be fully collapsed with the global statusline
 vim.opt.laststatus = 3
 
+-- folding
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+vim.opt.foldenable = true
+vim.opt.foldlevel = 99
+vim.opt.foldminlines = 3 -- Minimum lines needed for a fold
 
 -- vim go because it's old
 -- Disable vim-go LSP features in favor of native LSP
