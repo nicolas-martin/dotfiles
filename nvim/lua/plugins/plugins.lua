@@ -35,6 +35,7 @@ return {
 		opts = {
 			flavour = "auto",
 			integrations = {
+				blink_cmp = true,
 				nvimtree = true,
 				treesitter = true,
 			}
@@ -61,8 +62,14 @@ return {
 			require('colorizer').setup()
 		end,
 	},
-	-- I don't think I need to download it here also...
-	-- {
-	-- 	"giuxtaposition/blink-cmp-copilot",
-	-- },
+	{
+	  "rafamadriz/friendly-snippets",
+	  -- add blink.compat to dependencies
+	  {
+		"saghen/blink.compat",
+		optional = true, -- make optional so it's only enabled if any extras need it
+		opts = {},
+		version = not vim.g.lazyvim_blink_main and "*",
+	  },
+	}
 }

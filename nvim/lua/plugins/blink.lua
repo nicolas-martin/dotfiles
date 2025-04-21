@@ -18,24 +18,19 @@ return {
 		-- --- @field window blink.cmp.SignatureWindowConfig
 		---@type blink.cmp.SignatureConfigPartial
 		signature = { enabled = true },
-		--- @type blink.cmp.TermConfigPartial
 		term = {},
-		--- @type blink.cmp.CmdlineConfigPartial
 		cmdline = {},
-		--- @type blink.cmp.SnippetsConfigPartial
 		snippets = {
 			preset = "luasnip",
 		},
-		--- @type blink.cmp.CompletionConfigPartial
 		completion = {
 			ghost_text = {
 				enabled = true,
 				show_with_menu = false,
 			},
 			-- (Default) Only show the documentation popup when manually triggered
-			---@type blink.cmp.CompletionDocumentationConfigPartial
 			documentation = {
-				auto_show = false,
+				auto_show = true,
 				auto_show_delay_ms = 300,
 			},
 			---@type blink.cmp.CompletionMenuConfigPartial

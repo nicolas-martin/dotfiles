@@ -98,3 +98,13 @@ end, { nargs = 1, desc = "Evaluate and inspect a Lua expression" })
 vim.cmd [[
   cabbrev <expr> vi getcmdline() == "vi" ? "lua print(vim.inspect(" : getcmdline()
 ]]
+
+
+local format_sync_grp = vim.api.nvim_create_augroup("GoFormat", {})
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = "*.go",
+  callback = function()
+   require('go.format').goimports()
+  end,
+  group = format_sync_grp,
+})
