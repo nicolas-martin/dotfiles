@@ -3,7 +3,7 @@ return {
 	{ "tpope/vim-surround" },
 	{ "tpope/vim-commentary" },
 	{ "onsails/lspkind.nvim" },
-	{ "fatih/vim-go",        build = ":GoUpdateBinaries" },
+	-- { "fatih/vim-go",        build = ":GoUpdateBinaries" },
 	{
 		"tpope/vim-fugitive",
 		enabled = false,

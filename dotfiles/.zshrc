@@ -24,8 +24,8 @@ set -o vi
 # export my custom bind
 export PATH=$PATH:$HOME/.local/bin
 
-# export GOBIN=$HOME/go/bin
 export GOPATH=$HOME/go
+export GOBIN=$GOPATH/bin
 
 # test 
 export PATH=$PATH:$GOPATH/bin
