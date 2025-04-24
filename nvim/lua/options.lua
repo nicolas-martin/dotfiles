@@ -50,22 +50,14 @@ vim.cmd.colorscheme "catppuccin-macchiato"
 -- looks for editorconfig shit... idk
 vim.g.editorconfig = false
 
+vim.g.diagnostic_signs = {
+  [vim.diagnostic.severity.ERROR] = { text = "✘", texthl = "DiagnosticSignError" },
+  [vim.diagnostic.severity.WARN]  = { text = "▲", texthl = "DiagnosticSignWarn" },
+  [vim.diagnostic.severity.INFO]  = { text = "", texthl = "DiagnosticSignInfo" },
+  [vim.diagnostic.severity.HINT]  = { text = "⚑", texthl = "DiagnosticSignHint" },
+}
 vim.diagnostic.config({
 	virtual_text = true,
 	-- virtual_lines = true,
-	signs = {
-		-- virtual_text = true,
-		text = {
-			[vim.diagnostic.severity.ERROR] = ' ',
-			[vim.diagnostic.severity.WARN] = ' ',
-			[vim.diagnostic.severity.INFO] = ' ',
-			[vim.diagnostic.severity.HINT] = '',
-		},
-		texthl = {
-			[vim.diagnostic.severity.ERROR] = "DiagnosticError",
-			[vim.diagnostic.severity.WARN] = "DiagnosticWarn",
-			[vim.diagnostic.severity.INFO] = "DiagnosticInfo",
-			[vim.diagnostic.severity.HINT] = "DiagnosticHint",
-		},
-	},
+	signs = true
 })

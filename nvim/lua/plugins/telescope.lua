@@ -181,8 +181,9 @@ return {
 							if entry_tbl then
 								entry_tbl.display = function()
 									local int_sev = vim.diagnostic.severity[entry.type]
-									local icon = vim.diagnostic.config().signs.text[int_sev]
-									local hl_group = vim.diagnostic.config().signs.texthl[int_sev]
+									local sign = vim.g.diagnostic_signs[int_sev]
+									local icon = sign and sign.text or ""
+									local hl_group = sign and sign.texthl or ""
 									local filename = vim.fn.fnamemodify(entry.filename or "", ":t")
 									local message = entry.message or entry.text or ""
 
