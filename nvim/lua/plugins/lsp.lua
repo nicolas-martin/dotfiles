@@ -60,6 +60,13 @@ return {
 				},
 			}
 
+			-- NOTE: a bit annoying
+			require('lspconfig').yamlls.setup {
+				on_init = on_init,
+				on_attach = on_attach,
+				capabilities = capabilities,
+			}
+
 			require('lspconfig').rust_analyzer.setup {
 				on_init = on_init,
 				on_attach = on_attach,

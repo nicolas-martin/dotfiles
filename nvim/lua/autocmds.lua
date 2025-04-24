@@ -41,7 +41,7 @@ autocmd("FileType", {
 	end,
 })
 
-local conf = { "conf", "bash" }
+local conf = { "conf", "bash", "yaml" }
 
 autocmd("FileType", {
 	pattern = conf,
@@ -59,7 +59,6 @@ local files = { "rust",
 	"typescript",
 	"typescriptreact",
 	"proto",
-	"yaml",
 	"lua",
 	"javascriptreact",
 }
