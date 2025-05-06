@@ -50,6 +50,26 @@ vim.cmd.colorscheme "catppuccin-macchiato"
 -- looks for editorconfig shit... idk
 vim.g.editorconfig = false
 
+vim.api.nvim_create_autocmd("LspAttach", {
+callback = function() vim.diagnostic.config({
+  -- only override the gutter icons:
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = "✘",
+      [vim.diagnostic.severity.WARN]  = "▲",
+      [vim.diagnostic.severity.INFO]  = "",
+      [vim.diagnostic.severity.HINT]  = "⚑",
+    },
+    -- you can omit linehl or numhl if you don’t need them:
+    linehl = nil,
+    numhl  = nil,
+  },
+  virtual_text     = true,
+  underline         = true,
+  update_in_insert  = false,
+})
+	end
+	})
 vim.g.diagnostic_signs = {
   [vim.diagnostic.severity.ERROR] = { text = "✘", texthl = "DiagnosticSignError" },
   [vim.diagnostic.severity.WARN]  = { text = "▲", texthl = "DiagnosticSignWarn" },
