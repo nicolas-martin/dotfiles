@@ -91,4 +91,6 @@ eval "$(starship init zsh)"
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home
 export PATH="/Users/nma/.yarn/bin:$PATH"
 
+
+
 PATH=~/.console-ninja/.bin:$PATH

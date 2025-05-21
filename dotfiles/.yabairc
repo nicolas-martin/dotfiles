@@ -18,7 +18,7 @@ yabai -m config display_arrangement_order    default
 yabai -m config window_origin_display        default
 yabai -m config window_placement             second_child
 yabai -m config window_insertion_point       focused
-yabai -m config window_shadow                float
+# yabai -m config window_shadow                float
 # yabai -m config window_animation_duration    0.1
 # yabai -m config window_animation_easing      ease_out_circ
 yabai -m config window_opacity_duration      0.0
@@ -49,5 +49,6 @@ yabai -m rule --add app="^(LuLu|Calculator|Software Update|Dictionary|VLC|System
 yabai -m rule --add label="Finder" app="^Finder$" title="(Co(py|nnect)|Move|Info|Pref)" manage=off grid=4:4:1:1:2:2
 yabai -m rule --add label="About This Mac" app="System Information" title="About This Mac" manage=off grid=4:4:1:1:2:2
 yabai -m rule --add app="^Spotify|WhatsApp|Messages|Calendar$" manage=off
+yabai -m rule --add app="^Simulator$" manage=on float=off
 
 echo "yabai configuration loaded.."

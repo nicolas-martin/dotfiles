@@ -74,15 +74,6 @@ autocmd("FileType", {
 	end,
 })
 
--- Format on save
--- false causes some issue
--- true causes weird formatting..
--- BUG: https://github.com/neovim/neovim/issues/33224
--- autocmd("BufWritePre", {
--- 	callback = function()
--- 		vim.lsp.buf.format({ async = false })
--- 	end,
--- })
 
 vim.api.nvim_create_user_command("Vins", function(opts)
 	local expr = opts.args
@@ -99,11 +90,54 @@ vim.cmd [[
 ]]
 
 
-local format_sync_grp = vim.api.nvim_create_augroup("GoFormat", {})
+-- local format_sync_grp = vim.api.nvim_create_augroup("GoFormat", {})
+-- vim.api.nvim_create_autocmd("BufWritePre", {
+--   pattern = "*.go",
+--   callback = function()
+--    require('go.format').goimports()
+--   end,
+--   group = format_sync_grp,
+-- })
+--
+-- Format on save
+-- false causes some issue
+-- true causes weird formatting..
+-- BUG: https://github.com/neovim/neovim/issues/33224
+-- autocmd("BufWritePre", {
+-- 	callback = function()
+-- 		vim.lsp.buf.format({ async = false })
+-- 	end,
+-- })
+
+vim.api.nvim_create_autocmd("LspAttach", {
+	group = vim.api.nvim_create_augroup("lsp", { clear = true }),
+	callback = function(args)
+		-- 2
+		vim.api.nvim_create_autocmd("BufWritePre", {
+			-- 3
+			buffer = args.buf,
+			callback = function()
+				-- 4 + 5
+				vim.lsp.buf.format { async = false, id = args.data.client_id }
+			end,
+		})
+	end
+})
+
+-- Format json with jq pipe
 vim.api.nvim_create_autocmd("BufWritePre", {
-  pattern = "*.go",
-  callback = function()
-   require('go.format').goimports()
-  end,
-  group = format_sync_grp,
+	pattern = "*.json",
+	callback = function()
+		local buf = vim.api.nvim_get_current_buf()
+		local input = table.concat(vim.api.nvim_buf_get_lines(buf, 0, -1, false), "\n")
+
+		local result = vim.system({ "jq", "." }, { stdin = input }):wait()
+
+		if result.code == 0 then
+			local output = vim.split(result.stdout, "\n", { trimempty = true })
+			vim.api.nvim_buf_set_lines(buf, 0, -1, false, output)
+		else
+			vim.notify("jq error: " .. result.stderr, vim.log.levels.ERROR)
+		end
+	end,
 })
