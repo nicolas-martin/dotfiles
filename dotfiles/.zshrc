@@ -94,4 +94,4 @@ export PATH="/Users/nma/.yarn/bin:$PATH"
 
 
 export PATH="/opt/homebrew/opt/node@22/bin:$PATH"
-export PATH="/opt/homebrew/opt/node@22/bin:$PATH"
+export PATH="/opt/homebrew/opt/postgresql@15/bin:$PATH"
