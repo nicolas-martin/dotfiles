@@ -112,16 +112,16 @@ vim.cmd [[
 vim.api.nvim_create_autocmd("LspAttach", {
 	group = vim.api.nvim_create_augroup("lsp", { clear = true }),
 	callback = function(args)
-		-- 2
+		local ft = vim.bo[args.buf].filetype
+		-- skip go since we're already setting it up in the plugin
+		if ft == "go" then return end
 		vim.api.nvim_create_autocmd("BufWritePre", {
-			-- 3
 			buffer = args.buf,
 			callback = function()
-				-- 4 + 5
 				vim.lsp.buf.format { async = false, id = args.data.client_id }
 			end,
 		})
-	end
+	end,
 })
 
 -- Format json with jq pipe
