@@ -1,29 +1,33 @@
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 
 local on_init = function(client)
-	-- disable semantic tokens (we let Treesitter handle this)
 	client.server_capabilities.semanticTokensProvider = nil
 end
 
 local on_attach = function(client, bufnr)
 	local buf_opts = { noremap = true, silent = true, buffer = bufnr }
+
 	vim.keymap.set('n', 'gd', vim.lsp.buf.definition, buf_opts)
 	vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, buf_opts)
 	vim.keymap.set('n', 'K', vim.lsp.buf.hover, buf_opts)
 	vim.keymap.set('n', 'gr', vim.lsp.buf.references, buf_opts)
 	vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, buf_opts)
 	vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, buf_opts)
-	vim.keymap.set('n', '<leader>fm', vim.lsp.buf.formatting, buf_opts)
+
+	-- use new formatting API
+	vim.keymap.set('n', '<leader>fm', function()
+		vim.lsp.buf.format({ async = true })
+	end, buf_opts)
 end
 
 return {
 	{
-		"neovim/nvim-lspconfig",
-		event = { "BufReadPre", "BufNewFile" },
+		'neovim/nvim-lspconfig',
+		event = { 'BufReadPre', 'BufNewFile' },
 		dependencies = {
-			"saghen/blink.cmp",
-			"ray-x/lsp_signature.nvim",
-			"onsails/lspkind.nvim",
+			'saghen/blink.cmp',
+			'ray-x/lsp_signature.nvim',
+			'onsails/lspkind.nvim',
 		},
 		config = function()
 			require('lspconfig').yamlls.setup {
@@ -36,9 +40,7 @@ return {
 				on_attach    = on_attach,
 				capabilities = capabilities,
 				settings     = {
-					['rust-analyzer'] = {
-						checkOnSave = { command = "clippy" },
-					},
+					['rust-analyzer'] = { checkOnSave = { command = 'clippy' } },
 				},
 			}
 			require('lspconfig').lua_ls.setup {
@@ -50,16 +52,16 @@ return {
 						runtime = { version = 'LuaJIT' },
 						diagnostics = { globals = { 'vim' } },
 						workspace = {
-							library = vim.api.nvim_get_runtime_file("", true),
+							library = vim.api.nvim_get_runtime_file('', true),
 							checkThirdParty = false,
 						},
 						telemetry = { enable = false },
 					},
 				},
 			}
-			local servers = { 'taplo', 'bashls', 'pyright' }
-			for _, lsp in ipairs(servers) do
-				require('lspconfig')[lsp].setup {
+
+			for _, server in ipairs({ 'taplo', 'bashls', 'pyright' }) do
+				require('lspconfig')[server].setup {
 					on_init      = on_init,
 					on_attach    = on_attach,
 					capabilities = capabilities,
@@ -67,14 +69,17 @@ return {
 			end
 		end,
 	},
+
+	-- load lazydev.nvim always so blink.cmp can find its integration
 	{
-		"folke/lazydev.nvim",
-		ft = "lua",
+		'folke/lazydev.nvim',
+		lazy = false,
 	},
+
 	{
-		"pmizio/typescript-tools.nvim",
-		dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-		ft = { "typescript", "javascript", "typescriptreact", "javascriptreact" },
+		'pmizio/typescript-tools.nvim',
+		ft = { 'typescript', 'javascript', 'typescriptreact', 'javascriptreact' },
+		dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
 		opts = {
 			on_init      = on_init,
 			on_attach    = on_attach,
@@ -88,16 +93,17 @@ return {
 			},
 		},
 	},
+
 	{
-		"ray-x/go.nvim",
-		dependencies = {
-			"ray-x/guihua.lua",
-			"neovim/nvim-lspconfig",
-			"nvim-treesitter/nvim-treesitter",
-		},
-		ft = { "go", "gomod" },
-		event = { "CmdlineEnter" },
+		'ray-x/go.nvim',
+		ft = { 'go', 'gomod' },
+		event = { 'CmdlineEnter' },
 		build = ":lua require('go.install').update_all_sync()",
+		dependencies = {
+			'ray-x/guihua.lua',
+			'neovim/nvim-lspconfig',
+			'nvim-treesitter/nvim-treesitter',
+		},
 		opts = {
 			lsp_inlay_hints = { enable = false },
 			lsp_cfg = {
@@ -118,12 +124,8 @@ return {
 						semanticTokens   = true,
 						staticcheck      = true,
 						directoryFilters = {
-							"-.git",
-							"-.vscode",
-							"-.idea",
-							"-node_modules",
-							"-**/mocks",
-							"-**/gen",
+							'-.git', '-.vscode', '-.idea',
+							'-node_modules', '-**/mocks', '-**/gen',
 						},
 						hints            = {
 							assignVariableTypes    = true,
@@ -134,22 +136,21 @@ return {
 							parameterNames         = true,
 							rangeVariableTypes     = true,
 						},
-						hoverKind        = "FullDocumentation",
-						linkTarget       = "pkg.go.dev",
+						hoverKind        = 'FullDocumentation',
+						linkTarget       = 'pkg.go.dev',
 						linksInHover     = true,
 					},
 				},
 			},
 		},
 		config = function(_, opts)
-			require("go").setup(opts)
-			-- goimports on save
-			local grp = vim.api.nvim_create_augroup("GoFormat", { clear = true })
-			vim.api.nvim_create_autocmd("BufWritePre", {
-				pattern  = "*.go",
+			require('go').setup(opts)
+			local grp = vim.api.nvim_create_augroup('GoFormat', { clear = true })
+			vim.api.nvim_create_autocmd('BufWritePre', {
+				pattern  = '*.go',
 				group    = grp,
 				callback = function()
-					require("go.format").goimports()
+					require('go.format').goimports()
 				end,
 			})
 		end,
