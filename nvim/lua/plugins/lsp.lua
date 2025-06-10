@@ -45,6 +45,16 @@ return {
 					},
 				},
 			}
+			require('lspconfig').eslint.setup {
+				on_init      = on_init,
+				on_attach    = on_attach,
+				capabilities = capabilities,
+				settings     = {
+					format             = { enable = true },
+					workingDirectories = { mode = "auto" },
+				},
+				root_dir     = require('lspconfig').util.root_pattern(".eslintrc.js", ".eslintrc.json", ".eslintrc", "package.json"),
+			}
 			require('lspconfig').rust_analyzer.setup {
 				on_init      = on_init,
 				on_attach    = on_attach,
@@ -100,10 +110,13 @@ return {
 					tabSize             = 4,
 					convertTabsToSpaces = false,
 				},
+				on_init = function(client, _)
+					client.server_capabilities.documentFormattingProvider = false
+					require("your.lsp.handlers").on_init(client)
+				end,
 			},
 		},
 	},
-
 	{
 		'ray-x/go.nvim',
 		ft = { 'go', 'gomod' },
