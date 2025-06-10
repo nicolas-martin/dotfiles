@@ -41,7 +41,7 @@ autocmd("FileType", {
 	end,
 })
 
-local conf = { "conf", "bash", "yaml" }
+local conf = { "conf", "bash" }
 
 autocmd("FileType", {
 	pattern = conf,
@@ -54,6 +54,17 @@ autocmd("FileType", {
 	end,
 })
 
+-- force spaces in YAML
+autocmd("FileType", {
+	pattern = "yaml",
+	callback = function()
+		vim.opt_local.expandtab = true -- use spaces
+		vim.opt_local.tabstop = 4
+		vim.opt_local.shiftwidth = 4
+		vim.opt_local.softtabstop = 4
+		vim.opt_local.signcolumn = "yes"
+	end,
+})
 local files = { "rust",
 	"javascript",
 	"typescript",

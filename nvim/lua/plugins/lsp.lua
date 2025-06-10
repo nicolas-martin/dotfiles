@@ -34,6 +34,16 @@ return {
 				on_init      = on_init,
 				on_attach    = on_attach,
 				capabilities = capabilities,
+				settings     = {
+					yaml = {
+						format = {
+							enable = true, -- turn on the server’s formatter
+						},
+						schemaStore = {
+							enable = true, -- optional: pull schemas automatically
+						},
+					},
+				},
 			}
 			require('lspconfig').rust_analyzer.setup {
 				on_init      = on_init,
