@@ -21,6 +21,6 @@ sketchybar --add item spotify q \
     background.drawing=on \
     label.padding_right=10 \
     label.max_chars=30 \
-    associated_display=active \
+    # associated_display=active \
     updates=on \
 		--subscribe spotify media_change

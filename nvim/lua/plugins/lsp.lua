@@ -35,7 +35,7 @@ return {
 			-- Ensure capabilities are properly set up
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
 			capabilities = require('blink.cmp').get_lsp_capabilities(capabilities)
-			
+
 			require('lspconfig').yamlls.setup {
 				on_init      = on_init,
 				on_attach    = on_attach,
@@ -107,7 +107,7 @@ return {
 		ft = { 'typescript', 'javascript', 'typescriptreact', 'javascriptreact' },
 		dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
 		opts = {
-			on_init = function(client)
+			on_init      = function(client)
 				client.server_capabilities.semanticTokensProvider = nil
 				-- Optionally disable document formatting if you prefer to use a different formatter
 				-- client.server_capabilities.documentFormattingProvider = false
@@ -155,8 +155,14 @@ return {
 						semanticTokens   = true,
 						staticcheck      = true,
 						directoryFilters = {
-							'-.git', '-.vscode', '-.idea',
-							'-node_modules', '-**/mocks', '-**/gen',
+							'-.git',
+							'-.vscode',
+							'-.idea',
+							'-node_modules',
+							'-mocks', -- top-level mocks
+							'-**/mocks', -- nested mocks dir
+							'-**/mocks/**', -- everything under mocks
+							'-**/gen',
 						},
 						hints            = {
 							assignVariableTypes    = true,

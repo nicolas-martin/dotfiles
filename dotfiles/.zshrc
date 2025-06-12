@@ -83,8 +83,6 @@ mkcd ()
     mkdir -p -- "$1" &&
       cd -P -- "$1"
 }
-# reset terminal if Ctrl-C leaves it in raw mode
-trap 'stty sane' SIGINT
 
 export GEMINI_API_KEY=$(pass show nico/gemini)
 export BRAVE_API_KEY=$(pass show nico/brave)

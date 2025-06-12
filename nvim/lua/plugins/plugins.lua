@@ -36,7 +36,6 @@ return {
 			flavour = "auto",
 			integrations = {
 				blink_cmp = true,
-				nvimtree = true,
 				treesitter = true,
 			}
 		},
@@ -63,13 +62,13 @@ return {
 		end,
 	},
 	{
-	  "rafamadriz/friendly-snippets",
-	  -- add blink.compat to dependencies
-	  {
-		"saghen/blink.compat",
-		optional = true, -- make optional so it's only enabled if any extras need it
-		opts = {},
-		version = not vim.g.lazyvim_blink_main and "*",
-	  },
+		"rafamadriz/friendly-snippets",
+		-- add blink.compat to dependencies
+		{
+			"saghen/blink.compat",
+			optional = true, -- make optional so it's only enabled if any extras need it
+			opts = {},
+			version = not vim.g.lazyvim_blink_main and "*",
+		},
 	}
 }
