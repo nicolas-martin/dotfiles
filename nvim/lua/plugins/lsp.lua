@@ -1,4 +1,6 @@
 local capabilities = vim.lsp.protocol.make_client_capabilities()
+-- Setup capabilities for blink.cmp
+capabilities = require('blink.cmp').get_lsp_capabilities(capabilities)
 
 local on_init = function(client)
 	client.server_capabilities.semanticTokensProvider = nil
@@ -30,6 +32,10 @@ return {
 			'onsails/lspkind.nvim',
 		},
 		config = function()
+			-- Ensure capabilities are properly set up
+			local capabilities = vim.lsp.protocol.make_client_capabilities()
+			capabilities = require('blink.cmp').get_lsp_capabilities(capabilities)
+			
 			require('lspconfig').yamlls.setup {
 				on_init      = on_init,
 				on_attach    = on_attach,
@@ -101,7 +107,11 @@ return {
 		ft = { 'typescript', 'javascript', 'typescriptreact', 'javascriptreact' },
 		dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
 		opts = {
-			on_init      = on_init,
+			on_init = function(client)
+				client.server_capabilities.semanticTokensProvider = nil
+				-- Optionally disable document formatting if you prefer to use a different formatter
+				-- client.server_capabilities.documentFormattingProvider = false
+			end,
 			on_attach    = on_attach,
 			capabilities = capabilities,
 			settings     = {
@@ -110,10 +120,8 @@ return {
 					tabSize             = 4,
 					convertTabsToSpaces = false,
 				},
-				on_init = function(client, _)
-					client.server_capabilities.documentFormattingProvider = false
-					require("your.lsp.handlers").on_init(client)
-				end,
+				-- Increase timeout to prevent timeout errors
+				tsserver_max_memory = "auto",
 			},
 		},
 	},
