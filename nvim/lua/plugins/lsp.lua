@@ -1,6 +1,3 @@
-local capabilities = vim.lsp.protocol.make_client_capabilities()
--- Setup capabilities for blink.cmp
-capabilities = require('blink.cmp').get_lsp_capabilities(capabilities)
 
 local on_init = function(client)
 	client.server_capabilities.semanticTokensProvider = nil
@@ -97,10 +94,11 @@ return {
 		end,
 	},
 
-	-- load lazydev.nvim always so blink.cmp can find its integration
+	-- load lazydev.nvim for lua files
 	{
 		'folke/lazydev.nvim',
-		lazy = false,
+		ft = "lua",
+		opts = {},
 	},
 
 	{

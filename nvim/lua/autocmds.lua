@@ -3,29 +3,14 @@ local autocmd = vim.api.nvim_create_autocmd
 -- toggles the ft if there's no exntension
 -- but that also means that the auto detect ft for conf
 -- wont work
-autocmd({ "BufReadPost", "BufEnter", "BufWritePost" }, {
+-- Detect bash scripts by shebang
+autocmd({ "BufReadPost", "BufEnter" }, {
 	pattern = "*/[^./]*", -- matches files without "." in the filename
 	callback = function(args)
-		local bufnr = args.buf
-
-		vim.defer_fn(function()
-			if not vim.api.nvim_buf_is_valid(bufnr) then return end
-
-			local line = vim.api.nvim_buf_get_lines(bufnr, 0, 1, false)[1] or ""
-
-			if line:match("^#!.*bash") then
-				if vim.bo[bufnr].filetype ~= "bash" then
-					vim.bo[bufnr].filetype = "bash"
-				end
-			else
-				vim.defer_fn(function()
-					local ft = vim.bo[bufnr].filetype
-					if ft == "bash" then
-						vim.bo[bufnr].filetype = ""
-					end
-				end, 150)
-			end
-		end, 50)
+		local line = vim.api.nvim_buf_get_lines(args.buf, 0, 1, false)[1] or ""
+		if line:match("^#!.*bash") then
+			vim.bo[args.buf].filetype = "bash"
+		end
 	end,
 })
 
@@ -72,6 +57,7 @@ local files = { "rust",
 	"proto",
 	"lua",
 	"javascriptreact",
+	"json",
 }
 
 autocmd("FileType", {
@@ -139,15 +125,23 @@ vim.api.nvim_create_autocmd("LspAttach", {
 vim.api.nvim_create_autocmd("BufWritePre", {
 	pattern = "*.json",
 	callback = function()
+		-- Check if jq is available
+		if vim.fn.executable('jq') == 0 then
+			-- Silently skip if jq not installed
+			return
+		end
+		
 		local buf = vim.api.nvim_get_current_buf()
 		local input = table.concat(vim.api.nvim_buf_get_lines(buf, 0, -1, false), "\n")
 
-		local result = vim.system({ "jq", "." }, { stdin = input }):wait()
+		local ok, result = pcall(function()
+			return vim.system({ "jq", "." }, { stdin = input }):wait()
+		end)
 
-		if result.code == 0 then
+		if ok and result.code == 0 then
 			local output = vim.split(result.stdout, "\n", { trimempty = true })
 			vim.api.nvim_buf_set_lines(buf, 0, -1, false, output)
-		else
+		elseif ok and result.stderr then
 			vim.notify("jq error: " .. result.stderr, vim.log.levels.ERROR)
 		end
 	end,

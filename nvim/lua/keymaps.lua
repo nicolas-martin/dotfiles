@@ -44,12 +44,9 @@ map('n', '<leader>8', '8gt', { desc = 'Switch to 8th tab' })
 map('n', '<leader>9', '9gt', { desc = 'Switch to 9th tab' })
 
 -- Folding keymaps
-map('n', 'zf', 'za', { desc = 'Toggle fold under cursor' })
 map('n', '<leader>z', 'za', { desc = 'Toggle fold under cursor' })
 map('n', '<leader>Z', 'zR', { desc = 'Open all folds' })
 map('n', '<leader>zz', 'zM', { desc = 'Close all folds' })
-map('n', 'zC', 'zM', { desc = 'Close all folds' })
-map('n', 'zO', 'zR', { desc = 'Open all folds' })
 
 -- Move Lines
 -- work around to using <alt-j/k>

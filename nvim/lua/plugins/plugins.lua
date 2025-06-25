@@ -1,8 +1,8 @@
 return {
-	{ "tpope/vim-repeat" },
-	{ "tpope/vim-surround" },
-	{ "tpope/vim-commentary" },
-	{ "onsails/lspkind.nvim" },
+	{ "tpope/vim-repeat", keys = { "." } },
+	{ "tpope/vim-surround", keys = { "cs", "ds", "ys", "yss", "ysiw", "yS", "ySS" } },
+	{ "tpope/vim-commentary", keys = { "gc", "gcc", { "gc", mode = "v" } } },
+	{ "onsails/lspkind.nvim", lazy = true },
 	-- { "fatih/vim-go",        build = ":GoUpdateBinaries" },
 	{
 		"tpope/vim-fugitive",
@@ -56,7 +56,8 @@ return {
 	-- high-performance color highlighter
 	{
 		"catgoose/nvim-colorizer.lua",
-		event = 'BufReadPre',
+		ft = { 'css', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'html', 'lua', 'vue', 'svelte' },
+		cmd = { 'ColorizerToggle', 'ColorizerAttachToBuffer' },
 		config = function()
 			require('colorizer').setup()
 		end,
