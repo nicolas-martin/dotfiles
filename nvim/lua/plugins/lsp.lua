@@ -22,6 +22,10 @@ local on_attach = function(client, bufnr)
 	end, buf_opts)
 end
 
+-- Setup capabilities at module level so go.nvim can access it
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = require('blink.cmp').get_lsp_capabilities(capabilities)
+
 return {
 	{
 		'neovim/nvim-lspconfig',
@@ -32,9 +36,6 @@ return {
 			'onsails/lspkind.nvim',
 		},
 		config = function()
-			-- Ensure capabilities are properly set up
-			local capabilities = vim.lsp.protocol.make_client_capabilities()
-			capabilities = require('blink.cmp').get_lsp_capabilities(capabilities)
 
 			require('lspconfig').yamlls.setup {
 				on_init      = on_init,
