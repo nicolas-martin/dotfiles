@@ -1,6 +1,7 @@
-
 local on_init = function(client)
-	client.server_capabilities.semanticTokensProvider = nil
+	if client then
+		client.server_capabilities.semanticTokensProvider = nil
+	end
 end
 
 local on_attach = function(client, bufnr)
@@ -33,7 +34,6 @@ return {
 			'onsails/lspkind.nvim',
 		},
 		config = function()
-
 			require('lspconfig').yamlls.setup {
 				on_init      = on_init,
 				on_attach    = on_attach,
@@ -136,48 +136,7 @@ return {
 		},
 		opts = {
 			lsp_inlay_hints = { enable = false },
-			lsp_cfg = {
-				on_init      = on_init,
-				on_attach    = on_attach,
-				capabilities = capabilities,
-				settings     = {
-					gopls = {
-						gofumpt          = true,
-						analyses         = {
-							unusedparams   = true,
-							nilness        = true,
-							shadow         = false,
-							unusedwrite    = true,
-							useany         = true,
-							unusedvariable = true,
-						},
-						semanticTokens   = true,
-						staticcheck      = true,
-						directoryFilters = {
-							'-.git',
-							'-.vscode',
-							'-.idea',
-							'-node_modules',
-							'-mocks', -- top-level mocks
-							'-**/mocks', -- nested mocks dir
-							'-**/mocks/**', -- everything under mocks
-							'-**/gen',
-						},
-						hints            = {
-							assignVariableTypes    = true,
-							compositeLiteralFields = true,
-							compositeLiteralTypes  = true,
-							constantValues         = true,
-							functionTypeParameters = true,
-							parameterNames         = true,
-							rangeVariableTypes     = true,
-						},
-						hoverKind        = 'FullDocumentation',
-						linkTarget       = 'pkg.go.dev',
-						linksInHover     = true,
-					},
-				},
-			},
+			lsp_cfg = true, -- Let go.nvim handle LSP setup automatically
 		},
 		config = function(_, opts)
 			require('go').setup(opts)
