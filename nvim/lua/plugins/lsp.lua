@@ -136,7 +136,8 @@ return {
 		},
 		opts = {
 			lsp_inlay_hints = { enable = false },
-			lsp_cfg = true, -- Let go.nvim handle LSP setup automatically
+			lsp_cfg = true,   -- Let go.nvim handle LSP setup automatically
+			lsp_on_attach = on_attach, -- Use our custom on_attach for Go files
 		},
 		config = function(_, opts)
 			require('go').setup(opts)
