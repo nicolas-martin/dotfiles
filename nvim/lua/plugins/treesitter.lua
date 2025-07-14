@@ -17,7 +17,7 @@ return {
 			ensure_installed = {
 				"bash", "c", "html", "javascript", "json", "lua", "luadoc", "luap", "markdown",
 				"markdown_inline", "python", "query", "regex", "tsx", "typescript", "vim",
-				"vimdoc", "yaml", "go", "gomod", "gowork", "gosum", "rust",
+				"vimdoc", "yaml", "go", "gomod", "gowork", "gosum", "rust", "comment", "gotmpl", "sql"
 			},
 			incremental_selection = {
 				enable = true,

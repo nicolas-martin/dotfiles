@@ -1,6 +1,3 @@
--- local m = require("utils")
--- TOOD: when calling NvimTreeToggle, I want to find the file in the tree
--- no matter if it's in my current working directory or not
 return {
 	{
 		"nvim-tree/nvim-tree.lua",
@@ -8,12 +5,6 @@ return {
 			"nvim-tree/nvim-web-devicons", -- Optional for file icons
 		},
 		config = function()
-			-- Set diagnostic signs for nvim-tree
-			vim.fn.sign_define("DiagnosticSignError", { text = "󰅚", texthl = "DiagnosticSignError" })
-			vim.fn.sign_define("DiagnosticSignWarn", { text = "󰀪", texthl = "DiagnosticSignWarn" })
-			vim.fn.sign_define("DiagnosticSignInfo", { text = "󰋽", texthl = "DiagnosticSignInfo" })
-			vim.fn.sign_define("DiagnosticSignHint", { text = "󰌶", texthl = "DiagnosticSignHint" })
-
 			local function my_on_attach(bufnr)
 				local api = require('nvim-tree.api')
 				api.config.mappings.default_on_attach(bufnr)
@@ -59,11 +50,11 @@ return {
 					enable = true,
 					show_on_dirs = true,
 					severity = {
-						min = vim.diagnostic.severity.ERROR,
+						min = vim.diagnostic.severity.WARN,
 					},
 					icons = {
 						hint = "󰌶",
-						info = "󰋽",
+						info = "󰋽", 
 						warning = "󰀪",
 						error = "󰅚",
 					},
