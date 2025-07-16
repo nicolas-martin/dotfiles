@@ -40,17 +40,24 @@ vim.cmd.colorscheme "catppuccin-latte"
 -- looks for editorconfig shit... idk
 vim.g.editorconfig = false
 
--- Configure diagnostics once
+-- Configure diagnostics with custom signs
 vim.diagnostic.config({
 	virtual_text = true,
-	signs = true,
+	active = true,
+	signs = {
+		text = {
+			[vim.diagnostic.severity.ERROR] = "󰅚",
+			[vim.diagnostic.severity.WARN] = "󰀪",
+			[vim.diagnostic.severity.INFO] = "󰋽",
+			[vim.diagnostic.severity.HINT] = "󰌶",
+		},
+		texthl = {
+			[vim.diagnostic.severity.ERROR] = "DiagnosticSignError",
+			[vim.diagnostic.severity.WARN] = "DiagnosticSignWarn",
+			[vim.diagnostic.severity.INFO] = "DiagnosticSignInfo",
+			[vim.diagnostic.severity.HINT] = "DiagnosticSignHint",
+		},
+	},
 	underline = true,
 	update_in_insert = false,
 })
-
--- Define diagnostic signs for buffer (not conflicting with nvim-tree)
-vim.fn.sign_define("DiagnosticSignError", { text = "󰅚", numhl = "DiagnosticSignError" })
-vim.fn.sign_define("DiagnosticSignWarn", { text = "󰀪", numhl = "DiagnosticSignWarn" })
-vim.fn.sign_define("DiagnosticSignInfo", { text = "󰋽", numhl = "DiagnosticSignInfo" })
-vim.fn.sign_define("DiagnosticSignHint", { text = "󰌶", numhl = "DiagnosticSignHint" })
-
