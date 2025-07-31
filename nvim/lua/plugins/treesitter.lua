@@ -10,6 +10,7 @@ return {
 			highlight = {
 				enable = true,
 				additional_vim_regex_highlighting = false,
+				disable = { "markdown" }, -- Disable treesitter for markdown
 			},
 			indent = {
 				enable = true,

@@ -1,6 +1,6 @@
 return {
-	{ "tpope/vim-repeat", keys = { "." } },
-	{ "tpope/vim-surround", keys = { "cs", "ds", "ys", "yss", "ysiw", "yS", "ySS" } },
+	{ "tpope/vim-repeat",     keys = { "." } },
+	{ "tpope/vim-surround",   keys = { "cs", "ds", "ys", "yss", "ysiw", "yS", "ySS" } },
 	{ "tpope/vim-commentary", keys = { "gc", "gcc", { "gc", mode = "v" } } },
 	{ "onsails/lspkind.nvim", lazy = true },
 	-- { "fatih/vim-go",        build = ":GoUpdateBinaries" },
@@ -46,7 +46,6 @@ return {
 		opts = {
 			completions = { blink = { enabled = true } },
 		},
-
 	},
 	{
 		"folke/todo-comments.nvim",

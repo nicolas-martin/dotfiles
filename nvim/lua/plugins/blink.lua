@@ -87,7 +87,7 @@ return {
 		sources = {
 			providers = {
 				copilot = {
-					enabled = true,
+					enabled = false,
 					name = "copilot",
 					module = "blink-cmp-copilot",
 					score_offset = 100,
@@ -116,7 +116,7 @@ return {
 				buffer = { max_items = 5 },
 			},
 
-			default = { 'lsp', 'path', 'snippets', 'buffer', 'cmdline', 'lazydev', 'copilot' },
+			default = { 'lsp', 'path', 'snippets', 'buffer', 'cmdline', 'lazydev' },
 		},
 
 		--- @type blink.cmp.FuzzyConfigPartial
