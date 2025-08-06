@@ -16,6 +16,12 @@ return {
 			require("nvim-tree").setup({
 				-- NvimTree
 				on_attach = my_on_attach,
+				update_focused_file = {
+					enable = true,
+					update_root = {
+						enable = true,
+					},
+				},
 				sort = {
 					sorter = "case_sensitive",
 				},

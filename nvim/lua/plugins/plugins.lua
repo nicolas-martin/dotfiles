@@ -1,7 +1,21 @@
 return {
 	{ "tpope/vim-repeat",     keys = { "." } },
-	{ "tpope/vim-surround",   keys = { "cs", "ds", "ys", "yss", "ysiw", "yS", "ySS" } },
-	{ "tpope/vim-commentary", keys = { "gc", "gcc", { "gc", mode = "v" } } },
+	{
+		"kylechui/nvim-surround",
+		version = "^3.0.0", -- Use for stability; omit to use `main` branch for the latest features
+		event = "VeryLazy",
+		config = function()
+			require("nvim-surround").setup({
+				-- Configuration here, or leave empty to use defaults
+			})
+		end
+	},
+	{
+		'numToStr/Comment.nvim',
+		opts = {
+			-- add any options here
+		}
+	},
 	{ "onsails/lspkind.nvim", lazy = true },
 	-- { "fatih/vim-go",        build = ":GoUpdateBinaries" },
 	{
