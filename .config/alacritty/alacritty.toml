@@ -2,9 +2,9 @@
 import = [
 	# "~/.config/alacritty/themes/catppuccin-frappe.toml",
 	# "~/.config/alacritty/themes/catppuccin-frappe.toml",
-	# "~/.config/alacritty/themes/catppuccin-macchiato.toml",
+	"~/.config/alacritty/themes/catppuccin-macchiato.toml",
 	# "~/.config/alacritty/themes/catppuccin-mocha.toml",
-	"~/.config/alacritty/themes/catppuccin-latte.toml",
+	# "~/.config/alacritty/themes/catppuccin-latte.toml",
 ]
 
 [env]

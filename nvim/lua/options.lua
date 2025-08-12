@@ -34,8 +34,7 @@ vim.opt.foldlevelstart = 99
 
 -- colorscheme catppuccin " catppuccin-latte, catppuccin-frappe, catppuccin-macchiato, catppuccin-mocha
 vim.opt.termguicolors = true
--- vim.cmd.colorscheme "catppuccin-macchiato"
-vim.cmd.colorscheme "catppuccin-latte"
+vim.cmd.colorscheme "catppuccin-macchiato"
 
 -- looks for editorconfig shit... idk
 vim.g.editorconfig = false

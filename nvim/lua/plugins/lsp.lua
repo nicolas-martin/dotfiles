@@ -84,13 +84,29 @@ return {
 				},
 			}
 
-			for _, server in ipairs({ 'taplo', 'bashls', 'pyright' }) do
+			for _, server in ipairs({ 'taplo', 'bashls' }) do
 				require('lspconfig')[server].setup {
 					on_init      = on_init,
 					on_attach    = on_attach,
 					capabilities = capabilities,
 				}
 			end
+
+			require('lspconfig').pyright.setup {
+				on_init      = on_init,
+				on_attach    = on_attach,
+				capabilities = capabilities,
+				settings     = {
+					python = {
+						analysis = {
+							autoSearchPaths = true,
+							useLibraryCodeForTypes = true,
+							diagnosticMode = 'workspace',
+							typeCheckingMode = 'basic',
+						}
+					}
+				}
+			}
 		end,
 	},
 
