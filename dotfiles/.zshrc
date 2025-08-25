@@ -101,3 +101,4 @@ alias claude="/Users/nma/.claude/local/claude"
 source /opt/homebrew/opt/chruby/share/chruby/chruby.sh
 source /opt/homebrew/opt/chruby/share/chruby/auto.sh
 chruby ruby-3.4.1
+export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
