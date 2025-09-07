@@ -34,6 +34,23 @@ return {
 			'onsails/lspkind.nvim',
 		},
 		config = function()
+			local lspconfig = require('lspconfig')
+			local util = require('lspconfig.util')
+
+			-- Custom config for circom-lsp (not built into lspconfig)
+			local configs = require('lspconfig.configs')
+			if not configs.circom_lsp then
+				configs.circom_lsp = {
+					default_config = {
+						cmd = { "circom-lsp" },
+						filetypes = { "circom" },
+						root_dir = util.root_pattern('.git', 'package.json', 'Cargo.toml', '.'),
+						single_file_support = true,
+						settings = {},
+					},
+				}
+			end
+
 			require('lspconfig').yamlls.setup {
 				on_init      = on_init,
 				on_attach    = on_attach,
@@ -48,6 +65,11 @@ return {
 						},
 					},
 				},
+			}
+			lspconfig.circom_lsp.setup {
+				on_init      = on_init,
+				on_attach    = on_attach,
+				capabilities = capabilities,
 			}
 			require('lspconfig').eslint.setup {
 				on_init      = on_init,

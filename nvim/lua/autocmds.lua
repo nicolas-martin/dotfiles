@@ -1,5 +1,13 @@
 local autocmd = vim.api.nvim_create_autocmd
 
+-- Detect .circom files
+autocmd({ "BufRead", "BufNewFile" }, {
+	pattern = "*.circom",
+	callback = function()
+		vim.bo.filetype = "circom"
+	end,
+})
+
 -- toggles the ft if there's no exntension
 -- but that also means that the auto detect ft for conf
 -- wont work
@@ -123,14 +131,14 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 -- Format json with jq pipe
 vim.api.nvim_create_autocmd("BufWritePre", {
-	pattern = "*.json",
+	pattern = { "*.json", "*.strat" },
 	callback = function()
 		-- Check if jq is available
 		if vim.fn.executable('jq') == 0 then
 			-- Silently skip if jq not installed
 			return
 		end
-		
+
 		local buf = vim.api.nvim_get_current_buf()
 		local input = table.concat(vim.api.nvim_buf_get_lines(buf, 0, -1, false), "\n")
 
