@@ -51,4 +51,10 @@ yabai -m rule --add label="About This Mac" app="System Information" title="About
 # yabai -m rule --add app="^Spotify|WhatsApp|Messages|Calendar$" manage=off
 yabai -m rule --add app="^Simulator$" manage=on float=off
 
+# Ignore Chrome extension popups (MetaMask, Phantom, etc.)
+yabai -m rule --add app="^Google Chrome$" title="^MetaMask" manage=off
+yabai -m rule --add app="^Google Chrome$" title="^Phantom" manage=off
+yabai -m rule --add app="^Google Chrome$" title="^Extension:" manage=off
+yabai -m rule --add app="^Google Chrome$" title="^chrome-extension://" manage=off
+
 echo "yabai configuration loaded.."

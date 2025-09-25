@@ -89,6 +89,19 @@ return {
 					['rust-analyzer'] = { checkOnSave = { command = 'clippy' } },
 				},
 			}
+			require('lspconfig').solc.setup {
+				cmd          = { 'solc', '--lsp', '--base-path', '.', '--include-path', './lib' },
+				on_init      = on_init,
+				on_attach    = on_attach,
+				capabilities = capabilities,
+				root_dir     = lspconfig.util.root_pattern('foundry.toml', 'hardhat.config.*', '.git'),
+				settings     = {
+					solidity = {
+						includePath = './lib',
+						remappings = {},
+					}
+				}
+			}
 			require('lspconfig').lua_ls.setup {
 				on_init      = on_init,
 				on_attach    = on_attach,
