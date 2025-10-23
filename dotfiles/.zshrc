@@ -102,3 +102,10 @@ source /opt/homebrew/opt/chruby/share/chruby/chruby.sh
 source /opt/homebrew/opt/chruby/share/chruby/auto.sh
 chruby ruby-3.4.1
 export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
+
+# bun completions
+[ -s "/Users/nma/.oh-my-zsh/completions/_bun" ] && source "/Users/nma/.oh-my-zsh/completions/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
