@@ -89,12 +89,21 @@ return {
 					['rust-analyzer'] = { checkOnSave = { command = 'clippy' } },
 				},
 			}
-			require('lspconfig').solc.setup {
-				cmd          = { 'solc', '--lsp', '--base-path', '.' },
+			-- Use Nomicfoundation's Solidity Language Server for better Foundry support
+			require('lspconfig').solidity.setup {
+				cmd          = { 'nomicfoundation-solidity-language-server', '--stdio' },
+				filetypes    = { 'solidity' },
 				on_init      = on_init,
 				on_attach    = on_attach,
 				capabilities = capabilities,
 				root_dir     = lspconfig.util.root_pattern('foundry.toml', 'remappings.txt', 'hardhat.config.*', '.git'),
+				single_file_support = true,
+				settings     = {
+					solidity = {
+						includePath = '',
+						remappings = {},
+					}
+				}
 			}
 			require('lspconfig').lua_ls.setup {
 				on_init      = on_init,
