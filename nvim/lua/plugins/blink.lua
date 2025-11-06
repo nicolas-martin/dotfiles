@@ -6,7 +6,7 @@ return {
 		"nvim-tree/nvim-web-devicons", -- Optional for file icons
 		"onsails/lspkind.nvim",  --optional icons
 		"giuxtaposition/blink-cmp-copilot",
-		"L3MON4D3/LuaSnip",
+		-- "L3MON4D3/LuaSnip",
 	},
 	-- use a release tag to download pre-built binaries
 	version = '1.*',
@@ -20,9 +20,9 @@ return {
 		signature = { enabled = true },
 		term = {},
 		cmdline = {},
-		snippets = {
-			preset = "luasnip",
-		},
+		-- snippets = {
+		-- 	preset = "luasnip",
+		-- },
 		completion = {
 			ghost_text = {
 				enabled = true,
