@@ -56,15 +56,15 @@ return {
 			-- Configure yamlls
 			vim.lsp.config.yamlls = {
 				default_config = {
-					name = 'yamlls',
-					cmd = { 'yaml-language-server', '--stdio' },
-					filetypes = { 'yaml', 'yaml.docker-compose', 'yaml.gitlab' },
-					root_dir = util.find_git_ancestor,
+					name                = 'yamlls',
+					cmd                 = { 'yaml-language-server', '--stdio' },
+					filetypes           = { 'yaml', 'yaml.docker-compose', 'yaml.gitlab' },
+					root_dir            = util.find_git_ancestor,
 					single_file_support = true,
-					on_init      = on_init,
-					on_attach    = on_attach,
-					capabilities = capabilities,
-					settings     = {
+					on_init             = on_init,
+					on_attach           = on_attach,
+					capabilities        = capabilities,
+					settings            = {
 						yaml = {
 							format = {
 								enable = true, -- turn on the server's formatter
@@ -80,10 +80,10 @@ return {
 			-- Configure eslint
 			vim.lsp.config.eslint = {
 				default_config = {
-					name = 'eslint',
-					cmd = { 'vscode-eslint-language-server', '--stdio' },
-					filetypes = { 'javascript', 'javascriptreact', 'javascript.jsx', 'typescript', 'typescriptreact', 'typescript.tsx', 'vue', 'svelte', 'astro' },
-					root_dir = util.root_pattern(".eslintrc.js", ".eslintrc.json", ".eslintrc", "package.json"),
+					name         = 'eslint',
+					cmd          = { 'vscode-eslint-language-server', '--stdio' },
+					filetypes    = { 'javascript', 'javascriptreact', 'javascript.jsx', 'typescript', 'typescriptreact', 'typescript.tsx', 'vue', 'svelte', 'astro' },
+					root_dir     = util.root_pattern(".eslintrc.js", ".eslintrc.json", ".eslintrc", "package.json"),
 					on_init      = on_init,
 					on_attach    = on_attach,
 					capabilities = capabilities,
@@ -97,10 +97,10 @@ return {
 			-- Configure rust_analyzer
 			vim.lsp.config.rust_analyzer = {
 				default_config = {
-					name = 'rust_analyzer',
-					cmd = { 'rust-analyzer' },
-					filetypes = { 'rust' },
-					root_dir = util.root_pattern('Cargo.toml', 'rust-project.json'),
+					name         = 'rust_analyzer',
+					cmd          = { 'rust-analyzer' },
+					filetypes    = { 'rust' },
+					root_dir     = util.root_pattern('Cargo.toml', 'rust-project.json'),
 					on_init      = on_init,
 					on_attach    = on_attach,
 					capabilities = capabilities,
@@ -113,15 +113,15 @@ return {
 			-- Configure solidity
 			vim.lsp.config.solidity = {
 				default_config = {
-					name = 'solidity',
-					cmd          = { 'nomicfoundation-solidity-language-server', '--stdio' },
-					filetypes    = { 'solidity' },
-					root_dir     = util.root_pattern('foundry.toml', 'remappings.txt', 'hardhat.config.*', '.git'),
+					name                = 'solidity',
+					cmd                 = { 'nomicfoundation-solidity-language-server', '--stdio' },
+					filetypes           = { 'solidity' },
+					root_dir            = util.root_pattern('foundry.toml', 'remappings.txt', 'hardhat.config.*', '.git'),
 					single_file_support = true,
-					on_init      = on_init,
-					on_attach    = on_attach,
-					capabilities = capabilities,
-					settings     = {
+					on_init             = on_init,
+					on_attach           = on_attach,
+					capabilities        = capabilities,
+					settings            = {
 						solidity = {
 							includePath = '',
 							remappings = {},
@@ -133,10 +133,11 @@ return {
 			-- Configure lua_ls
 			vim.lsp.config.lua_ls = {
 				default_config = {
-					name = 'lua_ls',
-					cmd = { 'lua-language-server' },
-					filetypes = { 'lua' },
-					root_dir = util.root_pattern('.luarc.json', '.luarc.jsonc', '.luacheckrc', '.stylua.toml', 'stylua.toml', 'selene.toml', 'selene.yml', '.git'),
+					name         = 'lua_ls',
+					cmd          = { 'lua-language-server' },
+					filetypes    = { 'lua' },
+					root_dir     = util.root_pattern('.luarc.json', '.luarc.jsonc', '.luacheckrc', '.stylua.toml',
+						'stylua.toml', 'selene.toml', 'selene.yml', '.git'),
 					on_init      = on_init,
 					on_attach    = on_attach,
 					capabilities = capabilities,
@@ -157,10 +158,10 @@ return {
 			-- Configure taplo and bashls
 			vim.lsp.config.taplo = {
 				default_config = {
-					name = 'taplo',
-					cmd = { 'taplo', 'lsp', 'stdio' },
-					filetypes = { 'toml' },
-					root_dir = util.root_pattern('*.toml', '.git'),
+					name         = 'taplo',
+					cmd          = { 'taplo', 'lsp', 'stdio' },
+					filetypes    = { 'toml' },
+					root_dir     = util.root_pattern('*.toml', '.git'),
 					on_init      = on_init,
 					on_attach    = on_attach,
 					capabilities = capabilities,
@@ -169,10 +170,10 @@ return {
 
 			vim.lsp.config.bashls = {
 				default_config = {
-					name = 'bashls',
-					cmd = { 'bash-language-server', 'start' },
-					filetypes = { 'sh', 'bash' },
-					root_dir = util.find_git_ancestor,
+					name         = 'bashls',
+					cmd          = { 'bash-language-server', 'start' },
+					filetypes    = { 'sh', 'bash' },
+					root_dir     = util.find_git_ancestor,
 					on_init      = on_init,
 					on_attach    = on_attach,
 					capabilities = capabilities,
@@ -181,10 +182,11 @@ return {
 
 			vim.lsp.config.pyright = {
 				default_config = {
-					name = 'pyright',
-					cmd = { 'pyright-langserver', '--stdio' },
-					filetypes = { 'python' },
-					root_dir = util.root_pattern('pyproject.toml', 'setup.py', 'setup.cfg', 'requirements.txt', 'Pipfile', 'pyrightconfig.json', '.git'),
+					name         = 'pyright',
+					cmd          = { 'pyright-langserver', '--stdio' },
+					filetypes    = { 'python' },
+					root_dir     = util.root_pattern('pyproject.toml', 'setup.py', 'setup.cfg', 'requirements.txt',
+						'Pipfile', 'pyrightconfig.json', '.git'),
 					on_init      = on_init,
 					on_attach    = on_attach,
 					capabilities = capabilities,

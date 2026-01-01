@@ -5,24 +5,13 @@ return {
 		"rafamadriz/friendly-snippets",
 		"nvim-tree/nvim-web-devicons", -- Optional for file icons
 		"onsails/lspkind.nvim",  --optional icons
-		"giuxtaposition/blink-cmp-copilot",
-		-- "L3MON4D3/LuaSnip",
 	},
 	-- use a release tag to download pre-built binaries
 	version = '1.*',
-	---@module 'blink.cmp'
-	---@type blink.cmp.Config
 	opts = {
-		-- --- @field enabled boolean
-		-- --- @field trigger blink.cmp.SignatureTriggerConfig
-		-- --- @field window blink.cmp.SignatureWindowConfig
-		---@type blink.cmp.SignatureConfigPartial
 		signature = { enabled = true },
 		term = {},
 		cmdline = {},
-		-- snippets = {
-		-- 	preset = "luasnip",
-		-- },
 		completion = {
 			ghost_text = {
 				enabled = true,
@@ -33,7 +22,6 @@ return {
 				auto_show = true,
 				auto_show_delay_ms = 300,
 			},
-			---@type blink.cmp.CompletionMenuConfigPartial
 			menu = {
 				auto_show = true,
 				draw = {
@@ -67,40 +55,26 @@ return {
 				},
 			},
 		},
-
-		--- @type blink.cmp.KeymapConfig
 		keymap = {
 			preset = 'super-tab',
 			['<C-k>'] = { 'select_prev', 'fallback_to_mappings' },
 			['<C-j>'] = { 'select_next', 'fallback_to_mappings' },
+			['<A-y>'] = require('minuet').make_blink_map(),
 		},
-		--- @type blink.cmp.AppearanceConfigPartial
 		appearance = {
-			-- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
-			-- Adjusts spacing to ensure icons are aligned
 			nerd_font_variant = 'mono'
 		},
-
-		-- Default list of enabled providers defined so that you can extend it
-		-- elsewhere in your config, without redefining it, due to `opts_extend`
-		--- @type blink.cmp.SourceConfigPartial
 		sources = {
 			providers = {
-				copilot = {
-					enabled = false,
-					name = "copilot",
-					module = "blink-cmp-copilot",
-					score_offset = 100,
+				minuet = {
+					name = 'minuet',
+					module = 'minuet.blink',
 					async = true,
-					transform_items = function(_, items)
-						for _, item in ipairs(items) do
-							item.kind_icon = ''
-							item.kind_name = 'Copilot'
-						end
-						return items
-					end
+					-- Should match minuet.config.request_timeout * 1000,
+					-- since minuet.config.request_timeout is in seconds
+					timeout_ms = 3000,
+					score_offset = 50, -- Gives minuet higher priority among suggestions
 				},
-				-- I don't actually know what it does
 				markdown = {
 					name = "markdown",
 					module = "render-markdown.integ.blink",
@@ -116,10 +90,8 @@ return {
 				buffer = { max_items = 5 },
 			},
 
-			default = { 'lsp', 'path', 'snippets', 'buffer', 'cmdline', 'lazydev' },
+			default = { 'lsp', 'path', 'snippets', 'buffer', 'cmdline', 'lazydev', 'minuet' },
 		},
-
-		--- @type blink.cmp.FuzzyConfigPartial
 		fuzzy = { implementation = "prefer_rust_with_warning" }
 	},
 	opts_extend = { "sources.default" }

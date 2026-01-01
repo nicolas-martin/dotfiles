@@ -48,7 +48,6 @@ alias re='git fetch origin master;git rebase origin/master'
 alias g='git '
 alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit -m "--wip--"'
 alias gunwip='git log -n 1 | grep -q -c "\-\-wip\-\-" && git reset head~1'
-# alias orig="find . -name '*.orig' -delete"
 alias orig='git ls-files --others --exclude-standard | grep "\.orig$" | xargs -r rm'
 alias removemerge='git branch --merged | grep -v "\*" | grep -v master | grep -v dev | xargs -n 1 git branch -d'
 alias vim='/usr/bin/vim'
@@ -91,8 +90,6 @@ eval "$(starship init zsh)"
 
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home
 export PATH="/Users/nma/.yarn/bin:$PATH"
-
-
 
 export PATH="/opt/homebrew/opt/node@22/bin:$PATH"
 export PATH="/opt/homebrew/opt/postgresql@15/bin:$PATH"
