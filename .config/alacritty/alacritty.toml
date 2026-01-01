@@ -19,6 +19,7 @@ history = 10000
 # Scrolling distance multiplier.
 multiplier = 3
 
+
 [font]
 size = 14
 
@@ -40,6 +41,7 @@ args = ["-l", "-c", "tmux new-session -A -s default"]
 program = "/bin/zsh"
 
 [window]
+option_as_alt = "Both"     # or "OnlyLeft" or "OnlyRight"
 decorations = "Buttonless"
 opacity = 0.8
 blur = true

@@ -1,5 +1,4 @@
 local autocmd = vim.api.nvim_create_autocmd
-
 -- Detect .circom files
 autocmd({ "BufRead", "BufNewFile" }, {
 	pattern = "*.circom",

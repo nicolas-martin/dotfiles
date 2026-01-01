@@ -5,6 +5,7 @@ return {
 		"rafamadriz/friendly-snippets",
 		"nvim-tree/nvim-web-devicons", -- Optional for file icons
 		"onsails/lspkind.nvim",  --optional icons
+		"milanglacier/minuet-ai.nvim",
 	},
 	-- use a release tag to download pre-built binaries
 	version = '1.*',
@@ -59,12 +60,17 @@ return {
 			preset = 'super-tab',
 			['<C-k>'] = { 'select_prev', 'fallback_to_mappings' },
 			['<C-j>'] = { 'select_next', 'fallback_to_mappings' },
-			['<A-y>'] = require('minuet').make_blink_map(),
+			['<A-y>'] = {
+				function(cmp)
+					cmp.show { providers = { 'minuet' } }
+				end,
+			},
 		},
 		appearance = {
 			nerd_font_variant = 'mono'
 		},
 		sources = {
+			default = { 'lsp', 'path', 'snippets', 'buffer', 'cmdline', 'lazydev', 'minuet' },
 			providers = {
 				minuet = {
 					name = 'minuet',
@@ -90,7 +96,6 @@ return {
 				buffer = { max_items = 5 },
 			},
 
-			default = { 'lsp', 'path', 'snippets', 'buffer', 'cmdline', 'lazydev', 'minuet' },
 		},
 		fuzzy = { implementation = "prefer_rust_with_warning" }
 	},
