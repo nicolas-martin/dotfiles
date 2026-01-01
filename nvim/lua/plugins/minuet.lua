@@ -2,10 +2,12 @@ return {
 	{
 		"milanglacier/minuet-ai.nvim",
 		event = "BufReadPre",
+		enabled = false,
 		opts = {
+			notify = "debug",
 			provider = "codestral",
 			n_completions = 3,
-			add_single_line_entry = false,
+			add_single_line_entry = true,
 			virtualtext = {
 				keymap = {
 					-- accept whole completion
@@ -23,6 +25,8 @@ return {
 			},
 			provider_options = {
 				codestral = {
+					-- api_key = 'pass show nico/ministral',
+					api_key = 'CODESTRAL_API_KEY',
 					optional = {
 						max_tokens = 256,
 						stop = { "\n\n" },

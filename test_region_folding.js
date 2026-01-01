@@ -1,4 +1,18 @@
+function e() {
+	// write hello world in the console
+	// try
+
+
+
+
+}
 function example() {
+	initDatabase()
+
+
+
+
+
 	// #region Configuration Setup
 	const config = {
 		host: 'localhost',
@@ -10,6 +24,7 @@ function example() {
 		name: 'testdb'
 	};
 	// #endregion
+	//
 
 	// #region Helper Functions
 	function validateConfig(cfg) {
@@ -38,6 +53,7 @@ function example() {
 		return { config, database };
 	}
 	// #endregion
+	// 
 
 	return initialize();
 }
