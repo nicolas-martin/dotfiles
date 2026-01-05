@@ -65,6 +65,7 @@ local files = { "rust",
 	"lua",
 	"javascriptreact",
 	"json",
+	"python",
 }
 
 autocmd("FileType", {

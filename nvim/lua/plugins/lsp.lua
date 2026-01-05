@@ -1,10 +1,5 @@
-local on_init = function(client)
-	if client then
-		client.server_capabilities.semanticTokensProvider = nil
-	end
-end
-
 local on_attach = function(client, bufnr)
+	client.server_capabilities.semanticTokensProvider = nil
 	local buf_opts = { noremap = true, silent = true, buffer = bufnr }
 
 	vim.keymap.set('n', 'gd', vim.lsp.buf.definition, buf_opts)
@@ -34,8 +29,24 @@ return {
 			'onsails/lspkind.nvim',
 		},
 		config = function()
-			-- Only import the utility helpers we need from nvim-lspconfig
 			local util = require('lspconfig.util')
+
+			-- Apply shared defaults to every server (unless overridden later)
+			vim.lsp.config('*', {
+				capabilities = capabilities,
+			})
+
+			local attach_group = vim.api.nvim_create_augroup('dotfiles-lsp-attach', { clear = true })
+			vim.api.nvim_create_autocmd('LspAttach', {
+				group = attach_group,
+				callback = function(args)
+					local client = vim.lsp.get_client_by_id(args.data.client_id)
+					if not client then
+						return
+					end
+					on_attach(client, args.buf)
+				end,
+			})
 
 			-- Register all server configurations with vim.lsp.config first
 			-- Custom config for circom-lsp
@@ -46,9 +57,6 @@ return {
 					filetypes = { "circom" },
 					root_dir = util.root_pattern('.git', 'package.json', 'Cargo.toml', '.'),
 					single_file_support = true,
-					on_init = on_init,
-					on_attach = on_attach,
-					capabilities = capabilities,
 					settings = {},
 				},
 			}
@@ -61,9 +69,6 @@ return {
 					filetypes           = { 'yaml', 'yaml.docker-compose', 'yaml.gitlab' },
 					root_dir            = util.root_pattern('.git'),
 					single_file_support = true,
-					on_init             = on_init,
-					on_attach           = on_attach,
-					capabilities        = capabilities,
 					settings            = {
 						yaml = {
 							format = {
@@ -80,14 +85,11 @@ return {
 			-- Configure eslint
 			vim.lsp.config.eslint = {
 				default_config = {
-					name         = 'eslint',
-					cmd          = { 'vscode-eslint-language-server', '--stdio' },
-					filetypes    = { 'javascript', 'javascriptreact', 'javascript.jsx', 'typescript', 'typescriptreact', 'typescript.tsx', 'vue', 'svelte', 'astro' },
-					root_dir     = util.root_pattern(".eslintrc.js", ".eslintrc.json", ".eslintrc", "package.json"),
-					on_init      = on_init,
-					on_attach    = on_attach,
-					capabilities = capabilities,
-					settings     = {
+					name      = 'eslint',
+					cmd       = { 'vscode-eslint-language-server', '--stdio' },
+					filetypes = { 'javascript', 'javascriptreact', 'javascript.jsx', 'typescript', 'typescriptreact', 'typescript.tsx', 'vue', 'svelte', 'astro' },
+					root_dir  = util.root_pattern(".eslintrc.js", ".eslintrc.json", ".eslintrc", "package.json"),
+					settings  = {
 						format             = { enable = true },
 						workingDirectories = { mode = "auto" },
 					},
@@ -97,14 +99,11 @@ return {
 			-- Configure rust_analyzer
 			vim.lsp.config.rust_analyzer = {
 				default_config = {
-					name         = 'rust_analyzer',
-					cmd          = { 'rust-analyzer' },
-					filetypes    = { 'rust' },
-					root_dir     = util.root_pattern('Cargo.toml', 'rust-project.json'),
-					on_init      = on_init,
-					on_attach    = on_attach,
-					capabilities = capabilities,
-					settings     = {
+					name      = 'rust_analyzer',
+					cmd       = { 'rust-analyzer' },
+					filetypes = { 'rust' },
+					root_dir  = util.root_pattern('Cargo.toml', 'rust-project.json'),
+					settings  = {
 						['rust-analyzer'] = { checkOnSave = { command = 'clippy' } },
 					},
 				},
@@ -118,9 +117,6 @@ return {
 					filetypes           = { 'solidity' },
 					root_dir            = util.root_pattern('foundry.toml', 'remappings.txt', 'hardhat.config.*', '.git'),
 					single_file_support = true,
-					on_init             = on_init,
-					on_attach           = on_attach,
-					capabilities        = capabilities,
 					settings            = {
 						solidity = {
 							includePath = '',
@@ -133,15 +129,12 @@ return {
 			-- Configure lua_ls
 			vim.lsp.config.lua_ls = {
 				default_config = {
-					name         = 'lua_ls',
-					cmd          = { 'lua-language-server' },
-					filetypes    = { 'lua' },
-					root_dir     = util.root_pattern('.luarc.json', '.luarc.jsonc', '.luacheckrc', '.stylua.toml',
+					name      = 'lua_ls',
+					cmd       = { 'lua-language-server' },
+					filetypes = { 'lua' },
+					root_dir  = util.root_pattern('.luarc.json', '.luarc.jsonc', '.luacheckrc', '.stylua.toml',
 						'stylua.toml', 'selene.toml', 'selene.yml', '.git'),
-					on_init      = on_init,
-					on_attach    = on_attach,
-					capabilities = capabilities,
-					settings     = {
+					settings  = {
 						Lua = {
 							runtime = { version = 'LuaJIT' },
 							diagnostics = { globals = { 'vim' } },
@@ -158,57 +151,34 @@ return {
 			-- Configure taplo and bashls
 			vim.lsp.config.taplo = {
 				default_config = {
-					name         = 'taplo',
-					cmd          = { 'taplo', 'lsp', 'stdio' },
-					filetypes    = { 'toml' },
-					root_dir     = util.root_pattern('*.toml', '.git'),
-					on_init      = on_init,
-					on_attach    = on_attach,
-					capabilities = capabilities,
+					name      = 'taplo',
+					cmd       = { 'taplo', 'lsp', 'stdio' },
+					filetypes = { 'toml' },
+					root_dir  = util.root_pattern('*.toml', '.git'),
 				},
 			}
 
 			vim.lsp.config.bashls = {
 				default_config = {
-					name         = 'bashls',
-					cmd          = { 'bash-language-server', 'start' },
-					filetypes    = { 'sh', 'bash' },
-					root_dir     = util.root_pattern('.git'),
-					on_init      = on_init,
-					on_attach    = on_attach,
-					capabilities = capabilities,
+					name      = 'bashls',
+					cmd       = { 'bash-language-server', 'start' },
+					filetypes = { 'sh', 'bash' },
+					root_dir  = util.root_pattern('.git'),
 				},
 			}
 
-			vim.lsp.config.pyright = {
-				default_config = {
-					name         = 'pyright',
-					cmd          = { 'pyright-langserver', '--stdio' },
-					filetypes    = { 'python' },
-					root_dir     = util.root_pattern(
-						'pyproject.toml',
-						'setup.py',
-						'setup.cfg',
-						'requirements.txt',
-						'Pipfile',
-						'pyrightconfig.json',
-						'.git'
-					),
-					on_init      = on_init,
-					on_attach    = on_attach,
-					capabilities = capabilities,
-					settings     = {
-						python = {
-							analysis = {
-								autoSearchPaths = true,
-								useLibraryCodeForTypes = true,
-								diagnosticMode = 'workspace',
-								typeCheckingMode = 'basic',
-							},
+			vim.lsp.config('pyright', {
+				settings = {
+					python = {
+						analysis = {
+							autoSearchPaths = true,
+							useLibraryCodeForTypes = true,
+							diagnosticMode = 'workspace',
+							typeCheckingMode = 'basic',
 						},
 					},
 				},
-			}
+			})
 
 			-- Enable all configured servers
 			vim.lsp.enable('yamlls')
@@ -240,7 +210,6 @@ return {
 				-- Optionally disable document formatting if you prefer to use a different formatter
 				-- client.server_capabilities.documentFormattingProvider = false
 			end,
-			on_attach    = on_attach,
 			capabilities = capabilities,
 			settings     = {
 				tsserver_format_options = {
@@ -265,8 +234,7 @@ return {
 		},
 		opts = {
 			lsp_inlay_hints = { enable = false },
-			lsp_cfg = true,   -- Let go.nvim handle LSP setup automatically
-			lsp_on_attach = on_attach, -- Use our custom on_attach for Go files
+			lsp_cfg = true, -- Let go.nvim handle LSP setup automatically
 		},
 		config = function(_, opts)
 			require('go').setup(opts)
