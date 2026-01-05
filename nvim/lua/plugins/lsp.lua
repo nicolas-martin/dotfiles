@@ -34,9 +34,8 @@ return {
 			'onsails/lspkind.nvim',
 		},
 		config = function()
-			-- nvim-lspconfig exposes both setup helpers and shared utilities
-			local lspconfig = require('lspconfig')
-			local util = lspconfig.util
+			-- Only import the utility helpers we need from nvim-lspconfig
+			local util = require('lspconfig.util')
 
 			-- Register all server configurations with vim.lsp.config first
 			-- Custom config for circom-lsp
@@ -181,12 +180,12 @@ return {
 				},
 			}
 
-			vim.lsp.config.eslint = {
+			vim.lsp.config.pyright = {
 				default_config = {
-					on_init = on_init,
-					on_attach = on_attach,
-					capabilities = capabilities,
-					root_dir = util.root_pattern(
+					name         = 'pyright',
+					cmd          = { 'pyright-langserver', '--stdio' },
+					filetypes    = { 'python' },
+					root_dir     = util.root_pattern(
 						'pyproject.toml',
 						'setup.py',
 						'setup.cfg',
@@ -195,7 +194,10 @@ return {
 						'pyrightconfig.json',
 						'.git'
 					),
-					settings = {
+					on_init      = on_init,
+					on_attach    = on_attach,
+					capabilities = capabilities,
+					settings     = {
 						python = {
 							analysis = {
 								autoSearchPaths = true,
@@ -217,6 +219,7 @@ return {
 			vim.lsp.enable('lua_ls')
 			vim.lsp.enable('taplo')
 			vim.lsp.enable('bashls')
+			vim.lsp.enable('pyright')
 		end,
 	},
 
