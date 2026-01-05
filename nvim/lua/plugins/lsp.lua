@@ -34,8 +34,9 @@ return {
 			'onsails/lspkind.nvim',
 		},
 		config = function()
-			-- Get lspconfig module for utilities only
-			local util = require('lspconfig.util')
+			-- nvim-lspconfig exposes both setup helpers and shared utilities
+			local lspconfig = require('lspconfig')
+			local util = lspconfig.util
 
 			-- Register all server configurations with vim.lsp.config first
 			-- Custom config for circom-lsp
@@ -59,7 +60,7 @@ return {
 					name                = 'yamlls',
 					cmd                 = { 'yaml-language-server', '--stdio' },
 					filetypes           = { 'yaml', 'yaml.docker-compose', 'yaml.gitlab' },
-					root_dir            = util.find_git_ancestor,
+					root_dir            = util.root_pattern('.git'),
 					single_file_support = true,
 					on_init             = on_init,
 					on_attach           = on_attach,
@@ -173,33 +174,37 @@ return {
 					name         = 'bashls',
 					cmd          = { 'bash-language-server', 'start' },
 					filetypes    = { 'sh', 'bash' },
-					root_dir     = util.find_git_ancestor,
+					root_dir     = util.root_pattern('.git'),
 					on_init      = on_init,
 					on_attach    = on_attach,
 					capabilities = capabilities,
 				},
 			}
 
-			vim.lsp.config.pyright = {
+			vim.lsp.config.eslint = {
 				default_config = {
-					name         = 'pyright',
-					cmd          = { 'pyright-langserver', '--stdio' },
-					filetypes    = { 'python' },
-					root_dir     = util.root_pattern('pyproject.toml', 'setup.py', 'setup.cfg', 'requirements.txt',
-						'Pipfile', 'pyrightconfig.json', '.git'),
-					on_init      = on_init,
-					on_attach    = on_attach,
+					on_init = on_init,
+					on_attach = on_attach,
 					capabilities = capabilities,
-					settings     = {
+					root_dir = util.root_pattern(
+						'pyproject.toml',
+						'setup.py',
+						'setup.cfg',
+						'requirements.txt',
+						'Pipfile',
+						'pyrightconfig.json',
+						'.git'
+					),
+					settings = {
 						python = {
 							analysis = {
 								autoSearchPaths = true,
 								useLibraryCodeForTypes = true,
 								diagnosticMode = 'workspace',
 								typeCheckingMode = 'basic',
-							}
-						}
-					}
+							},
+						},
+					},
 				},
 			}
 
@@ -212,7 +217,6 @@ return {
 			vim.lsp.enable('lua_ls')
 			vim.lsp.enable('taplo')
 			vim.lsp.enable('bashls')
-			vim.lsp.enable('pyright')
 		end,
 	},
 
