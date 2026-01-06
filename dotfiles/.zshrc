@@ -90,7 +90,6 @@ eval "$(starship init zsh)"
 
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home
 export PATH="/Users/nma/.yarn/bin:$PATH"
-
 export PATH="/opt/homebrew/opt/node@22/bin:$PATH"
 export PATH="/opt/homebrew/opt/postgresql@15/bin:$PATH"
 
@@ -107,18 +106,23 @@ export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
- # >>> conda initialize >>>
- # !! contents within this block are managed by 'conda init' !!
- __conda_setup="$('/opt/homebrew/caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
- if [ $? -eq 0 ]; then
-     eval "$__conda_setup"
- else
-     if [ -f "/opt/homebrew/caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
-         . "/opt/homebrew/caskroom/miniconda/base/etc/profile.d/conda.sh"
-     else
-         export path="/opt/homebrew/caskroom/miniconda/base/bin:$path"
-     fi
- fi
- unset __conda_setup
- # <<< conda initialize <<<
+# Lazy conda bootstrap so shells that do not need it avoid the start-up hit
+_CONDA_BOOTSTRAPPED=0
+conda_init() {
+  [ $_CONDA_BOOTSTRAPPED -eq 1 ] && return
 
+  __conda_setup="$('/opt/homebrew/caskroom/miniconda/base/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+  if [ $? -eq 0 ]; then
+      eval "$__conda_setup"
+  else
+      if [ -f "/opt/homebrew/caskroom/miniconda/base/etc/profile.d/conda.sh" ]; then
+          . "/opt/homebrew/caskroom/miniconda/base/etc/profile.d/conda.sh"
+      else
+          export PATH="/opt/homebrew/caskroom/miniconda/base/bin:$PATH"
+      fi
+  fi
+  unset __conda_setup
+  _CONDA_BOOTSTRAPPED=1
+}
+
+alias conda-start='conda_init'
