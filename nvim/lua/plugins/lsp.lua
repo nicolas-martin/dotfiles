@@ -2,11 +2,13 @@ local on_attach = function(client, bufnr)
 	client.server_capabilities.semanticTokensProvider = nil
 	local buf_opts = { noremap = true, silent = true, buffer = bufnr }
 
-	vim.keymap.set('n', 'gd', vim.lsp.buf.definition, buf_opts)
-	vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, buf_opts)
-	vim.keymap.set('n', 'K', vim.lsp.buf.hover, buf_opts)
+	-- vim.keymap.set('n', 'gd', vim.lsp.buf.definition, buf_opts)
+	-- vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, buf_opts)
 	-- vim.keymap.set('n', 'gr', vim.lsp.buf.references, buf_opts)
+	vim.keymap.set('n', 'gd', "<cmd>Trouble lsp_definitions toggle<cr>", buf_opts)
+	vim.keymap.set('n', 'gi', "<cmd>Trouble lsp_implementations toggle<cr>", buf_opts)
 	vim.keymap.set('n', 'gr', "<cmd>Trouble lsp_references toggle<cr>", buf_opts)
+	vim.keymap.set('n', 'K', vim.lsp.buf.hover, buf_opts)
 	vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, buf_opts)
 	vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, buf_opts)
 
