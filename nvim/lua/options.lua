@@ -6,6 +6,7 @@ vim.opt.hlsearch = true
 vim.opt.showmatch = true
 vim.opt.relativenumber = true
 vim.opt.number = true
+vim.opt.signcolumn = "yes" -- always show sign column to prevent layout shift
 vim.opt.completeopt = { 'menuone' }
 vim.opt.writebackup = false
 vim.opt.swapfile = false
@@ -62,12 +63,7 @@ vim.diagnostic.config({
 			[vim.diagnostic.severity.INFO] = "󰋽",
 			[vim.diagnostic.severity.HINT] = "󰌶",
 		},
-		-- texthl = {
-		-- 	[vim.diagnostic.severity.ERROR] = "DiagnosticSignError",
-		-- 	[vim.diagnostic.severity.WARN] = "DiagnosticSignWarn",
-		-- 	[vim.diagnostic.severity.INFO] = "DiagnosticSignInfo",
-		-- 	[vim.diagnostic.severity.HINT] = "DiagnosticSignHint",
-		-- },
+		priority = 20, -- higher than gitsigns (15) so diagnostics show on top
 	},
 	underline = true,
 	update_in_insert = false,

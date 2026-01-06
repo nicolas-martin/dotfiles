@@ -172,6 +172,9 @@ return {
 				settings = {
 					python = {
 						analysis = {
+							reportUnusedImport = "none",
+							reportUnusedParameter = "none",
+							reportUnusedVariable = "none",
 							autoSearchPaths = true,
 							useLibraryCodeForTypes = true,
 							diagnosticMode = 'workspace',
