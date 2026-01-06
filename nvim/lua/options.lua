@@ -40,8 +40,20 @@ vim.cmd.colorscheme "catppuccin-macchiato"
 vim.g.editorconfig = false
 
 -- Configure diagnostics with custom signs
+-- vim.fn.sign_define("DiagnosticSignError", { text = "󰅚", texthl = "DiagnosticSignError" })
+-- vim.fn.sign_define("DiagnosticSignWarn", { text = "󰀪", texthl = "DiagnosticSignWarn" })
+-- vim.fn.sign_define("DiagnosticSignHint", { text = "󰋽", texthl = "DiagnosticSignHint" })
+-- vim.fn.sign_define("DiagnosticSignInfo", { text = "󰌶", texthl = "DiagnosticSignInfo" })
 vim.diagnostic.config({
-	virtual_text = true,
+	-- virtual_lines = {
+	-- 	current_line = true
+	-- },
+	virtual_text = {
+		spacing = 4,
+		prefix = "",
+		current_line = true,
+		-- format = diagnostic_format,
+	},
 	active = true,
 	signs = {
 		text = {
@@ -50,12 +62,12 @@ vim.diagnostic.config({
 			[vim.diagnostic.severity.INFO] = "󰋽",
 			[vim.diagnostic.severity.HINT] = "󰌶",
 		},
-		texthl = {
-			[vim.diagnostic.severity.ERROR] = "DiagnosticSignError",
-			[vim.diagnostic.severity.WARN] = "DiagnosticSignWarn",
-			[vim.diagnostic.severity.INFO] = "DiagnosticSignInfo",
-			[vim.diagnostic.severity.HINT] = "DiagnosticSignHint",
-		},
+		-- texthl = {
+		-- 	[vim.diagnostic.severity.ERROR] = "DiagnosticSignError",
+		-- 	[vim.diagnostic.severity.WARN] = "DiagnosticSignWarn",
+		-- 	[vim.diagnostic.severity.INFO] = "DiagnosticSignInfo",
+		-- 	[vim.diagnostic.severity.HINT] = "DiagnosticSignHint",
+		-- },
 	},
 	underline = true,
 	update_in_insert = false,

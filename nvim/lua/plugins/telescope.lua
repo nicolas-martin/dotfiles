@@ -2,18 +2,19 @@ return {
 	{
 		"nvim-telescope/telescope.nvim",
 		cmd = { "Telescope" },
-		keys = {
-			{ "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find Files" },
-			{ "<leader>fg", "<cmd>Telescope live_grep<cr>", desc = "Live Grep" },
-			{ "<leader>fb", "<cmd>Telescope buffers<cr>", desc = "Buffers" },
-			{ "<leader>fh", "<cmd>Telescope help_tags<cr>", desc = "Help Tags" },
-			{ "<leader>fd", "<cmd>Telescope diagnostics<cr>", desc = "Diagnostics" },
-		},
+		-- keys = {
+		-- 	{ "<leader>ff", "<cmd>Telescope find_files<cr>",  desc = "Find Files" },
+		-- 	{ "<leader>fg", "<cmd>Telescope live_grep<cr>",   desc = "Live Grep" },
+		-- 	{ "<leader>fb", "<cmd>Telescope buffers<cr>",     desc = "Buffers" },
+		-- 	{ "<leader>fh", "<cmd>Telescope help_tags<cr>",   desc = "Help Tags" },
+		-- 	{ "<leader>fd", "<cmd>Telescope diagnostics<cr>", desc = "Diagnostics" },
+		-- },
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 			{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
 		},
 		config = function()
+			local open_with_trouble = require("trouble.sources.telescope").open
 			local actions = require('telescope.actions')
 
 			-- Helper function for right-aligned display
@@ -109,7 +110,8 @@ return {
 							["<C-[>"] = actions.close,
 							["<C-j>"] = actions.move_selection_next,
 							["<C-k>"] = actions.move_selection_previous,
-							["<leader>q"] = actions.send_selected_to_qflist + actions.open_qflist,
+							-- ["<leader>q"] = actions.send_selected_to_qflist + actions.open_qflist,
+							["<leader>q"] = open_with_trouble,
 						},
 					},
 					respect_gitignore = true,
@@ -194,7 +196,8 @@ return {
 										[vim.diagnostic.severity.INFO] = { text = "󰋽", texthl = "DiagnosticSignInfo" },
 										[vim.diagnostic.severity.HINT] = { text = "󰌶", texthl = "DiagnosticSignHint" },
 									}
-									local sign = diagnostic_signs[int_sev] or { text = "?", texthl = "DiagnosticSignError" }
+									local sign = diagnostic_signs[int_sev] or
+										{ text = "?", texthl = "DiagnosticSignError" }
 									local icon = sign.text or ""
 									local hl_group = sign.texthl or ""
 									local filename = vim.fn.fnamemodify(entry.filename or "", ":t")
