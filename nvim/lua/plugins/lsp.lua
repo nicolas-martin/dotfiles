@@ -51,16 +51,16 @@ return {
 
 			-- Register all server configurations with vim.lsp.config first
 			-- Custom config for circom-lsp
-			vim.lsp.config.circom_lsp = {
-				default_config = {
-					name = 'circom_lsp',
-					cmd = { "circom-lsp" },
-					filetypes = { "circom" },
-					root_dir = util.root_pattern('.git', 'package.json', 'Cargo.toml', '.'),
-					single_file_support = true,
-					settings = {},
-				},
-			}
+			-- vim.lsp.config.circom_lsp = {
+			-- 	default_config = {
+			-- 		name = 'circom_lsp',
+			-- 		cmd = { "circom-lsp" },
+			-- 		filetypes = { "circom" },
+			-- 		root_dir = util.root_pattern('.git', 'package.json', 'Cargo.toml', '.'),
+			-- 		single_file_support = true,
+			-- 		settings = {},
+			-- 	},
+			-- }
 
 			-- Configure yamlls
 			vim.lsp.config.yamlls = {
@@ -172,9 +172,6 @@ return {
 				settings = {
 					python = {
 						analysis = {
-							reportUnusedImport = "none",
-							reportUnusedParameter = "none",
-							reportUnusedVariable = "none",
 							autoSearchPaths = true,
 							useLibraryCodeForTypes = true,
 							diagnosticMode = 'workspace',
@@ -186,7 +183,7 @@ return {
 
 			-- Enable all configured servers
 			vim.lsp.enable('yamlls')
-			vim.lsp.enable('circom_lsp')
+			-- vim.lsp.enable('circom_lsp')
 			vim.lsp.enable('eslint')
 			vim.lsp.enable('rust_analyzer')
 			vim.lsp.enable('solidity')
