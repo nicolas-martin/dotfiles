@@ -236,17 +236,13 @@ return {
 	{
 		'ray-x/go.nvim',
 		ft = { 'go', 'gomod' },
-		event = { 'CmdlineEnter' },
 		build = ":lua require('go.install').update_all_sync()",
 		dependencies = {
 			'ray-x/guihua.lua',
 			'neovim/nvim-lspconfig',
 			'nvim-treesitter/nvim-treesitter',
 		},
-		opts = {
-			lsp_inlay_hints = { enable = false },
-			lsp_cfg = true, -- Let go.nvim handle LSP setup automatically
-		},
+		opts = {},
 		config = function(_, opts)
 			require('go').setup(opts)
 			local grp = vim.api.nvim_create_augroup('GoFormat', { clear = true })
