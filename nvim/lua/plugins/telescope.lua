@@ -190,20 +190,13 @@ return {
 							if entry_tbl then
 								entry_tbl.display = function()
 									local int_sev = vim.diagnostic.severity[entry.type]
-									local diagnostic_signs = {
-										[vim.diagnostic.severity.ERROR] = { text = "󰅚", texthl = "DiagnosticSignError" },
-										[vim.diagnostic.severity.WARN] = { text = "󰀪", texthl = "DiagnosticSignWarn" },
-										[vim.diagnostic.severity.INFO] = { text = "󰋽", texthl = "DiagnosticSignInfo" },
-										[vim.diagnostic.severity.HINT] = { text = "󰌶", texthl = "DiagnosticSignHint" },
-									}
-									local sign = diagnostic_signs[int_sev] or
-										{ text = "?", texthl = "DiagnosticSignError" }
-									local icon = sign.text or ""
-									local hl_group = sign.texthl or ""
+									local diag_config = vim.diagnostic.config()
+									local icon = diag_config.signs.text[int_sev] or "?"
+									local sev_name = vim.diagnostic.severity[int_sev]
+									local hl_group = "DiagnosticSign" .. sev_name:sub(1, 1) .. sev_name:sub(2):lower()
 									local filename = vim.fn.fnamemodify(entry.filename or "", ":t")
 									local message = entry.message or entry.text or ""
 
-									-- return format_with_right_align({ icon, hl_group }, entry.text, kind)
 									return format_with_right_align({ icon, hl_group }, message, filename)
 								end
 							end
