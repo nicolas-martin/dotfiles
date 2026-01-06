@@ -169,6 +169,16 @@ return {
 			}
 
 			vim.lsp.config('pyright', {
+				capabilities = {
+					textDocument = {
+						publishDiagnostics = {
+							tagSupport = {
+								valueSet = { 2 }, -- 1 = Unnecessary, 2 = Deprecated
+
+							},
+						},
+					},
+				},
 				settings = {
 					python = {
 						analysis = {
