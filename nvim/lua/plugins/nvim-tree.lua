@@ -19,7 +19,7 @@ return {
 				update_focused_file = {
 					enable = true,
 					update_root = {
-						enable = true,
+						enable = false,
 					},
 				},
 				sort = {
@@ -41,6 +41,7 @@ return {
 				filters = {
 					dotfiles = true,
 				},
+				sync_root_with_cwd = true,
 				notify = {
 					threshold = vim.log.levels.INFO,
 				},
@@ -60,7 +61,7 @@ return {
 					},
 					icons = {
 						hint = "󰌶",
-						info = "󰋽", 
+						info = "󰋽",
 						warning = "󰀪",
 						error = "󰅚",
 					},

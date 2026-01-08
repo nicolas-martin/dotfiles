@@ -7,9 +7,8 @@ return {
 		{
 			"supermaven-inc/supermaven-nvim",
 			opts = {
-				disable_inline_completion = true,
-				disable_keymaps = true,
-				log_level = "off",
+				disable_inline_completion = false, -- enables inline ghost text, suppresses nvim-cmp warning
+				disable_keymaps = false,
 			}
 		},
 		"huijiro/blink-cmp-supermaven",
