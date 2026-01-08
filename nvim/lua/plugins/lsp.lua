@@ -248,6 +248,13 @@ return {
 			require('go').setup({
 				lsp_cfg = {
 					capabilities = capabilities,
+					settings = {
+						gopls = {
+							analyses = {
+								ST1000 = false, -- disable "package comment" lint
+							},
+						},
+					},
 				},
 				lsp_inlay_hints = { enable = false },
 				lsp_keymaps = false, -- use keymaps from on_attach instead
