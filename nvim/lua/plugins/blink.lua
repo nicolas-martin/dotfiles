@@ -1,10 +1,18 @@
 return {
 	'saghen/blink.cmp',
-	-- optional: provides snippets for the snippet source
 	dependencies = {
 		"rafamadriz/friendly-snippets",
 		"nvim-tree/nvim-web-devicons", -- Optional for file icons
 		"onsails/lspkind.nvim",  --optional icons
+		{
+			"supermaven-inc/supermaven-nvim",
+			opts = {
+				disable_inline_completion = true,
+				disable_keymaps = true,
+				log_level = "off",
+			}
+		},
+		"huijiro/blink-cmp-supermaven",
 	},
 	-- use a release tag to download pre-built binaries
 	version = '1.*',
@@ -65,6 +73,12 @@ return {
 		},
 		sources = {
 			providers = {
+				supermaven = {
+					name = 'supermaven',
+					module = "blink-cmp-supermaven",
+					async = true,
+					score_offset = 3,
+				},
 				markdown = {
 					name = "markdown",
 					module = "render-markdown.integ.blink",
@@ -79,7 +93,7 @@ return {
 				},
 				buffer = { max_items = 5 },
 			},
-			default = { 'lsp', 'path', 'snippets', 'buffer', 'cmdline', 'lazydev' },
+			default = { 'lsp', 'path', 'snippets', 'buffer', 'cmdline', 'lazydev', "supermaven" },
 
 		},
 		fuzzy = { implementation = "prefer_rust_with_warning" }

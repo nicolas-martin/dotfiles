@@ -256,6 +256,7 @@ return {
 						},
 					},
 				},
+				diagnostic = false, -- don't override vim.diagnostic.config
 				lsp_inlay_hints = { enable = false },
 				lsp_keymaps = false, -- use keymaps from on_attach instead
 			})
