@@ -4,14 +4,6 @@ return {
 		"rafamadriz/friendly-snippets",
 		"nvim-tree/nvim-web-devicons", -- Optional for file icons
 		"onsails/lspkind.nvim",  --optional icons
-		{
-			"supermaven-inc/supermaven-nvim",
-			opts = {
-				disable_inline_completion = false, -- enables inline ghost text, suppresses nvim-cmp warning
-				disable_keymaps = false,
-			}
-		},
-		"huijiro/blink-cmp-supermaven",
 	},
 	-- use a release tag to download pre-built binaries
 	version = '1.*',
@@ -72,12 +64,6 @@ return {
 		},
 		sources = {
 			providers = {
-				supermaven = {
-					name = 'supermaven',
-					module = "blink-cmp-supermaven",
-					async = true,
-					score_offset = 3,
-				},
 				markdown = {
 					name = "markdown",
 					module = "render-markdown.integ.blink",
@@ -92,7 +78,7 @@ return {
 				},
 				buffer = { max_items = 5 },
 			},
-			default = { 'lsp', 'path', 'snippets', 'buffer', 'cmdline', 'lazydev', "supermaven" },
+			default = { 'lsp', 'path', 'snippets', 'buffer', 'cmdline', 'lazydev' },
 
 		},
 		fuzzy = { implementation = "prefer_rust_with_warning" }
