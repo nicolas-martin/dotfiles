@@ -125,3 +125,5 @@ conda_init() {
 }
 
 alias conda-start='conda_init'
+export PATH="/Users/nma/fvm/bin:$PATH"
+export PATH="/Users/nma/fvm/default/bin:$PATH"

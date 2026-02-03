@@ -236,6 +236,26 @@ return {
 		},
 	},
 	{
+		'nvim-flutter/flutter-tools.nvim',
+		lazy = false,
+		dependencies = {
+			'nvim-lua/plenary.nvim',
+			'stevearc/dressing.nvim',
+		},
+		opts = {
+			lsp = {
+				capabilities = capabilities,
+				on_attach = on_attach,
+				settings = {
+					showTodos = true,
+					completeFunctionCalls = true,
+					renameFilesWithClasses = "prompt",
+					enableSnippets = true,
+				},
+			},
+		},
+	},
+	{
 		'ray-x/go.nvim',
 		ft = { 'go', 'gomod' },
 		build = ":lua require('go.install').update_all_sync()",
