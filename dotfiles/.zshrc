@@ -57,6 +57,7 @@ alias ll='ls -la'
 alias b='git branch | grep -v "^\*" | fzf --height=20% --reverse --info=inline | xargs git checkout'
 alias d='git branch | grep -v "^\*" | fzf --height=20% --reverse --info=inline | xargs git branch -D'
 alias fzfkill='ps -ef | awk "{print \$2, \$8}" | fzf --height=40% --reverse --info=inline | awk "{print \$1}" | xargs kill -9'
+alias oc=opencode
 
 # First source fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -90,7 +91,7 @@ eval "$(starship init zsh)"
 
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home
 export PATH="/Users/nma/.yarn/bin:$PATH"
-export PATH="/opt/homebrew/opt/node@22/bin:$PATH"
+export PATH="/opt/homebrew/opt/node@24/bin:$PATH"
 export PATH="/opt/homebrew/opt/postgresql@15/bin:$PATH"
 
 source /opt/homebrew/opt/chruby/share/chruby/chruby.sh
